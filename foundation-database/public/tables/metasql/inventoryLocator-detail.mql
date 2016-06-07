@@ -47,7 +47,7 @@ FROM (SELECT itemloc_id, 1 AS type, warehous_code,
          ELSE charass_alias<? literal("char_id_date_list") ?>.charass_value::date 
     END AS char<? literal("char_id_date_list") ?>
 <? endforeach ?>
-      FROM itemsite, whsinfo,
+      FROM itemsite, site(),
            itemloc LEFT OUTER JOIN location ON (itemloc_location_id=location_id)
 <? foreach("char_id_text_list") ?>
   LEFT OUTER JOIN charass charass_alias<? literal("char_id_text_list") ?> ON ((charass_alias<? literal("char_id_text_list") ?>.charass_target_type='LS')
@@ -105,7 +105,7 @@ FROM (SELECT itemloc_id, 1 AS type, warehous_code,
 <? foreach("char_id_date_list" ?>
           , NULL AS char<? value("char_id_date_list") ?>
 <? endforeach ?>
-      FROM itemsite, whsinfo
+      FROM itemsite, site()
       WHERE ((NOT itemsite_loccntrl)
          AND (itemsite_controlmethod NOT IN ('L', 'S'))
          AND (itemsite_warehous_id=warehous_id)

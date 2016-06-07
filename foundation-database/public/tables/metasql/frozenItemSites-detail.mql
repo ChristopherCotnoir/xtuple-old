@@ -10,7 +10,7 @@ SELECT itemsite_id, warehous_code, item_number,
                   FROM invcnt
                   WHERE ((NOT invcnt_posted)
                           AND (invcnt_itemsite_id=itemsite_id)) LIMIT 1), '') AS cnttag
-FROM itemsite, item, whsinfo
+FROM itemsite, item, site()
 WHERE ( (itemsite_item_id=item_id)
     AND (itemsite_warehous_id=warehous_id)
     AND (itemsite_freeze)

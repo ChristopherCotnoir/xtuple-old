@@ -9,7 +9,7 @@ SELECT itemsite_id, <? value("received") ?> AS label, warehous_code
      <? foreach("period_id_list") ?>
        , summTransR(itemsite_id, <? value("period_id_list") ?>) AS bucket_<? literal("period_id_list") ?>
      <? endforeach ?>
-FROM itemsite, whsinfo
+FROM itemsite, site()
 WHERE ((itemsite_warehous_id=warehous_id)
 <? if exists("item_id") ?>
    AND (itemsite_item_id=<? value("item_id") ?>)
@@ -23,7 +23,7 @@ SELECT itemsite_id, <? value("issued") ?> AS label, warehous_code
      <? foreach("period_id_list") ?>
        , summTransI(itemsite_id, <? value("period_id_list") ?>) AS bucket_<? literal("period_id_list") ?>
      <? endforeach ?>
-FROM itemsite, whsinfo
+FROM itemsite, site()
 WHERE ((itemsite_warehous_id=warehous_id)
 <? if exists("item_id") ?>
    AND (itemsite_item_id=<? value("item_id") ?>)
@@ -37,7 +37,7 @@ SELECT itemsite_id, <? value("sold") ?> AS label, warehous_code
      <? foreach("period_id_list") ?>
        , summTransS(itemsite_id, <? value("period_id_list") ?>) AS bucket_<? literal("period_id_list") ?>
      <? endforeach ?>
-FROM itemsite, whsinfo
+FROM itemsite, site()
 WHERE ((itemsite_warehous_id=warehous_id)
 <? if exists("item_id") ?>
    AND (itemsite_item_id=<? value("item_id") ?>)
@@ -51,7 +51,7 @@ SELECT itemsite_id, <? value("scrap") ?> AS label, warehous_code
      <? foreach("period_id_list") ?>
        , summTransC(itemsite_id, <? value("period_id_list") ?>) AS bucket_<? literal("period_id_list") ?>
      <? endforeach ?>
-FROM itemsite, whsinfo
+FROM itemsite, site()
 WHERE ((itemsite_warehous_id=warehous_id)
 <? if exists("item_id") ?>
    AND (itemsite_item_id=<? value("item_id") ?>)
@@ -65,7 +65,7 @@ SELECT itemsite_id, <? value("adjustments") ?> AS label, warehous_code
      <? foreach("period_id_list") ?>
        , summTransA(itemsite_id, <? value("period_id_list") ?>) AS bucket_<? literal("period_id_list") ?>
      <? endforeach ?>
-FROM itemsite, whsinfo
+FROM itemsite, site()
 WHERE ((itemsite_warehous_id=warehous_id)
 <? if exists("item_id") ?>
    AND (itemsite_item_id=<? value("item_id") ?>)
@@ -80,7 +80,7 @@ SELECT itemsite_id, <? value("transfers") ?> AS label, warehous_code
      <? foreach("period_id_list") ?>
        , summTransT(itemsite_id, <? value("period_id_list") ?>) AS bucket_<? literal("period_id_list") ?>
      <? endforeach ?>
-FROM itemsite, whsinfo
+FROM itemsite, site()
 WHERE ((itemsite_warehous_id=warehous_id)
 <? if exists("item_id") ?>
    AND (itemsite_item_id=<? value("item_id") ?>)

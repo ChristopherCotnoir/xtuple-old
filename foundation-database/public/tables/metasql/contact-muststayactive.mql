@@ -20,7 +20,7 @@ SELECT EXISTS(
   WHERE (vend_active
     AND (<? value("id") ?> IN (vend_cntct1_id, vend_cntct2_id)))
  UNION SELECT 7
-   FROM prospect
+   FROM prospect JOIN site() ON (prospect_warehous_id=warehous_id)
   WHERE (prospect_active AND (prospect_cntct_id=<? value("id") ?>))
  UNION SELECT 8
    FROM shiptoinfo
@@ -30,7 +30,7 @@ SELECT EXISTS(
    JOIN vendinfo ON (vendaddr_vend_id=vend_id)
   WHERE (vend_active AND (vendaddr_cntct_id=<? value("id") ?>))
  UNION SELECT 10
-   FROM whsinfo
+   FROM site()
   WHERE (warehous_active AND (warehous_cntct_id=<? value("id") ?>))
  UNION SELECT 11
    FROM emp

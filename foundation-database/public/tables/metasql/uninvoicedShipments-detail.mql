@@ -27,7 +27,7 @@ SELECT cohead_id, -1 AS shipitem_id, cohead_number, -1 AS coitem_linenumber, 0 A
        '' AS uom_name,
        COALESCE(SUM(shipitem_qty), 0) AS shipped,
        COALESCE(SUM(cobill_qty), 0) AS selected
-FROM cohead, custinfo, itemsite, item, whsinfo, shipitem, shiphead, uom,
+FROM cohead, custinfo, itemsite, item, site(), shipitem, shiphead, uom,
      coitem LEFT OUTER JOIN
       ( cobill JOIN cobmisc
         ON ( (cobill_cobmisc_id=cobmisc_id) AND (NOT cobmisc_posted) ) )
@@ -56,7 +56,7 @@ SELECT cohead_id, shipitem_id, cohead_number, coitem_linenumber, 1 AS level,
        uom_name,
        COALESCE(SUM(shipitem_qty), 0) AS shipped,
        COALESCE(SUM(cobill_qty), 0) AS selected
-FROM cohead, custinfo, itemsite, item, whsinfo, shipitem, shiphead, uom,
+FROM cohead, custinfo, itemsite, item, site(), shipitem, shiphead, uom,
      coitem LEFT OUTER JOIN
       ( cobill JOIN cobmisc
         ON ( (cobill_cobmisc_id=cobmisc_id) AND (NOT cobmisc_posted) ) )

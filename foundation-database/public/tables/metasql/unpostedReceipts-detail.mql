@@ -51,7 +51,8 @@ SELECT recv_id, recv_orderitem_id, recv_order_number, recv_order_type,
        'qty' AS orderitem_qty_ordered_xtnumericrole,
        'qty' AS orderitem_qty_received_xtnumericrole,
        'qty' AS recv_qty_xtnumericrole
-FROM rahead JOIN
+FROM rahead JOIN site() ON (rahead_warehous_id=warehous_id)
+            JOIN
      raitem ON (raitem_rahead_id=rahead_id) JOIN 
      recv  ON ((recv_orderitem_id=raitem_id)
 	   AND (recv_order_type='RA')) LEFT OUTER JOIN

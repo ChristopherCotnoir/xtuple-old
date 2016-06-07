@@ -10,7 +10,7 @@ SELECT itemsite_id, warehous_code, item_number,
        detailedQOH(itemsite_id, FALSE) AS detailedqoh,
        'qty' AS itemsite_qtyonhand_xtnumericrole,
        'qty' AS detailedqoh_xtnumericrole
-FROM whsinfo, item, itemsite, uom
+FROM site(), item, itemsite, uom
 WHERE ( (itemsite_item_id=item_id)
     AND (item_inv_uom_id=uom_id)
     AND (itemsite_warehous_id=warehous_id)

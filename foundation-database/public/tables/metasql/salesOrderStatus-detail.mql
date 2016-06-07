@@ -23,7 +23,7 @@ SELECT coitem_id, coitem_linenumber, item_number,
        'qty' AS coitem_qtyreturned_xtnumericrole,
        'qty' AS invoiced_xtnumericrole,
        'qty' AS balance_xtnumericrole 
-FROM itemsite, item, whsinfo, coitem LEFT OUTER JOIN
+FROM itemsite, item, site(), coitem LEFT OUTER JOIN
      cobill ON (coitem_id=cobill_coitem_id AND
                 cobill_invcitem_id IS NOT NULL)
 WHERE ( (coitem_itemsite_id=itemsite_id)

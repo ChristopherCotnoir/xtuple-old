@@ -33,7 +33,7 @@ FROM poitem
 <? endif ?>
   LEFT OUTER JOIN item ON (itemsite_item_id=item_id) 
   LEFT OUTER JOIN uom ON (item_inv_uom_id=uom_id)
-  LEFT OUTER JOIN whsinfo ON (itemsite_warehous_id=warehous_id)
+  LEFT OUTER JOIN site() ON (itemsite_warehous_id=warehous_id)
   LEFT OUTER JOIN itemsrc ON (itemsrc_id=poitem_itemsrc_id)
   LEFT OUTER JOIN expcat ON (poitem_expcat_id=expcat_id)
 WHERE ( (poitem_status <> 'C')
@@ -77,7 +77,7 @@ FROM rahead, raitem
 <? endif ?>
        JOIN item ON (itemsite_item_id=item_id) 
        JOIN uom iu ON (item_inv_uom_id=uom_id)
-       JOIN whsinfo ON (itemsite_warehous_id=warehous_id)
+       JOIN site() ON (itemsite_warehous_id=warehous_id)
      ) ON (raitem_itemsite_id=itemsite_id), uom ru
 WHERE ( (raitem_status <> 'C')
  AND (item_type <> 'K')
@@ -117,7 +117,7 @@ FROM tohead, itemsite
 <? if exists("selectedOnly") ?>
        JOIN usrsite ON (itemsite_warehous_id=usrsite_warehous_id) 
 <? endif ?>
-, whsinfo, toitem, item JOIN uom ON (item_inv_uom_id=uom_id)
+, site(), toitem, item JOIN uom ON (item_inv_uom_id=uom_id)
 WHERE ((toitem_item_id=item_id)
   AND  (tohead_id=toitem_tohead_id)
   AND  (tohead_dest_warehous_id=itemsite_warehous_id)

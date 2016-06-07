@@ -60,7 +60,7 @@ FROM itemsrc JOIN vendinfo ON (vend_id=itemsrc_vend_id AND vend_active)
              JOIN uom ON (uom_id=item_inv_uom_id)
              LEFT OUTER JOIN itemsrcp ON (itemsrcp_itemsrc_id=itemsrc_id)
              LEFT OUTER JOIN contrct ON (contrct_id=itemsrc_contrct_id)
-             LEFT OUTER JOIN whsinfo ON (warehous_id=itemsrcp_warehous_id)
+             LEFT OUTER JOIN site() ON (warehous_id=itemsrcp_warehous_id)
 WHERE ((true)
 <? if not exists("showInactive") ?>
    AND (itemsrc_active)

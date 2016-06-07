@@ -10,7 +10,7 @@ SELECT itemsite_id, itemloc_id AS altid, item_number AS sortkey, warehous_code, 
        itemloc_qty AS qoh,
        whsezone_name, 
        location_descrip, location_aisle, location_rack, location_bin, item_id
-      FROM itemloc, itemsite, whsinfo, item, uom, location, whsezone
+      FROM itemloc, itemsite, site(), item, uom, location, whsezone
       WHERE ((itemloc_itemsite_id=itemsite_id)
          AND (itemsite_item_id=item_id)
          AND (item_inv_uom_id=uom_id)

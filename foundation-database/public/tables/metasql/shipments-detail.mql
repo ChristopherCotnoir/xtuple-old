@@ -96,7 +96,7 @@ SELECT shiphead_id, coitem_id AS lineitem_id, cohead_number AS sortkey1, shiphea
        coitem_qtyord AS qtyord,
        SUM(shipitem_qty) AS qtyshipped,
        '' AS notes
-FROM shipitem, shiphead, coitem, cohead, custinfo, itemsite, item, whsinfo
+FROM shipitem, shiphead, coitem, cohead, custinfo, itemsite, item, site()
 WHERE ( (shipitem_shiphead_id=shiphead_id)
  AND (shipitem_orderitem_id=coitem_id)
  AND (coitem_itemsite_id=itemsite_id)

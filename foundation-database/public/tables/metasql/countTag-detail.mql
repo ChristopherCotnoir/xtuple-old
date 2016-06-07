@@ -56,7 +56,7 @@ FROM (
              item_number AS orderby,
              0 AS xtindentrole
       FROM invcnt LEFT OUTER JOIN location ON (invcnt_location_id=location_id),
-     item, whsinfo, itemsite
+     item, site(), itemsite
       WHERE ((invcnt_itemsite_id=itemsite_id)
          AND (itemsite_item_id=item_id)
          AND (itemsite_warehous_id=warehous_id)

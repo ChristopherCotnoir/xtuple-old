@@ -24,7 +24,7 @@ SELECT itemsite_id, itemtype,
        <? foreach("period_id_list") ?>
        , qtyAvailable(itemsite_id, findPeriodStart(<? value("period_id_list") ?>)) AS bucket_<?  literal("period_id_list") ?> 
        <? endforeach ?>
- FROM itemsite, item, whsinfo, uom
+ FROM itemsite, item, site(), uom
   WHERE ((itemsite_item_id=item_id)
    AND (item_inv_uom_id=uom_id) 
    AND (itemsite_warehous_id=warehous_id) 

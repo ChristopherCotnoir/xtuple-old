@@ -41,7 +41,7 @@ FROM (SELECT itemsite_id,
                                              WHERE (plancode_code ~ <? value("plancode_pattern") ?>)))
             <? endif ?>
                   )
-           ) AS itemsitedata, item, whsinfo
+           ) AS itemsitedata, item, site()
       WHERE ((itemsite_item_id=item_id)
          AND (itemsite_warehous_id=warehous_id))
      ) AS data

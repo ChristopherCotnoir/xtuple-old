@@ -18,7 +18,7 @@ SELECT pohead_id, poitem_id, pohead_number, poitem_status,
        END AS f_poitem_status,
        vend_name,
        (SELECT warehous_code
-          FROM whsinfo
+          FROM site()
          WHERE (COALESCE(itemsite_warehous_id, pohead_warehous_id)=warehous_id)) AS warehous_code,
        COALESCE(item_number, <? value("nonInv") ?>) AS itemnumber,
        poitem_vend_item_number, poitem_vend_uom,

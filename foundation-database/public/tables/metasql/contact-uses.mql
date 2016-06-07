@@ -63,7 +63,8 @@ FROM (
          prospect_name AS name, '' AS role,
          (prospect_active) AS active,
          '' AS owner
-    FROM prospect WHERE (prospect_cntct_id=<? value("id") ?>)
+    FROM prospect JOIN site() ON (prospect_warehous_id=warehous_id)
+                  WHERE (prospect_cntct_id=<? value("id") ?>)
   
   UNION ALL
   SELECT shipto_id AS type_id, 8 AS type_code, <? value("shipto") ?> AS type,
@@ -87,7 +88,7 @@ FROM (
          warehous_descrip AS name, '' AS role,
          (warehous_active) AS active,
          '' AS owner
-    FROM whsinfo WHERE (warehous_cntct_id=<? value("id") ?>)
+    FROM site() WHERE (warehous_cntct_id=<? value("id") ?>)
   
   UNION ALL
   SELECT emp_id AS type_id, 11 AS type_code, <? value("emp") ?> AS type,
@@ -96,6 +97,7 @@ FROM (
          (emp_active) AS active,
          '' AS owner
     FROM emp WHERE (emp_cntct_id=<? value("id") ?>)
+    JOIN site() ON (emp_warehous_id=warehous_id)
 
 <? if exists("showOrders") ?>
   UNION ALL
@@ -172,7 +174,8 @@ FROM (
          <? value("billing") ?> AS role,
          (quhead_status = 'O') AS active,
          '' AS owner
-    FROM quhead LEFT OUTER JOIN custinfo ON (quhead_cust_id=cust_id)
+    FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
+                LEFT OUTER JOIN custinfo ON (quhead_cust_id=cust_id)
                 LEFT OUTER JOIN prospect ON (quhead_cust_id=prospect_id)
    WHERE (<? value("id") ?>=quhead_billto_cntct_id)
 
@@ -183,7 +186,8 @@ FROM (
          <? value("shipto") ?> AS role,
          (quhead_status = 'O') AS active,
          '' AS owner
-    FROM quhead LEFT OUTER JOIN custinfo ON (quhead_cust_id=cust_id)
+    FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
+                LEFT OUTER JOIN custinfo ON (quhead_cust_id=cust_id)
                 LEFT OUTER JOIN prospect ON (quhead_cust_id=prospect_id)
    WHERE (<? value("id") ?>=quhead_shipto_cntct_id)
 <? endif ?>

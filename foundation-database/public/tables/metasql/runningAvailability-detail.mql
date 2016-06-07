@@ -363,9 +363,9 @@ SELECT planord_id AS orderid, -1 AS altorderid,
        planord_qty AS balance,
        planord_comments AS notes
 FROM planord JOIN itemsite ON (itemsite.itemsite_id=planord_itemsite_id)
-             JOIN whsinfo ON (whsinfo.warehous_id=itemsite.itemsite_warehous_id)
+             JOIN site() ON (whsinfo.warehous_id=itemsite.itemsite_warehous_id)
              JOIN itemsite srcitemsite ON (srcitemsite.itemsite_id=planord_supply_itemsite_id)
-             JOIN whsinfo srcwhsinfo ON (srcwhsinfo.warehous_id=srcitemsite.itemsite_warehous_id)
+             JOIN site() srcwhsinfo ON (srcwhsinfo.warehous_id=srcitemsite.itemsite_warehous_id)
 WHERE ((planord_type='T')
   AND  (itemsite.itemsite_warehous_id=<? value("warehous_id") ?>)
   AND  (itemsite.itemsite_item_id=<? value("item_id") ?>) )
@@ -387,9 +387,9 @@ SELECT planord_id AS orderid, -1 AS altorderid,
        (planord_qty * -1) AS balance,
        planord_comments AS notes
 FROM planord JOIN itemsite ON (itemsite.itemsite_id=planord_itemsite_id)
-             JOIN whsinfo ON (whsinfo.warehous_id=itemsite.itemsite_warehous_id)
+             JOIN site() ON (whsinfo.warehous_id=itemsite.itemsite_warehous_id)
              JOIN itemsite srcitemsite ON (srcitemsite.itemsite_id=planord_supply_itemsite_id)
-             JOIN whsinfo srcwhsinfo ON (srcwhsinfo.warehous_id=srcitemsite.itemsite_warehous_id)
+             JOIN site() srcwhsinfo ON (srcwhsinfo.warehous_id=srcitemsite.itemsite_warehous_id)
 WHERE ((planord_type='T')
   AND  (srcitemsite.itemsite_warehous_id=<? value("warehous_id") ?>)
   AND  (srcitemsite.itemsite_item_id=<? value("item_id") ?>) )

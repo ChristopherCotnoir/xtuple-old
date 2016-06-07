@@ -25,7 +25,8 @@ SELECT DISTINCT rahead_id, rahead_number, rahead_billtoname,
        CASE WHEN (rahead_expiredate < current_date) THEN
          'error'
        END AS rahead_expiredate_qtforegroundrole
-  FROM rahead LEFT OUTER JOIN custinfo ON (rahead_cust_id=cust_id)
+  FROM rahead JOIN site() ON (rahead_warehous_id=warehous_id) 
+              LEFT OUTER JOIN custinfo ON (rahead_cust_id=cust_id)
                <? if exists("selectedSites") ?> 
                    JOIN raitem ON (raitem_rahead_id=rahead_id) 
                    JOIN itemsite ON (raitem_itemsite_id=itemsite_id) 
@@ -33,7 +34,7 @@ SELECT DISTINCT rahead_id, rahead_number, rahead_billtoname,
                <? else ?> 
                    LEFT OUTER JOIN raitem ON (raitem_rahead_id=rahead_id) 
                    LEFT OUTER JOIN itemsite ON (raitem_itemsite_id=itemsite_id) 
-                   LEFT OUTER JOIN whsinfo ON (itemsite_warehous_id=warehous_id) 
+                   LEFT OUTER JOIN site() ON (itemsite_warehous_id=warehous_id) 
                <? endif ?> 
  WHERE ((true)
 <? if not exists("showClosed") ?> 

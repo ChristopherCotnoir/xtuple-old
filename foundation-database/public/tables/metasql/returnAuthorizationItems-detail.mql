@@ -27,7 +27,8 @@ SELECT rahead_id, rahead_number, rahead_billtoname,
        CASE WHEN (rahead_expiredate < current_date) THEN
          'error'
        END AS rahead_expiredate_qtforegroundrole
-  FROM rahead LEFT OUTER JOIN custinfo ON (rahead_cust_id=cust_id)
+  FROM rahead JOIN site() ON (rahead_warehous_id=warehous_id)
+              LEFT OUTER JOIN custinfo ON (rahead_cust_id=cust_id)
                    JOIN raitem ON (raitem_rahead_id=rahead_id) 
                    JOIN itemsite ON (raitem_itemsite_id=itemsite_id) 
                    JOIN uom ON (uom_id=raitem_qty_uom_id)

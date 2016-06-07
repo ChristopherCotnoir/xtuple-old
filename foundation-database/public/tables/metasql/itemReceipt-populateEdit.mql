@@ -70,6 +70,7 @@ FROM recv
   JOIN  raitem ON ((recv_orderitem_id=raitem_id)
                AND (recv_order_type='RA'))
   JOIN  rahead ON (raitem_rahead_id=rahead_id)
+  JOIN  site() ON (rahead_warehous_id=warehous_id)
 WHERE (recv_id=<? value("recv_id") ?>)
 <? endif ?>
 <? if exists ("MultiWhs") ?>

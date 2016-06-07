@@ -298,7 +298,7 @@ SELECT quhead_id AS id,
         
        NULL::text AS due_qtforegroundrole,
        2 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
   JOIN custinfo ON (quhead_cust_id=cust_id)
 <? if exists("owner_username") ?>
     JOIN prj ON (prj_id=quhead_prj_id
@@ -351,7 +351,7 @@ SELECT quitem_id AS id,
         
        NULL::text AS due_qtforegroundrole,
        3 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
 <? if exists("owner_username") ?>
     JOIN prj ON (prj_id=quhead_prj_id
             AND ((prj_owner_username=<? value("owner_username") ?>) OR (prj_username=<? value("owner_username") ?>)))
@@ -397,7 +397,7 @@ SELECT quhead_id AS id,
         
 	NULL::text AS due_qtforegroundrole,
        2 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
 <? if exists("owner_username") ?>
     JOIN prj ON (prj_id=quhead_prj_id
             AND ((prj_owner_username=<? value("owner_username") ?>) OR (prj_username=<? value("owner_username") ?>)))
@@ -441,7 +441,7 @@ SELECT -1 AS id,
         
 	NULL::text AS due_qtforegroundrole,
        2 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
 <? if exists("owner_username") ?>
     JOIN prj ON (prj_id=quhead_prj_id
             AND ((prj_owner_username=<? value("owner_username") ?>) OR (prj_username=<? value("owner_username") ?>)))

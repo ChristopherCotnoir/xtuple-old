@@ -61,7 +61,7 @@ SELECT SUM(counter) AS counter FROM (
   SELECT <? if exists("count") ?> COUNT(*)
          <? else ?> quhead_id, 'Quote', quhead_number, quhead_billtocountry, 'Bill-To'
          <? endif ?>
-    FROM quhead
+    FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
    WHERE quhead_billtocountry != ''
      AND quhead_billtocountry NOT IN (SELECT country_name
                                         FROM country
@@ -71,7 +71,7 @@ SELECT SUM(counter) AS counter FROM (
   SELECT <? if exists("count") ?> COUNT(*)
          <? else ?> quhead_id, 'Quote', quhead_number, quhead_shiptocountry, 'Ship-To'
          <? endif ?>
-    FROM quhead
+    FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
    WHERE quhead_shiptocountry != ''
      AND quhead_shiptocountry NOT IN (SELECT country_name
                                         FROM country

@@ -32,7 +32,7 @@ FROM ( SELECT itemsite_id, itemloc_id, warehous_code, item_number,
             <? else ?>
               (itemsite_value / CASE WHEN(itemsite_qtyonhand=0) THEN 1 ELSE itemsite_qtyonhand END) AS cost
             <? endif ?>
-       FROM itemloc, itemsite, item, whsinfo, uom, ls
+       FROM itemloc, itemsite, item, site(), uom, ls
        WHERE ((itemloc_itemsite_id=itemsite_id)
           AND (itemsite_item_id=item_id)
           AND (item_inv_uom_id=uom_id)

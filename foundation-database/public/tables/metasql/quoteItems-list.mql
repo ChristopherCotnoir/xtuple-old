@@ -48,7 +48,7 @@ SELECT quitem_id,
        'percent' AS marginpercent_xtnumericrole,
        'curr' AS extprice_xtnumericrole
   FROM item, uom AS quom, uom AS puom,
-       quitem LEFT OUTER JOIN (itemsite JOIN whsinfo ON (itemsite_warehous_id=warehous_id)) ON (quitem_itemsite_id=itemsite_id)
+       quitem LEFT OUTER JOIN (itemsite JOIN site() ON (itemsite_warehous_id=warehous_id)) ON (quitem_itemsite_id=itemsite_id)
  WHERE ( (quitem_item_id=item_id)
    AND   (quitem_qty_uom_id=quom.uom_id)
    AND   (quitem_price_uom_id=puom.uom_id)

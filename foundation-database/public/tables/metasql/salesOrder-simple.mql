@@ -106,7 +106,7 @@
     COALESCE(shipto_salesrep_id, cust_salesrep_id),
     cust_terms_id,
     (SELECT warehous_fob
-       FROM whsinfo
+       FROM site()
       WHERE warehous_id=
             CASE WHEN (COALESCE(shipto_preferred_warehous_id, -1) > 0) THEN shipto_preferred_warehous_id
                  WHEN (COALESCE(cust_preferred_warehous_id, -1) > 0) THEN cust_preferred_warehous_id
@@ -206,7 +206,7 @@
     cohead_salesrep_id=COALESCE(shipto_salesrep_id, cust_salesrep_id),
     cohead_terms_id=cust_terms_id,
     cohead_fob=(SELECT warehous_fob
-                FROM whsinfo
+                FROM site()
                 WHERE warehous_id=
                        CASE WHEN (COALESCE(shipto_preferred_warehous_id, -1) > 0) THEN shipto_preferred_warehous_id
                             WHEN (COALESCE(cust_preferred_warehous_id, -1) > 0) THEN cust_preferred_warehous_id

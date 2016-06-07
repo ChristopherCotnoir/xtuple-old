@@ -47,7 +47,7 @@ SELECT wo_id,
 FROM wo JOIN itemsite ON (itemsite_id=wo_itemsite_id)
         JOIN item ON (item_id=itemsite_item_id)
         JOIN uom ON (uom_id=item_inv_uom_id)
-        JOIN whsinfo ON (warehous_id=itemsite_warehous_id)
+        JOIN site() ON (warehous_id=itemsite_warehous_id)
         LEFT OUTER JOIN prj ON (prj_id=wo_prj_id)
 <? if reExists("woSoStatus") ?>
         JOIN coitem ON ((coitem_order_id=wo_id) AND (coitem_order_type='W'))

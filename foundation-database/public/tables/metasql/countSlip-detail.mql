@@ -31,7 +31,7 @@ FROM cntslip, invcnt
 <? if exists("byWarehouse") ?>
      JOIN itemsite ON (invcnt_itemsite_id=itemsite_id)
      JOIN item ON (itemsite_item_id=item_id)
-     JOIN whsinfo ON (itemsite_warehous_id=warehous_id)
+     JOIN site() ON (itemsite_warehous_id=warehous_id)
 <? endif ?>
 WHERE ((cntslip_cnttag_id=invcnt_id)
 <? if exists("byWarehouse") ?>

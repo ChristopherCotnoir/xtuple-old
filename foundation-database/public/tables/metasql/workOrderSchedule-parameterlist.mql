@@ -26,7 +26,7 @@ SELECT wo_id,
             ELSE 'On Time'
        END AS condition,
        CASE WHEN (wo_duedate<=CURRENT_DATE) THEN 'error' END AS condition_qtforegroundrole
-FROM wo, itemsite, whsinfo, item, uom
+FROM wo, itemsite, site(), item, uom
 WHERE ( (wo_itemsite_id=itemsite_id)
   AND (itemsite_item_id=item_id)
   AND (item_inv_uom_id=uom_id)

@@ -82,7 +82,7 @@ SELECT rahead_number AS order_number, raitem_linenumber AS orderitem_linenumber,
        'qty' AS qtytoreceive_xtnumericrole, 
        'qty' AS receivable_xtnumericrole,
        'purchprice' AS recv_purchcost_xtnumericrole 
-FROM rahead
+FROM rahead JOIN site() ON (rahead_warehous_id=warehous_id)
   JOIN raitem ON (rahead_id=raitem_rahead_id)
 WHERE ((raitem_status <> 'C')
   AND  (raitem_id=<? value("orderitem_id") ?>)

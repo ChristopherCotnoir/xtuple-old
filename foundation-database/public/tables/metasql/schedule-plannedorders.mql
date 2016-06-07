@@ -81,12 +81,12 @@
          formatMoney(0)
  <? endif ?> AS f_plorevenue
  FROM planord JOIN itemsite ON (planord_itemsite_id=itemsite.itemsite_id)
-              JOIN whsinfo ON (itemsite.itemsite_warehous_id=whsinfo.warehous_id)
+              JOIN site() ON (itemsite.itemsite_warehous_id=whsinfo.warehous_id)
               JOIN item ON (itemsite.itemsite_item_id=item_id)
               JOIN uom ON (item_inv_uom_id=uom_id)
               LEFT OUTER JOIN classcode ON (classcode_id=item_classcode_id)
               LEFT OUTER JOIN itemsite supplyitemsite ON (planord_supply_itemsite_id=supplyitemsite.itemsite_id)
-              LEFT OUTER JOIN whsinfo supplywhsinfo ON (supplyitemsite.itemsite_warehous_id=supplywhsinfo.warehous_id)
+              LEFT OUTER JOIN site() supplywhsinfo ON (supplyitemsite.itemsite_warehous_id=supplywhsinfo.warehous_id)
  <? if exists("itemgrp_id") ?>
               JOIN itemgrpitem ON (itemgrpitem_item_id=item_id)
               JOIN itemgrp ON (itemgrp_id=itemgrpitem_itemgrp_id AND itemgrp_id=<? value("itemgrp_id") ?>)

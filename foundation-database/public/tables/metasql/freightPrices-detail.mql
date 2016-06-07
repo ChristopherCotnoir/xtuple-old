@@ -29,7 +29,7 @@ FROM (SELECT ipsfreight_id AS itemid, 1 AS sourcetype,
              warehous_code, shipzone_name, freightclass_code, ipsfreight_shipvia
       FROM ipsass JOIN ipshead ON (ipshead_id=ipsass_ipshead_id)
            JOIN ipsfreight ON (ipsfreight_ipshead_id=ipshead_id)
-           LEFT OUTER JOIN whsinfo ON (warehous_id=ipsfreight_warehous_id)
+           LEFT OUTER JOIN site() ON (warehous_id=ipsfreight_warehous_id)
            LEFT OUTER JOIN shipzone ON (shipzone_id=ipsfreight_shipzone_id)
            LEFT OUTER JOIN freightclass ON (freightclass_id=ipsfreight_freightclass_id)
       WHERE ((true)
@@ -69,7 +69,7 @@ FROM (SELECT ipsfreight_id AS itemid, 1 AS sourcetype,
 <? if exists("byCust") ?>
            JOIN custinfo ON (cust_custtype_id=ipsass_custtype_id)
 <? endif ?>
-           LEFT OUTER JOIN whsinfo ON (warehous_id=ipsfreight_warehous_id)
+           LEFT OUTER JOIN site() ON (warehous_id=ipsfreight_warehous_id)
            LEFT OUTER JOIN shipzone ON (shipzone_id=ipsfreight_shipzone_id)
            LEFT OUTER JOIN freightclass ON (freightclass_id=ipsfreight_freightclass_id)
       WHERE ((true)
@@ -108,7 +108,7 @@ FROM (SELECT ipsfreight_id AS itemid, 1 AS sourcetype,
            sale JOIN ipshead ON (ipshead_id=sale_ipshead_id)
 <? endif ?>
                 JOIN ipsfreight ON (ipsfreight_ipshead_id=ipshead_id)
-                LEFT OUTER JOIN whsinfo ON (warehous_id=ipsfreight_warehous_id)
+                LEFT OUTER JOIN site() ON (warehous_id=ipsfreight_warehous_id)
                 LEFT OUTER JOIN shipzone ON (shipzone_id=ipsfreight_shipzone_id)
                 LEFT OUTER JOIN freightclass ON (freightclass_id=ipsfreight_freightclass_id)
       WHERE ((true)
@@ -143,7 +143,7 @@ FROM (SELECT ipsfreight_id AS itemid, 1 AS sourcetype,
              warehous_code, shipzone_name, freightclass_code, ipsfreight_shipvia
       FROM sale JOIN ipshead ON (ipshead_id=sale_ipshead_id)
                 JOIN ipsfreight ON (ipsfreight_ipshead_id=ipshead_id)
-                LEFT OUTER JOIN whsinfo ON (warehous_id=ipsfreight_warehous_id)
+                LEFT OUTER JOIN site() ON (warehous_id=ipsfreight_warehous_id)
                 LEFT OUTER JOIN shipzone ON (shipzone_id=ipsfreight_shipzone_id)
                 LEFT OUTER JOIN freightclass ON (freightclass_id=ipsfreight_freightclass_id)
       WHERE ((true)

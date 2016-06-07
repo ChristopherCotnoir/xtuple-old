@@ -31,7 +31,7 @@ SELECT invcnt_id, invcnt_tagnumber, warehous_code,
       'qty' AS invcnt_qoh_after_xtnumericrole,
       'qty' AS variance_xtnumericrole,
       'percent' AS percent_xtnumericrole 
-FROM invcnt, itemsite, item, whsinfo
+FROM invcnt, itemsite, item, site()
 WHERE ((invcnt_itemsite_id=itemsite_id)
   AND  (itemsite_item_id=item_id)
   AND  (itemsite_warehous_id=warehous_id)

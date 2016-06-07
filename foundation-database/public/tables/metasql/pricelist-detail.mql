@@ -62,6 +62,7 @@ FROM (
            ipsitem_type AS price_type
     FROM sale JOIN ipshead ON (ipshead_id=sale_ipshead_id AND NOT ipshead_listprice)
               JOIN ipsiteminfo ON (ipsitem_ipshead_id=ipshead_id)
+              JOIN site() ON (ipsiteminfo_warehous_id=warehous_id)
               JOIN ipsass ON (ipsass_ipshead_id=ipshead_id)
    WHERE ((ipsitem_item_id=<? value('item_id') ?>) OR (ipsitem_prodcat_id=<? value('prodcat_id') ?>))
       AND (<? value('asof') ?> BETWEEN sale_startdate AND sale_enddate)
@@ -116,6 +117,7 @@ FROM (
            ipsitem_type AS price_type
     FROM ipsass JOIN ipshead ON (ipshead_id=ipsass_ipshead_id AND NOT ipshead_listprice)
                 JOIN ipsiteminfo ON (ipsitem_ipshead_id=ipshead_id)
+                JOIN site() ON (ipsiteminfo_warehous_id=warehous_id)
     WHERE ((ipsitem_item_id=<? value('item_id') ?>) OR (ipsitem_prodcat_id=<? value('prodcat_id') ?>))
       AND (<? value('asof') ?> BETWEEN ipshead_effective AND ipshead_expires)
       AND ( ((COALESCE(ipsass_shipto_id, -1) > 0) AND (ipsass_shipto_id=<? value('shipto_id') ?>))

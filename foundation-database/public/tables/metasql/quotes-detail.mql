@@ -29,7 +29,7 @@ SELECT quhead.*, firstline(quhead_ordercomments) AS notes, quhead_id AS id,
   CASE WHEN (quhead_expire < current_date) THEN
     'error'
    END AS quhead_expire_qtforegroundrole
-FROM quhead
+FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
 <? if not exists("customersOnly") ?>
   LEFT OUTER 
 <? endif ?>

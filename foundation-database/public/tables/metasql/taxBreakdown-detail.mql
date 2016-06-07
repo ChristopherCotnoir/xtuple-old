@@ -154,7 +154,7 @@
          quhead_freight AS freight,
          taxtype_id AS freightTax,
          ROUND(calculateTax(quhead_taxzone_id, getfreighttaxtypeid(), quhead_quotedate, quhead_curr_id, quhead_freight), 2) AS freighttaxamt
-  FROM quitem, item, quhead 
+  FROM quitem, item, quhead JOIN site() ON (quhead_warehous_id=warehous_id)
     LEFT OUTER JOIN taxzone ON (quhead_taxzone_id=taxzone_id) 
     LEFT OUTER JOIN taxtype ON (taxtype_id=getFreightTaxTypeId())
   WHERE ((quitem_quhead_id=<? value("quhead_id") ?>)
@@ -175,7 +175,7 @@
          rahead_freight AS freight,
          taxtype_id AS freightTax,
          ROUND(calculateTax(rahead_taxzone_id, getfreighttaxtypeid(), rahead_authdate, rahead_curr_id, rahead_freight), 2) AS freighttaxamt
-  FROM rahead 
+  FROM rahead JOIN site() ON (rahead_warehous_id=warehous_id)
     LEFT OUTER JOIN raitem ON (raitem_rahead_id=rahead_id)
     LEFT OUTER JOIN taxzone ON (rahead_taxzone_id=taxzone_id) 
     LEFT OUTER JOIN taxtype ON (taxtype_id=getFreightTaxTypeId())

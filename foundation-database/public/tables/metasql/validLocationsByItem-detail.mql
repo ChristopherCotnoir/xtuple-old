@@ -8,7 +8,7 @@ SELECT location_id, warehous_code,
        formatLocationName(location_id) AS locationname,
        firstLine(location_descrip) AS locationdescrip,
        location_restrict, location_netable
-FROM itemsite, location, whsinfo
+FROM itemsite, location, site()
 WHERE ((validLocation(location_id, itemsite_id))
    AND ((itemsite_loccntrl) OR (itemsite_location_id=location_id))
    AND (itemsite_item_id=<? value("item_id") ?>)

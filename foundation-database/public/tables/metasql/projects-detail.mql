@@ -316,7 +316,7 @@ SELECT quhead_id AS id,
 
        NULL::text AS due_qtforegroundrole,
        2 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
   JOIN prj() ON (quhead_prj_id=prj_id)
   JOIN custinfo ON (quhead_cust_id=cust_id)
     JOIN quitem ON (quitem_quhead_id = quhead_id)
@@ -365,7 +365,7 @@ SELECT quitem_id AS id,
        NULL::numeric AS exp_balance,
        NULL::text AS due_qtforegroundrole,
        3 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
   JOIN prj() ON (quhead_prj_id=prj_id)
     JOIN quitem ON (quitem_quhead_id = quhead_id)
     JOIN uom ON (quitem_qty_uom_id = uom_id)
@@ -408,7 +408,7 @@ SELECT quhead_id AS id,
 
 	NULL::text AS due_qtforegroundrole,
        2 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
     JOIN prj() ON (quhead_prj_id=prj_id)
     JOIN quitem ON (quitem_quhead_id = quhead_id)
  WHERE (1=1)
@@ -449,7 +449,7 @@ SELECT -1 AS id,
 
 	NULL::text AS due_qtforegroundrole,
        2 AS xtindentrole
-  FROM quhead
+  FROM quhead JOIN site() ON (quhead_warehous_id=warehous_id)
     JOIN prj() ON (quhead_prj_id=prj_id)
     JOIN quitem ON (quitem_quhead_id = quhead_id)
  WHERE (1=1)

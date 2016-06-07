@@ -7,7 +7,7 @@
 SELECT itemsite_id, item_type, item_number,
        (item_descrip1 || ' ' || item_descrip2) AS descrip,
        warehous_code
-FROM itemsite, item, whsinfo
+FROM itemsite, item, site()
 WHERE ( (itemsite_active)
     AND (itemsite_item_id=item_id)
     AND (itemsite_warehous_id=warehous_id)

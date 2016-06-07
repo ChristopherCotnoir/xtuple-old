@@ -9,7 +9,7 @@ SELECT evntlog_id, evntlog_ord_id, evntlog_newdate,
        evntlog_evnttime,
        evntlog_dispatched,
        evnttype_name, evntlog_number 
-  FROM evnttype, evntlog LEFT OUTER JOIN whsinfo ON (evntlog_warehous_id=warehous_id)
+  FROM evnttype, evntlog LEFT OUTER JOIN site() ON (evntlog_warehous_id=warehous_id)
 WHERE ( (evntlog_evnttype_id=evnttype_id)
  AND (evntlog_username=<? value("username") ?>)
 <? if exists("warehous_id") ?>
