@@ -17,7 +17,7 @@ SELECT emp_id, warehous_code, emp_active, emp_code, emp_number,
 <? endforeach ?>
 FROM emp
   LEFT OUTER JOIN cntct ON (emp_cntct_id=cntct_id)
-  LEFT OUTER JOIN site() ON (emp_warehous_id=warehous_id)
+  JOIN site() ON (emp_warehous_id=warehous_id)
 <? if exists("emp_group") ?>
   JOIN empgrpitem ON (emp_id=empgrpitem_emp_id AND empgrpitem_empgrp_id=<? value("emp_group") ?>)
 <? endif ?>

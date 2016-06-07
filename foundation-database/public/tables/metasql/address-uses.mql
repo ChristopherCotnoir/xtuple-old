@@ -31,6 +31,6 @@ UNION
 SELECT warehous_id, 5, <? value("whs") ?>, warehous_code,
        warehous_descrip, '', '',
        '', '', '', ''
-FROM site()
+FROM whsinfo
 WHERE (warehous_addr_id=<? value("addr_id") ?>)
 ORDER BY 3, 5, 4;

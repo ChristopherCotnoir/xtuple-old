@@ -34,8 +34,8 @@ SELECT ipsitem_id AS id, 1 AS altid,
        'qty' AS qtybreak_xtnumericrole,
        'salesprice' AS netPrice_xtnumericrole,
        'salesprice' AS price_xtnumericrole
-FROM ipshead JOIN site() ON (ipsiteminfo_warehous_id=warehous_id)
-             JOIN ipsiteminfo ON (ipsitem_ipshead_id=ipshead_id)
+FROM ipshead JOIN ipsiteminfo ON (ipsitem_ipshead_id=ipshead_id)
+             JOIN site() ON (ipsiteminfo_warehous_id=warehous_id)
              LEFT OUTER JOIN item ON (item_id=ipsitem_item_id)
              LEFT OUTER JOIN prodcat ON (prodcat_id=ipsitem_prodcat_id)
              LEFT OUTER JOIN uom AS qty ON (qty.uom_id=ipsitem_qty_uom_id)
@@ -60,7 +60,7 @@ SELECT ipsfreight_id AS id, 2 AS altid, <? value("freight") ?> AS type,
        'salesprice' AS netPrice_xtnumericrole,
        'salesprice' AS price_xtnumericrole
 FROM ipsfreight LEFT OUTER JOIN uom ON (uom_item_weight)
-                LEFT OUTER JOIN site() ON (warehous_id=ipsfreight_warehous_id)
+                JOIN site() ON (warehous_id=ipsfreight_warehous_id)
                 LEFT OUTER JOIN shipzone ON (shipzone_id=ipsfreight_shipzone_id)
 WHERE ( (ipsfreight_ipshead_id=<? value("ipshead_id") ?>) )
 ORDER BY altid, number, qtybreak;

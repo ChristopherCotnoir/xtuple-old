@@ -113,7 +113,7 @@ SELECT invhist.*, 0 AS level,
        END AS locto,
        itemsite_abcclass 
 FROM itemsite, item, site() AS whs1, invhist
-  LEFT OUTER JOIN site() AS whs2 ON (invhist_xfer_warehous_id=whs2.warehous_id)
+  JOIN site() AS whs2 ON (invhist_xfer_warehous_id=whs2.warehous_id)
 WHERE ( (invhist_itemsite_id=itemsite_id)
   AND  (itemsite_item_id=item_id) 
   AND  (itemsite_warehous_id=whs1.warehous_id)
@@ -209,7 +209,7 @@ UNION SELECT invhist.*, 1 AS level,
              '' AS locfrom,
              '' AS locto,
              '' AS itemsite_abcclass 
-FROM itemsite, item, site() AS whs1, invdetail, invhist LEFT OUTER JOIN
+FROM itemsite, item, site() AS whs1, invdetail, invhist JOIN
      site() AS whs2 ON (invhist_xfer_warehous_id=whs2.warehous_id)
 WHERE ((invhist_hasdetail)
   AND (invhist_itemsite_id=itemsite_id)

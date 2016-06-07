@@ -33,7 +33,7 @@ FROM poitem
 <? endif ?>
   LEFT OUTER JOIN item ON (itemsite_item_id=item_id) 
   LEFT OUTER JOIN uom ON (item_inv_uom_id=uom_id)
-  LEFT OUTER JOIN site() ON (itemsite_warehous_id=warehous_id)
+  JOIN site() ON (itemsite_warehous_id=warehous_id)
   LEFT OUTER JOIN itemsrc ON (itemsrc_id=poitem_itemsrc_id)
   LEFT OUTER JOIN expcat ON (poitem_expcat_id=expcat_id)
 WHERE ( (poitem_status <> 'C')

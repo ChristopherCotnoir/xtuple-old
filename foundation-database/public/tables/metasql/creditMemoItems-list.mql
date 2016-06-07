@@ -19,7 +19,7 @@ SELECT cmitem_id, cmitem_linenumber, COALESCE(item_number, cmitem_number) AS ite
 FROM cmitem
 LEFT OUTER JOIN itemsite ON (cmitem_itemsite_id=itemsite_id)
 LEFT OUTER JOIN item ON (itemsite_item_id=item_id)
-LEFT OUTER JOIN site() ON (itemsite_warehous_id=warehous_id)
+JOIN site() ON (itemsite_warehous_id=warehous_id)
 LEFT OUTER JOIN uom AS quom ON (cmitem_qty_uom_id=quom.uom_id)
 LEFT OUTER JOIN uom AS puom ON (cmitem_price_uom_id=puom.uom_id)
 WHERE (cmitem_cmhead_id=<? value("cmhead_id") ?>)

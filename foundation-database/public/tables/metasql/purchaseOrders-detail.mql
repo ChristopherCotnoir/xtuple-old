@@ -57,7 +57,7 @@ SELECT pohead_id, pohead_number,
 <? if exists("byReceiptDate") ?>
        recv,
 <? endif ?>
-       pohead LEFT OUTER JOIN site() ON (pohead_warehous_id=warehous_id)
+       pohead JOIN site() ON (pohead_warehous_id=warehous_id)
  WHERE ((poitem_pohead_id=pohead_id)
    AND  (pohead_vend_id=vend_id)
 <? if exists("byReceiptDate") ?>
