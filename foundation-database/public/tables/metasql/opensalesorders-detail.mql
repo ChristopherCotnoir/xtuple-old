@@ -26,9 +26,9 @@ SELECT DISTINCT
        charass_alias<? literal("char_id_date_list") ?>.charass_value::date AS char<? literal("char_id_date_list") ?>,
 <? endforeach ?>
        firstline(cohead_ordercomments) AS notes,
-       calcSalesOrderAmt(cohead_id,'T') AS ordertotal,
-       calcSalesOrderAmt(cohead_id,'M') AS ordermargin,
-       calcSalesOrderAmt(cohead_id,'P') AS ordermarginpercent,
+       calcSalesOrderAmt(cohead_id,'T', cohead_taxzone_id, cohead_orderdate, cohead_curr_id, cohead_freight, cohead_misc) AS ordertotal,
+       calcSalesOrderAmt(cohead_id,'M', cohead_taxzone_id, cohead_orderdate, cohead_curr_id, cohead_freight, cohead_misc) AS ordermargin,
+       calcSalesOrderAmt(cohead_id,'P', cohead_taxzone_id, cohead_orderdate, cohead_curr_id, cohead_freight, cohead_misc) AS ordermarginpercent,
        'percent' AS ordermarginpercent_xtnumericrole,
        'extprice' AS ordertotal_xtnumericrole,
        'extprice' AS ordermargin_xtnumericrole

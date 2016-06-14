@@ -5,7 +5,7 @@
 -- See www.xtuple.com/CPAL for the full text of the software license.
 
 SELECT quhead.*, firstline(quhead_ordercomments) AS notes, quhead_id AS id,
-       calcQuoteAmt(quhead_id) AS ordertotal,
+       calcQuoteAmt(quhead_id, quhead_taxzone_id, quhead_quotedate, quhead_curr_id, quhead_freight, quhead_misc) AS ordertotal,
        'extprice' AS ordertotal_xtnumericrole,
        <? foreach("char_id_text_list") ?>
          charass_alias<? literal("char_id_text_list") ?>.charass_value AS char<? literal("char_id_text_list") ?>,

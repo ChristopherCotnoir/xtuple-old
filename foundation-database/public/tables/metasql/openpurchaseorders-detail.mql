@@ -8,7 +8,7 @@ SELECT DISTINCT
        pohead_id AS id, COALESCE(pohead_cohead_id, -1) AS altid,
        pohead.*,
        calcPurchaseOrderDueDate(pohead_id) AS min_duedate,
-       calcPurchaseOrderAmt(pohead_id) AS order_total,
+       calcPurchaseOrderAmt(pohead_id, pohead_taxzone_id, pohead_orderdate, pohead_curr_id, pohead_freight) AS order_total,
        vend_name, vend_number, vendtype_code,
 <? foreach("char_id_text_list") ?>
        charass_alias<? literal("char_id_text_list") ?>.charass_value AS char<? literal("char_id_text_list") ?>,

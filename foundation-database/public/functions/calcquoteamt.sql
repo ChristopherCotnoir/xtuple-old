@@ -60,3 +60,60 @@ BEGIN
 
 END;
 $$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION calcQuoteAmt(pQuheadid INTEGER, pTaxzoneId INTEGER, pOrderDate DATE, pCurrId INTEGER, pFreight NUMERIC, pMisc NUMERIC) RETURNS NUMERIC STABLE AS $$
+-- Copyright (c) 1999-2014 by OpenMFG LLC, d/b/a xTuple. 
+-- See www.xtuple.com/CPAL for the full text of the software license.
+BEGIN
+
+  RETURN calcQuoteAmt(pQuheadid, 'T', pTaxzoneId, pOrderDate, pCurrId, pFreight, pMisc);
+
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION calcQuoteAmt(pQuheadid INTEGER,
+                                        pType TEXT, pTaxzoneId INTEGER, pOrderDate DATE, pCurrId INTEGER, pFreight NUMERIC, pMisc NUMERIC) RETURNS NUMERIC STABLE AS $$
+-- Copyright (c) 1999-2014 by OpenMFG LLC, d/b/a xTuple. 
+-- See www.xtuple.com/CPAL for the full text of the software license.
+DECLARE
+  _subtotal NUMERIC := 0.0;
+  _cost NUMERIC := 0.0;
+  _tax NUMERIC := 0.0;
+  _freight NUMERIC := 0.0;
+  _misc NUMERIC := 0.0;
+  _amount NUMERIC := 0.0;
+
+BEGIN
+
+  -- pType: S = line item subtotal
+  --        T = total
+  --        X = tax
+  --        M = margin
+
+  SELECT COALESCE(SUM(ROUND((quitem_qtyord * quitem_qty_invuomratio) *
+                            (quitem_price / quitem_price_invuomratio), 2)), 0.0),
+         COALESCE(SUM(ROUND((quitem_qtyord * quitem_qty_invuomratio) *
+                            (quitem_unitcost / quitem_price_invuomratio), 2)), 0.0)
+         INTO _subtotal, _cost
+  FROM quitem
+  WHERE (quitem_quhead_id=pQuheadid);
+
+  IF (pType IN ('T', 'X')) THEN
+    SELECT COALESCE(SUM(tax), 0.0) INTO _tax
+    FROM (SELECT COALESCE(ROUND(SUM(taxdetail_tax), 2), 0.0) AS tax
+          FROM tax
+               JOIN calculateTaxDetailSummary('Q', pQuheadid, 'T', COALESCE(pTaxzoneId, -1), pOrderDate, pCurrId, COALESCE(pFreight,0.0))ON (taxdetail_tax_id=tax_id)
+          GROUP BY tax_id) AS data;
+  END IF;
+
+  _amount := CASE pType WHEN 'S' THEN (_subtotal)
+                        WHEN 'T' THEN (_subtotal + _tax + COALESCE(pFreight, 0) + COALESCE(pMisc, 0))
+                        WHEN 'X' THEN (_tax)
+                        WHEN 'M' THEN (_subtotal - _cost)
+                        ELSE 0.0
+             END;
+
+  RETURN _amount;
+
+END;
+$$ LANGUAGE 'plpgsql';
