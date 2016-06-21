@@ -7,10 +7,21 @@ DECLARE
   pOrderType ALIAS FOR $1;
   pOrderId ALIAS FOR $2;
   pDisplayType ALIAS FOR $3;
+  _x RECORD;
+  _row taxdetail%ROWTYPE;
 
 BEGIN
 
-  RETURN NEXT calculatetaxdetailsummary(pOrderType, pOrderId, pDisplayType, NULL, NULL, NULL, NULL, FALSE);
+  FOR _x IN SELECT * FROM calculatetaxdetailsummary(pOrderType, pOrderId, pDisplayType, NULL, NULL, NULL, NULL, FALSE)
+  LOOP
+    _row.taxdetail_tax_id = _x.taxdetail_tax_id;
+    _row.taxdetail_tax_code = _x.taxdetail_tax_code;
+    _row.taxdetail_tax_descrip = _x.taxdetail_tax_descrip;
+    _row.taxdetail_tax = _x.taxdetail_tax;
+    _row.taxdetail_level=_x.taxdetail_level;
+    _row.taxdetail_taxclass_sequence= _x.taxdetail_taxclass_sequence;
+    RETURN NEXT _row;
+  END LOOP;
 
  END;
 $$ LANGUAGE plpgsql;
