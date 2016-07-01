@@ -11,7 +11,7 @@ return (function () {
                       'where crmacct_id = $1;';
 
   if (TG_OP === 'INSERT') {
-    if (NEW.crmacct_usr_username !== null || NEW.crmacct_usr_username !== '') {
+    if (NEW.crmacct_usr_username !== null && NEW.crmacct_usr_username !== '') {
       /* Refresh this CRM Account's share access. */
       XT.ShareUsers.refreshCacheUser(NEW.crmacct_usr_username);
 
@@ -19,7 +19,7 @@ return (function () {
       XT.ShareUsers.refreshCacheUser(NEW.crmacct_owner_username);
     }
 
-    if (NEW.crmacct_parent_id !== null || NEW.crmacct_parent_id !== '') {
+    if (NEW.crmacct_parent_id !== null && NEW.crmacct_parent_id !== '') {
       /* Refresh this CRM Account's Parents share access. */
       XT.ShareUsers.refreshRelationCacheUser(parentUserSql, [NEW.crmacct_parent_id]);
 
@@ -45,7 +45,7 @@ return (function () {
 
     /* If the CRM Account's crmacct_parent_id changed, refresh the new and old Parent CRM Account's share access. */
     if (OLD.crmacct_parent_id !== NEW.crmacct_parent_id) {
-      if (OLD.crmacct_parent_id !== null || OLD.crmacct_parent_id !== '') {
+      if (OLD.crmacct_parent_id !== null && OLD.crmacct_parent_id !== '') {
         /* Refresh the old CRM Account's Parents share access. */
         XT.ShareUsers.refreshRelationCacheUser(parentUserSql, [OLD.crmacct_parent_id]);
 
@@ -53,7 +53,7 @@ return (function () {
         XT.ShareUsers.refreshRelationCacheUser(parentOwnerSql, [OLD.crmacct_parent_id]);
       }
 
-      if (NEW.crmacct_parent_id !== null || NEW.crmacct_parent_id !== '') {
+      if (NEW.crmacct_parent_id !== null && NEW.crmacct_parent_id !== '') {
         /* Refresh the new CRM Account's Parents share access. */
         XT.ShareUsers.refreshRelationCacheUser(parentUserSql, [NEW.crmacct_parent_id]);
 
@@ -68,7 +68,7 @@ return (function () {
     /* Delete share access cache for this CRM Account Owner by refreshing it. */
     XT.ShareUsers.refreshCacheUser(OLD.crmacct_owner_username);
 
-    if (OLD.crmacct_parent_id !== null || OLD.crmacct_parent_id !== '') {
+    if (OLD.crmacct_parent_id !== null && OLD.crmacct_parent_id !== '') {
       /* Refresh the old CRM Account's Parents share access. */
       XT.ShareUsers.refreshRelationCacheUser(parentUserSql, [OLD.crmacct_parent_id]);
 
