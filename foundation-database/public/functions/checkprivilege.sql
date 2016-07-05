@@ -1,14 +1,5 @@
-CREATE OR REPLACE FUNCTION checkPrivilege(text) RETURNS BOOLEAN STABLE AS $$
--- Copyright (c) 1999-2014 by OpenMFG LLC, d/b/a xTuple. 
--- See www.xtuple.com/CPAL for the full text of the software license.
-DECLARE
-  pPrivilege ALIAS FOR $1;
-  _result TEXT;
-BEGIN
-  RETURN checkPrivilege(pPrivilege, getEffectiveXtUser());
-END;
-$$ LANGUAGE 'plpgsql';
-CREATE OR REPLACE FUNCTION checkPrivilege(text, text) RETURNS BOOLEAN STABLE AS $$
+DROP FUNCTION IF EXISTS checkPrivilege(text);
+CREATE OR REPLACE FUNCTION checkPrivilege(text, text DEFAULT getEffectiveXtUser()) RETURNS BOOLEAN STABLE AS $$
 -- Copyright (c) 1999-2014 by OpenMFG LLC, d/b/a xTuple. 
 -- See www.xtuple.com/CPAL for the full text of the software license.
 DECLARE
