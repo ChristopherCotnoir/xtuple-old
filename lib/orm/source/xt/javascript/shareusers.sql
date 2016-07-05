@@ -89,7 +89,7 @@ select xt.install_js('XT','ShareUsers','xtuple', $$
    */
   XT.ShareUsers.refreshCacheUser = function(refreshObjUser) {
     var privCheckSql = 'SELECT checkPrivilege($2, $1) AND checkPrivilege($3, $1) AND checkPrivilege($4, $1)';
-    if(!(plv8.execute(privCheckSql, [refreshObjUser, 'MaintainAllCRMAccounts', 'MaintainCustomMasters', 'MaintainShiptos']))) {
+    if((plv8.execute(privCheckSql, [refreshObjUser, 'MaintainAllCRMAccounts', 'MaintainCustomMasters', 'MaintainShiptos']))) {
       var refreshObjSql = 'select xt.refresh_cache_share_users_user($1)';
 
       plv8.execute(refreshObjSql, [refreshObjUser]);
