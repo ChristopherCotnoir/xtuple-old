@@ -20,7 +20,7 @@ DECLARE
 BEGIN
   SELECT * INTO _head FROM pohead WHERE pohead_id = pSrcid;
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Could not find the P/O to copy. [xtuple: copyPO, -1]';
   END IF;
   IF (_head.pohead_vend_id != pVendid) THEN
     RETURN -2;		-- not supported now but should be in the future
@@ -105,7 +105,7 @@ BEGIN
         AND  (itemsrc_id = _lineitem.poitem_itemsrc_id)
 	AND  (itemsite_id = _lineitem.poitem_itemsite_id));
       IF (NOT FOUND AND _vend_restrictpurch) THEN
-	RETURN -3;
+	RAISE EXCEPTION 'The system does not allow purchases of Items for this Vendor without Item Sources and at least one line item item in the original P/O does not have an active Item Source. [xtuple: copyPO, -3]';
       END IF;
 
       -- handle changes to the uom ratio and consequent qty changes
@@ -133,7 +133,7 @@ BEGIN
         SELECT itemsrcPrice(_itemsrc.itemsrc_id, _head.pohead_warehous_id, _head.pohead_dropship,
                             _lineitem.poitem_qty_ordered, _head.pohead_curr_id, CURRENT_DATE) INTO _unitprice;
 	IF (_unitprice IS NULL) THEN
-	  RETURN -4;
+	  RAISE EXCEPTION 'At least one line item in the original P/O does not have an active Item Source Price for this Vendor. [xtuple: copyPO, -4]';
 	END IF;
       END IF;
 

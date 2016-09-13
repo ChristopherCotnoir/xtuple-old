@@ -10,7 +10,7 @@ BEGIN
   FROM todoitem
   WHERE (todoitem_incdt_id=pincdtid);
   IF (_count > 0) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'This Incident cannot be deleted as there are To-Do List Items associated with it. [xtuple: deleteIncident, -1]';
   END IF;
 
   DELETE FROM comment

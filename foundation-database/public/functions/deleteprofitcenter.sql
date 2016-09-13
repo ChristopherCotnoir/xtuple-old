@@ -9,7 +9,7 @@ BEGIN
              WHERE ((accnt_profit=prftcntr_number)
                AND  (prftcntr_id=pid))
             )) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Profit Center cannot be deleted as it is in use by existing Account. You must reclass these Accounts before you may delete the selected Profit Center. [xtuple: deleteProfitCenter, -1]';
   END IF;
 
   DELETE FROM prftcntr

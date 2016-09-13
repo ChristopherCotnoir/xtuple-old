@@ -24,7 +24,7 @@ BEGIN
     WHERE (bankaccnt_check_form_id=pFormid)
     LIMIT 1;
     IF (FOUND) THEN
-      RETURN -1;
+      RAISE EXCEPTION 'The selected Check Format cannot be deleted as it is used by one or more Bank Accounts. You must reassign these Bank Accounts before you may delete the selected Check Form. [xtuple: deleteForm, -1]';
     END IF;
 
   END IF;

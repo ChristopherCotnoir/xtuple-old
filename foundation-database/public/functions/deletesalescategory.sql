@@ -13,7 +13,7 @@ BEGIN
    AND (NOT invchead_posted)
    AND (invcitem_salescat_id=pSalescatid) );
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteSalesCategory, -1]';
   END IF;
 
   PERFORM invcitem_salescat_id
@@ -22,14 +22,14 @@ BEGIN
    AND (invchead_posted)
    AND (invcitem_salescat_id=pSalescatid) );
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: deleteSalesCategory, -2]';
   END IF;
 
   PERFORM aropen_salescat_id
      FROM aropen
     WHERE (aropen_salescat_id=pSalescatid);
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: deleteSalesCategory, -3]';
   END IF;
 
   DELETE FROM salescat

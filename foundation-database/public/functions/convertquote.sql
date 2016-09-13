@@ -23,7 +23,7 @@ BEGIN
   IF (SELECT COALESCE(quhead_expire, endOfTime()) < CURRENT_DATE
         FROM quhead
        WHERE(quhead_id=pQuheadid)) THEN
-    RETURN -6;
+    RAISE EXCEPTION 'Quote has expired and can not be converted. [xtuple: convertQuote, -6]';
   END IF;
 
 --  Check to make sure that all of the quote items have a valid itemsite
@@ -38,7 +38,7 @@ BEGIN
     FROM quhead
     WHERE (quhead_id=pQuheadid);
 
-    RETURN -1;
+    RAISE EXCEPTION 'Quote has one or more line items without a warehouse specified. These line items must be fixed before you may convert this quote. [xtuple: convertQuote, -1]';
   END IF;
 
   SELECT cust_creditstatus, cust_usespos, cust_blanketpos
@@ -53,14 +53,14 @@ BEGIN
     WHERE ((quhead_cust_id=prospect_id)
       AND  (quhead_id=pQuheadid));
     IF (NOT FOUND) THEN
-      RETURN -2;
+      RAISE EXCEPTION 'Cannot find the Customer data for Quote. [xtuple: convertQuote, -2]';
     ELSE
-      RETURN -3;
+      RAISE EXCEPTION 'Quote is associated with a Prospect, not a Customer. Convert the Prospect to a Customer first. [xtuple: convertQuote, -3]';
     END IF;
   ELSIF (_creditstatus = 'H' AND NOT checkPrivilege('CreateSOForHoldCustomer')) THEN
-    RETURN -4;
+    RAISE EXCEPTION 'Quote is for a Customer that has been placed on a Credit Hold and you do not have privilege to create Sales Orders for Customers on Credit Hold.  The selected Customer must be taken off of Credit Hold before you may create convert this Quote. [xtuple: convertQuote, -4]';
   ELSIF (_creditstatus = 'W' AND NOT checkPrivilege('CreateSOForWarnCustomer')) THEN
-    RETURN -5;
+    RAISE EXCEPTION 'Quote is for a Customer that has been placed on a Credit Warning and you do not have privilege to create Sales Orders for Customers on Credit Warning.  The selected Customer must be taken off of Credit Warning before you may create convert this Quote. [xtuple: convertQuote, -5]';
   END IF;
 
   IF (_usespos) THEN

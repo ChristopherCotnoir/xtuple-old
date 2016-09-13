@@ -17,14 +17,14 @@ BEGIN
                AND (ccpay_status NOT IN ('D', 'X'))
                AND (ccpay_id NOT IN (SELECT payco_ccpay_id FROM payco))
                AND (cashrcpt_id=pcashrcptid))) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Cash Receipt cannot be deleted because it is a Customer Deposit made with a Credit Card and the card has already been charged. [xtuple: deleteCashrcpt, -1]';
   END IF;
 
   IF EXISTS(SELECT cashrcpt_id
             FROM cashrcpt
             WHERE ( (cashrcpt_id=pcashrcptid)
               AND   (cashrcpt_posted) )) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: deleteCashrcpt, -2]';
   END IF;
 
   -- If there are applications for this Cash Receipt then

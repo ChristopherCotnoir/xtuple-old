@@ -10,14 +10,14 @@ BEGIN
   IF (NOT EXISTS(SELECT cohead_id
                  FROM cohead
                  WHERE (cohead_id=pSoheadid))) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Sales Order cannot be attached because the Sales Order cannot be found. [xtuple: attachSalesOrderToOpportunity, -1]';
   END IF;
 
 -- Check Opportunity
   IF (NOT EXISTS(SELECT ophead_id
                  FROM ophead
                  WHERE (ophead_id=pOpheadid))) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The selected Sales Order cannot be attached because the Opportunity cannot be found.' [xtuple: attachSalesOrderToOpportunity, -2]';
   END IF;
 
 -- Cannot attach if already attached
@@ -25,7 +25,7 @@ BEGIN
 	     FROM cohead
 	     WHERE ((cohead_id=pSoheadid)
 	       AND  (cohead_ophead_id IS NOT NULL)))) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'The selected Sales Order cannot be attached because it is already associated with an Opportunity.  You must detach this Sales Order before you may attach it. [xtuple: attachSalesOrderToOpportunity, -3]';
   END IF;
 
   UPDATE cohead SET cohead_ophead_id=pOpheadid

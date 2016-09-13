@@ -37,7 +37,7 @@ BEGIN
   GROUP BY apopen_amount, apopen_paid, apopen_curr_id, apopen_curr_rate, apopen_docdate, prepared, selected;
 
   IF (_amount < 0) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: applyAPCreditMemoToBalance, -1]';
   END IF;
 
 --  Loop through the apopen items in order of due date

@@ -40,7 +40,7 @@ BEGIN
   FROM apopen
   WHERE (apopen_id = pApopenid);
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: createapdiscount, -1]';
   END IF;
 
   _crAccnt := findAPDiscountAccount(_ap.apopen_vend_id);

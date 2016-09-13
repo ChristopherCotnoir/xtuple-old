@@ -53,7 +53,7 @@ BEGIN
               LEFT OUTER JOIN item ON (item_id = itemsite_item_id)
   WHERE (quitem_id = pQuitemId);
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: createpurchasetoquote, -1]';
   END IF;
 
   SELECT addr_city, addr_country, addr_id, addr_line1, addr_line2,
@@ -79,7 +79,7 @@ BEGIN
                LEFT OUTER JOIN addr ON (vend_addr_id = addr_id)
   WHERE (itemsrc_id = pItemSourceId);
   IF (NOT FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: createpurchasetoquote, -2]';
   END IF;
 
   -- _pohead - NULL=add to existing PO if one exists

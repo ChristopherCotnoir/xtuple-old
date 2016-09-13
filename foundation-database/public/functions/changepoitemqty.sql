@@ -21,7 +21,7 @@ BEGIN
   IF ( ( SELECT (poitem_status IN ('C'))
          FROM poitem
          WHERE (poitem_id=pPoitemid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: changePoitemQty, -1]';
   END IF;
 
   UPDATE poitem

@@ -54,7 +54,7 @@ BEGIN
   LIMIT 1;
 
   IF (NOT FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The selected source Item does not have any Bill of Material Component Items associated with it. [xtuple: copyBOM, -2]';
   END IF;
 
 --  Make sure that target bomitems do not exist
@@ -65,7 +65,7 @@ BEGIN
   LIMIT 1;
 
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'The selected target Item already has a Bill of Materials associated with it.\nYou must first delete the Bill of Materials for the selected target item before attempting to copy an existing Bill of Materials. [xtuple: copyBOM, -3]';
   END IF;
 
 --  Make sure that the parent is not used in the component at some level
@@ -80,7 +80,7 @@ BEGIN
     LIMIT 1;
     IF (FOUND) THEN
       PERFORM deleteBOMWorkset(_bomworksetid);
-      RETURN -4;
+      RAISE EXCEPTION 'The Item you are trying to copy this Bill of Material to is a component item which would cause a recursive Bill of Material. [xtuple: copyBOM, -4]';
     END IF;
     PERFORM deleteBOMWorkset(_bomworksetid);
   END IF;

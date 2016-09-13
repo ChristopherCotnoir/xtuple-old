@@ -22,7 +22,7 @@ BEGIN
   IF (SELECT COALESCE(quhead_expire, endOfTime()) < CURRENT_DATE
         FROM quhead
        WHERE(quhead_id=pQuheadid)) THEN
-    RETURN -6;
+    RAISE EXCEPTION '[xtuple: convertquotetoinvoice, -6]';
   END IF;
 
 --  Check to make sure that all of the quote items have a valid itemsite
@@ -37,7 +37,7 @@ BEGIN
     FROM quhead
     WHERE (quhead_id=pQuheadid);
 
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: convertquotetoinvoice, -1]';
   END IF;
 
 -- Get Credit Stat, Uses POs and Blanket POs
@@ -56,14 +56,14 @@ BEGIN
     WHERE ((quhead_cust_id=prospect_id)
       AND  (quhead_id=pQuheadid));
     IF (NOT FOUND) THEN
-      RETURN -2;
+      RAISE EXCEPTION '[xtuple: convertquotetoinvoice, -2]';
     ELSE
-      RETURN -3;
+      RAISE EXCEPTION '[xtuple: convertquotetoinvoice, -3]';
     END IF;
   ELSIF (_creditstatus = 'H' AND NOT hasPriv('CreateSOForHoldCustomer')) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: convertquotetoinvoice, -4]';
   ELSIF (_creditstatus = 'W' AND NOT hasPriv('CreateSOForWarnCustomer')) THEN
-    RETURN -5;
+    RAISE EXCEPTION '[xtuple: convertquotetoinvoice, -5]';
   END IF;
 
 -- PO/blanket PO checks

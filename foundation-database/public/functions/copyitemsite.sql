@@ -27,7 +27,7 @@ BEGIN
   FROM itemsite
   WHERE (itemsite_id=pItemsiteid);
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: copyItemSite, -1]';
   END IF;
 
   -- if there is no dest warehouse then perhaps the user is manually copying it
@@ -36,12 +36,12 @@ BEGIN
     FROM whsinfo
     WHERE (warehous_id=pDestWhsid);
     IF (NOT FOUND) THEN
-      RETURN -2;
+      RAISE EXCEPTION '[xtuple: copyItemSite, -2]';
     END IF;
   END IF;
 
   IF (NOT checkPrivilege('MaintainItemSites')) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: copyItemSite, -3]';
   END IF;
 
   SELECT itemsite_id INTO _new.itemsite_id

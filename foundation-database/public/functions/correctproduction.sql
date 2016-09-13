@@ -72,11 +72,11 @@ BEGIN
    WHERE (wo_id=pWoid);
 
   IF (_status != 'I') THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: correctProduction, -1]';
   END IF;
 
   IF (_type = 'J') THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: correctProduction, -2]';
   END IF;
 
   IF (pItemlocSeries = 0) THEN

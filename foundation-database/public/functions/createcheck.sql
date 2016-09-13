@@ -56,29 +56,29 @@ BEGIN
   FROM bankaccnt
   WHERE bankaccnt_id = pBankaccntid;
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: createcheck, -1]';
   END IF;
 
   IF (pRecipType NOT IN ('C', 'T', 'V')) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: createcheck, -2]';
   END IF;
 
   IF (pCheckDate IS NULL) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: createcheck, -3]';
   END IF;
 
   IF (pAmount <= 0) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: createcheck, -4]';
   END IF;
 
   IF (pCurrid IS NULL
       OR NOT EXISTS(SELECT * FROM curr_symbol WHERE (curr_id=pCurrid))) THEN
-    RETURN -5;
+    RAISE EXCEPTION '[xtuple: createcheck, -5]';
   END IF;
 
   IF (pExpcatid IS NOT NULL
       AND NOT EXISTS(SELECT * FROM expcat WHERE (expcat_id=pExpcatid))) THEN
-    RETURN -6;
+    RAISE EXCEPTION '[xtuple: createcheck, -6]';
   END IF;
 
 -- Do not assign Journal Number until check is posted

@@ -26,12 +26,12 @@ BEGIN
       WHERE ( (recv_order_type='PO')
        AND (recv_orderitem_id=pPoitemid) );
       IF (FOUND) THEN
-        RETURN -10;
+        RAISE EXCEPTION '[xtuple: deletepoitem, -10]';
       ELSE
-        RETURN -20;
+        RAISE EXCEPTION '[xtuple: deletepoitem, -20]';
       END IF;
     ELSE
-      RETURN -10;
+      RAISE EXCEPTION '[xtuple: deletepoitem, -10]';
     END IF;
   END IF;
 

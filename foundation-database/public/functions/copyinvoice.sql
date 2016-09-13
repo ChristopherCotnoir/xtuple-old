@@ -16,7 +16,7 @@ BEGIN
     FROM invchead
    WHERE(invchead_id=pInvcheadid);
   IF(NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: copyInvoice, -1]';
   END IF;
 
   _invcnumber := fetchInvcNumber();

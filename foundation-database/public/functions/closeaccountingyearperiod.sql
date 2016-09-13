@@ -11,14 +11,14 @@ BEGIN
   IF ( ( SELECT yearperiod_closed
            FROM yearperiod
           WHERE (yearperiod_id=pYearPeriodid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: closeAccountingYearPeriod, -1]';
   END IF;
 
   IF ( ( SELECT (count(period_id) > 0)
            FROM period
           WHERE ((period_yearperiod_id=pYearPeriodid)
            AND (NOT period_closed)) ) ) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'The selected Fiscal Year cannot be closed because there are periods within the year that are still open. [xtuple: closeAccountingYearPeriod, -10]';
   END IF;
 
   IF ( ( SELECT (count(yearperiod_id) > 0)
@@ -29,7 +29,7 @@ BEGIN
             WHERE (yearperiod_id=pYearPeriodId))
           )
            AND (NOT yearperiod_closed)) ) ) THEN
-    RETURN -11;
+    RAISE EXCEPTION 'The selected Fiscal Year cannot be closed because there are prior years that are still open. [xtuple: closeAccountingYearPeriod, -11]';
   END IF;
 
 --  Should we check for a previous yearperiod existing already ?
@@ -42,7 +42,7 @@ BEGIN
   IF ( ( SELECT (yearperiod_end >= CURRENT_DATE)
            FROM yearperiod
           WHERE (yearperiod_id=pYearPeriodid) ) ) THEN
-    RETURN -5;
+    RAISE EXCEPTION '[xtuple: closeAccountingYearPeriod, -5]';
   END IF;
 
 --  Update the year end Retained Earnings

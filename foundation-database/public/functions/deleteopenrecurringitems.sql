@@ -16,13 +16,13 @@ BEGIN
   RAISE DEBUG 'deleteOpenRecurringItems(%, %, %)', pParentid, pType, pDatetime;
 
   IF (pParentid IS NULL) THEN
-    RETURN -11;
+    RAISE EXCEPTION 'Cannot delete open recurring items without a valid parent item. [xtuple: deleteOpenRecurringItems, -11]';
   END IF;
 
   SELECT * INTO _rt FROM recurtype WHERE (UPPER(recurtype_type)=pType);
   GET DIAGNOSTICS _count = ROW_COUNT;
   IF (_count <= 0) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'Cannot delete open recurring items with an invalid type. [xtuple: deleteOpenRecurringItems, -10]';
   END IF;
 
   -- 2 deletes avoid reparenting problems if the parent gets deleted first

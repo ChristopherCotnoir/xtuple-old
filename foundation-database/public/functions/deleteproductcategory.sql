@@ -13,7 +13,7 @@ BEGIN
   WHERE (item_prodcat_id=pProdcatid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteProductCategory, -1]';
   END IF;
 
 --  Delete any assocated records

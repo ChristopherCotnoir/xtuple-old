@@ -70,7 +70,7 @@ BEGIN
         ELSE IF (_accntType IN ('L','Q')) THEN
                 _result := ((_priorBudget-_currentBudget) *-1);
 
-        ELSE RETURN -1;
+        ELSE RAISE EXCEPTION '[xtuple: calccashbudget, -1]';
         END IF;
   END IF;
 

@@ -54,7 +54,7 @@ BEGIN
   GROUP BY aropen_amount, aropen_paid, aropen_curr_id, aropen_curr_rate, prepared, cashapplied;
 
   IF (_amount < 0) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: applyARCreditMemoToBalance, -1]';
   END IF;
 
 --  Loop through the aropen items in order of due date

@@ -40,15 +40,15 @@ DECLARE
 
 BEGIN
   IF (pusername IS NULL OR pusername = '') THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The To-Do List Item cannot be created as there is no assigned User. [xtuple: createTodoItem, -1]';
   END IF;
 
   IF (pname IS NULL OR pname = '') THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The To-Do List Item cannot be created as the Task Name is blank. [xtuple: createTodoItem, -2]';
   END IF;
 
   IF (pdue IS NULL) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'The To-Do List Item cannot be created as there is no Due Date. [xtuple: createTodoItem, -3]';
   END IF;
 
   IF (pcompleted IS NOT NULL) THEN

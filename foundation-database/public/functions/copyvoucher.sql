@@ -16,7 +16,7 @@ BEGIN
     FROM vohead
    WHERE(vohead_id=pVoheadid);
   IF(NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: copyVoucher, -1]';
   END IF;
 
   _vonumber := fetchVoNumber();

@@ -13,7 +13,7 @@ BEGIN
   WHERE (item_classcode_id=pClasscodeid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Class Code cannot be deleted because there are Items that are assigned to it. You must reassign these Items before you may delete the selected Class Code. [xtuple: deleteClassCode, -1]';
   END IF;
 
 --  Delete the passed classcode

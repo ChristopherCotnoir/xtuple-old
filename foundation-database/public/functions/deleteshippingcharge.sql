@@ -10,7 +10,7 @@ BEGIN
   IF EXISTS(SELECT 1
               FROM custinfo
              WHERE (cust_shipchrg_id=pShipchrgid)) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteShippingCharge, -1]';
   END IF;
 
   DELETE FROM shipchrg

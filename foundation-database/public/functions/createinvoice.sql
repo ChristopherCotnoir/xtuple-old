@@ -16,7 +16,7 @@ BEGIN
   IF ( ( SELECT cobmisc_posted
          FROM cobmisc
          WHERE (cobmisc_id=pCobmiscid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: createInvoice, -1]';
   END IF;
 
   SELECT NEXTVAL('invchead_invchead_id_seq') INTO _invcheadid;

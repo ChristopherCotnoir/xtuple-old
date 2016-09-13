@@ -19,7 +19,7 @@ BEGIN
             FROM uomusedforitem(_itemid)
             WHERE ((uom_id IN (_fromuomid, _touomid))
                AND (uom_id != _invuomid)) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'This UOM Conversion cannot be deleted as there are records for this Item which use this UOM. [xtuple: deleteItemUOMConv, -1]';
   END IF;
 
   DELETE FROM itemuom WHERE itemuom_itemuomconv_id=pItemuomconvid;

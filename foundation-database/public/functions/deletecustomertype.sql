@@ -10,7 +10,7 @@ BEGIN
   IF EXISTS(SELECT 1
               FROM custinfo
              WHERE (cust_custtype_id=pCusttypeid)) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Customer Type cannot be deleted as there are one or more Customers assigned to it. You must reassign these Customers before you may delete the selected Customer Type. [xtuple: deleteCustomerType, -1]';
   END IF;
 
   DELETE FROM ipsass

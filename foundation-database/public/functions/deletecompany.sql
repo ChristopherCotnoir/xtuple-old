@@ -10,7 +10,7 @@ BEGIN
              WHERE ((accnt_company=company_number)
                AND  (company_id=pcompanyid))
             )) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Company cannot be deleted as it is in use by existing Account. You must reclass these Accounts before you may delete the selected Company. [xtuple: deleteCompany, -1]';
   END IF;
 
   DELETE FROM company

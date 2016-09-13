@@ -11,7 +11,7 @@ BEGIN
   IF (pAmount > (SELECT ROUND(currToCurr(apopen_curr_id, pCurrId, (apopen_amount - apopen_paid), apopen_docdate), 2)
                  FROM apopen
                  WHERE (apopen_id=pTargetApopenId))) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'You may not apply more than the balance due to this document. [xtuple: createAPCreditMemoApplication, -1]';
   END IF;
 
   IF (pAmount > (SELECT ROUND((apopen_amount - apopen_paid) - 
@@ -24,7 +24,7 @@ BEGIN
               AND (apcreditapply_target_apopen_id<>pTargetApopenId)) 
              WHERE (apopen_id=pSourceApopenId) 
              GROUP BY apopen_amount, apopen_paid)) THEN
-      RETURN -2;
+      RAISE EXCEPTION 'You may not apply more than the amount available to apply for this Credit Memo. [xtuple: createAPCreditMemoApplication, -2]';
     END IF;
 
   SELECT apcreditapply_id INTO _apCreditApplyId

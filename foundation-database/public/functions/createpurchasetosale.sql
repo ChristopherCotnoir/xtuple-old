@@ -100,7 +100,7 @@ BEGIN
               LEFT OUTER JOIN item ON (item_id = itemsite_item_id)
   WHERE (coitem_id = pCoitemId);
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'SO Header Information related to this SO Item not found! [xtuple: createpurchasetosale, -1]';
   END IF;
 
   SELECT * INTO _w
@@ -115,7 +115,7 @@ BEGIN
                LEFT OUTER JOIN addr ON (vend_addr_id = addr_id)
   WHERE (itemsrc_id = pItemSourceId);
   IF (NOT FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'Item Source Information not found! [xtuple: createpurchasetosale, -2]';
   END IF;
 
   -- pPoheadId - NULL=add to existing PO if one exists

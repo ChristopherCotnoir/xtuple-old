@@ -33,7 +33,7 @@ BEGIN
   RETURNING todoitem_id INTO _todoitemid;
 
   IF (_todoitemid IS NULL) THEN
-    RETURN -10;
+    RAISE EXCEPTION '[xtuple: copyTodoitem, -10]';
   END IF;
 
   SELECT saveAlarm(NULL, NULL, _duedate,

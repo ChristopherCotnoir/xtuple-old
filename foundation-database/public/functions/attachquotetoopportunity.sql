@@ -10,14 +10,14 @@ BEGIN
   IF (NOT EXISTS(SELECT quhead_id
                  FROM quhead
                  WHERE (quhead_id=pQuheadid))) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Quote cannot be attached because the Quote cannot be found. [xtuple: attachQuoteToOpportunity, -1]';
   END IF;
 
 -- Check Opportunity
   IF (NOT EXISTS(SELECT ophead_id
                  FROM ophead
                  WHERE (ophead_id=pOpheadid))) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The selected Quote cannot be attached because the Opportunity cannot be found. [xtuple: attachQuoteToOpportunity, -2]';
   END IF;
 
 -- Cannot attach if already attached
@@ -25,7 +25,7 @@ BEGIN
 	     FROM quhead
 	     WHERE ((quhead_id=pQuheadid)
 	       AND  (quhead_ophead_id IS NOT NULL)))) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'The selected Quote cannot be attached because it is already associated with an Opportunity.  You must detach this Quote before you may attach it. [xtuple: attachQuoteToOpportunity, -3]';
   END IF;
 
   UPDATE quhead SET quhead_ophead_id=pOpheadid

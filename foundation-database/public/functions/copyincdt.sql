@@ -27,7 +27,7 @@ BEGIN
   RETURNING incdt_id INTO _incdtid;
 
   IF (_incdtid IS NULL) THEN
-    RETURN -10;
+    RAISE EXCEPTION '[xtuple: copyIncdt, -10]';
   END IF;
 
   SELECT MIN(copyTodoitem(todoitem_id, CAST(ptimestamp AS DATE), _incdtid))

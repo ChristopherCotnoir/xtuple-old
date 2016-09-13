@@ -16,7 +16,7 @@ BEGIN
   IF ( ( SELECT yearperiod_closed
          FROM yearperiod
          WHERE (yearperiod_id=pPeriodid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: changeAccountingYearPeriodDates, -1]';
   END IF;
 
 --  Check to make sure that the passed start date does not fall
@@ -27,7 +27,7 @@ BEGIN
     AND (yearperiod_id <> pPeriodid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: changeAccountingYearPeriodDates, -2]';
   END IF;
 
 --  Check to make sure that the passed end date does not fall
@@ -38,7 +38,7 @@ BEGIN
     AND (yearperiod_id <> pPeriodid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: changeAccountingYearPeriodDates, -3]';
   END IF;
 
 --  Check to make sure that the passed yearperiod is not closed
@@ -46,13 +46,13 @@ BEGIN
          FROM period
          WHERE ((period_yearperiod_id=pPeriodid)
           AND (period_start < pStartDate OR period_end > pEndDate)) ) ) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: changeAccountingYearPeriodDates, -4]';
   END IF;
 
 --  Make sure that the passed start is prior to the end date
   SELECT (pStartDate > pEndDate) INTO _checkBool;
   IF (_checkBool) THEN
-    RETURN -5;
+    RAISE EXCEPTION '[xtuple: changeAccountingYearPeriodDates, -5]';
   END IF;
 
 

@@ -10,7 +10,7 @@ BEGIN
               OR (checkhead_ach_batch IS NOT NULL AND checkhead_printed)
       FROM checkhead
       WHERE (checkhead_id=pCheckid) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot delete this Payment because either it has not been voided, it has already been posted or replaced, or it has been transmitted electronically. [xtuple: deleteCheck, -1]';
   END IF;
 
   UPDATE checkhead

@@ -105,11 +105,11 @@ BEGIN
     WHERE (planord_id=pParentId);
 
   ELSE
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: createPr, -2]';
   END IF;
 
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: createPr, -1]';
   END IF;
 
   SELECT NEXTVAL('pr_pr_id_seq') INTO _prid;
@@ -157,11 +157,11 @@ BEGIN
     SELECT fetchPrNumber() INTO _orderNumber;
 
   ELSE
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: createPr, -2]';
   END IF;
 
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: createPr, -1]';
   END IF;
 
   SELECT createPr(_orderNumber, pParentType, pParentId) INTO _prid;
@@ -217,11 +217,11 @@ BEGIN
     WHERE (planord_id=pParentId);
 
   ELSE
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: createPr, -2]';
   END IF;
 
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: createPr, -1]';
   END IF;
 
   SELECT NEXTVAL('pr_pr_id_seq') INTO _prid;

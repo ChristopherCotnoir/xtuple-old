@@ -35,7 +35,7 @@ BEGIN
 
 --  Make sure that the parent and component are not the same
   IF (pParentItemid = pComponentItemid) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'You may not create a BOM Item that defines a Parent that is composed of itself. [xtuple: createBOMItem, -1]';
   END IF;
 
 --  Make sure that the parent is not used in the component at some level
@@ -47,7 +47,7 @@ BEGIN
   LIMIT 1;
   IF (FOUND) THEN
     PERFORM deleteBOMWorkset(_bomworksetid);
-    RETURN -2;
+    RAISE EXCEPTION 'The Component that you have selected for thisBOM Item is a manufactured or phantom Item that uses the Parent Item as a Component Item in its own BOM. You may not create a recursive BOM. [xtuple: createBOMItem, -2]';
   END IF;
 
   PERFORM deleteBOMWorkset(_bomworksetid);

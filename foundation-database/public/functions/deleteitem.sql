@@ -12,7 +12,7 @@ BEGIN
   WHERE (bomitem_item_id=pItemid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'This Item cannot be deleted as it is used in one or more bills of materials. [xtuple: deleteItem, -1]';
   END IF;
 
   SELECT itemsite_id INTO _result
@@ -20,7 +20,7 @@ BEGIN
   WHERE (itemsite_item_id=pItemid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'This Item cannot be deleted as there are Item Site records associated with it. [xtuple: deleteItem, -2]';
   END IF;
 
   SELECT itemsub_id INTO _result
@@ -28,7 +28,7 @@ BEGIN
   WHERE (itemsub_sub_item_id=pItemid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'This Item cannot be deleted as there are Substitute records associated with it. [xtuple: deleteItem, -3]';
   END IF;
 
   IF (fetchmetricbool('RevControl')) THEN
@@ -38,7 +38,7 @@ BEGIN
     AND (rev_target_type = 'BOM'))
     LIMIT 1;
     IF (FOUND) THEN
-      RETURN -6;
+      RAISE EXCEPTION 'This Item cannot be deleted as there are Revision Control records associated with it. [xtuple: deleteItem, -6]';
     END IF;
   END IF;
 

@@ -13,15 +13,15 @@ BEGIN
    WHERE (prjtask_id=pPrjtaskid)
    LIMIT 1;
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteProjectTask, -1]';
   END IF;
 
   IF (COALESCE(_row.prjtask_hours_actual, 0.0) > 0.0) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: deleteProjectTask, -2]';
   END IF;
 
   IF (COALESCE(_row.prjtask_exp_actual, 0.0) > 0.0) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: deleteProjectTask, -3]';
   END IF;
 
   DELETE FROM comment

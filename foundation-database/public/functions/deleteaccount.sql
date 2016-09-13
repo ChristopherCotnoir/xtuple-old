@@ -27,7 +27,7 @@ BEGIN
      OR   (costcat_exp_accnt_id=pAccntid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Cost Categories.  You must reassign these Cost Category assignments before you may delete the selected Ledger Account. [xtuple: deleteAccount, -1]';
   END IF;
 
   IF (fetchMetricText('Application') = 'Standard') THEN
@@ -37,7 +37,7 @@ BEGIN
        OR   (costcat_laboroverhead_accnt_id=pAccntid) )
     LIMIT 1;
     IF (FOUND) THEN
-      RETURN -1;
+      RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Cost Categories.  You must reassign these Cost Category assignments before you may delete the selected Ledger Account. [xtuple: deleteAccount, -1]';
     END IF;
   END IF;
 
@@ -49,7 +49,7 @@ BEGIN
      OR   (salesaccnt_cos_accnt_id=pAccntid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Sales Account Assignment. You must reassign these Sales Account Assignments before you may delete the selected Ledger Account. [xtuple: deleteAccount, -2]';
   END IF;
 
   IF (fetchMetricText('Application') = 'Standard') THEN
@@ -60,7 +60,7 @@ BEGIN
        OR   (salesaccnt_cow_accnt_id=pAccntid) )
     LIMIT 1;
     IF (FOUND) THEN
-      RETURN -2;
+      RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Sales Account Assignment. You must reassign these Sales Account Assignments before you may delete the selected Ledger Account. [xtuple: deleteAccount, -2]';
     END IF;
   END IF;
 
@@ -72,7 +72,7 @@ BEGIN
      OR   (salescat_ar_accnt_id=pAccntid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Sales Account Assignment. You must reassign these Sales Account Assignments before you may delete the selected Ledger Account. [xtuple: deleteAccount, -2]';
   END IF;
 
 --  Check to see if the passed accnt is used in a A/R Account Assignment
@@ -85,14 +85,14 @@ BEGIN
      OR   (araccnt_discount_accnt_id=pAccntid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Customer A/R Account assignments. You must reassign these Customer A/R Account assignments before you may delete the selected Ledger Account. [xtuple: deleteAccount, -3]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Warehouse
   IF EXISTS (SELECT 1
                FROM whsinfo
               WHERE (warehous_default_accnt_id=pAccntid)) THEN
-    RETURN -4;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used as the default Account one or more Sites. You must reassign the default Account for these Sites before you may delete the selected Ledger Account. [xtuple: deleteAccount, -4];
   END IF;
 
 --  Check to see if the passed accnt is used in a Bank Account
@@ -101,7 +101,7 @@ BEGIN
   WHERE (bankaccnt_accnt_id=pAccntid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -5;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Bank Accounts. You must reassign these Bank Accounts before you may delete the selected Ledger Account. [xtuple: deleteAccount, -5]';
   END IF;
 
   SELECT bankadjtype_id INTO _check
@@ -109,7 +109,7 @@ BEGIN
   WHERE (bankadjtype_accnt_id=pAccntid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -5;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Bank Accounts. You must reassign these Bank Accounts before you may delete the selected Ledger Account. [xtuple: deleteAccount, -5]';
   END IF;
 
 --  Check to see if the passed accnt is used in an Expense Category
@@ -121,7 +121,7 @@ BEGIN
      OR   (expcat_freight_accnt_id=pAccntid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -6;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Expense Categories. You must reassign these Expense Categories before you may delete the selected Ledger Account. [xtuple: deleteAccount, -6]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Tax Code
@@ -131,7 +131,7 @@ BEGIN
      OR   (tax_dist_accnt_id=pAccntid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -7;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Tax Codes. You must reassign these Tax Codes before you may delete the selected Ledger Account. [xtuple: deleteAccount, -7]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Standard Journal Item
@@ -140,7 +140,7 @@ BEGIN
   WHERE (stdjrnlitem_accnt_id=pAccntid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -8;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Standard Journals. You must reassign these Standard Journal Items before you may delete the selected Ledger Account. [xtuple: deleteAccount, -8]';
   END IF;
 
 --  Check to see if the passed accnt is used in a A/P Account Assignment
@@ -151,7 +151,7 @@ BEGIN
      OR   (apaccnt_discount_accnt_id=pAccntid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -9;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more Customer A/P Account assignments. You must reassign these Customer A/P Account assignments before you may delete the selected Ledger Account. [xtuple: deleteAccount, -9]';
   END IF;
 
 --  Check to see if the passed accnt is used in an A/R Open Item record
@@ -160,7 +160,7 @@ BEGIN
    WHERE (aropen_accnt_id=pAccntid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -11;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used in one or more A/R Open Items. You must reassign these Currency definitions before you may delete the selected Ledger Account. [xtuple: deleteAccount, -11]';
   END IF;
 
 --  Check to see if the passed accnt has been used in the G/L
@@ -169,7 +169,7 @@ BEGIN
   WHERE (gltrans_accnt_id=pAccntid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -99;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as there have been Ledger Transactions posted against it. [xtuple: deleteAccount, -99]';
   END IF;
 
   SELECT glseries_accnt_id INTO _check
@@ -177,7 +177,7 @@ BEGIN
   WHERE (glseries_accnt_id=pAccntid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -99;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as there have been Ledger Transactions posted against it. [xtuple: deleteAccount, -99]';
   END IF;
 
   SELECT trialbal_accnt_id INTO _check
@@ -186,7 +186,7 @@ BEGIN
     AND (trialbal_beginning != 0 OR trialbal_ending != 0)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -99;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as there have been Ledger Transactions posted against it. [xtuple: deleteAccount, -99]';
   END IF;
 
   SELECT cashrcptmisc_accnt_id INTO _check
@@ -194,7 +194,7 @@ BEGIN
   WHERE (cashrcptmisc_accnt_id=pAccntid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -99;
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as there have been Ledger Transactions posted against it. [xtuple: deleteAccount, -99]';
   END IF;
 
 --  Delete any non-critical use

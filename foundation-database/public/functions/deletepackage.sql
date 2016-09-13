@@ -14,18 +14,18 @@ BEGIN
   IF (EXISTS(SELECT *
              FROM pkgdep
              WHERE (pkgdep_parent_pkghead_id=ppkgheadid))) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Package cannot be deleted because there are other packages that depend on it to function properly. [xtuple: deletePackage, -1]';
   END IF;
 
   SELECT pkghead_name INTO _pkgname
   FROM pkghead
   WHERE (pkghead_id=ppkgheadid);
   IF (NOT FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: deletePackage, -2]';
   END IF;
 
   IF (LOWER(_pkgname) = 'public' OR LOWER(_pkgname) = 'api') THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: deletePackage, -3]';
   END IF;
 
   FOR _i IN ARRAY_LOWER(_tabs,1)..ARRAY_UPPER(_tabs,1) LOOP

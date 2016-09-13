@@ -12,7 +12,7 @@ BEGIN
    WHERE (quhead_prj_id=pPrjid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteProject, -1]';
   END IF;
 
   SELECT cohead_id INTO _result
@@ -20,7 +20,7 @@ BEGIN
    WHERE (cohead_prj_id=pPrjid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: deleteProject, -2]';
   END IF;
 
   SELECT wo_id INTO _result
@@ -28,7 +28,7 @@ BEGIN
    WHERE (wo_prj_id=pPrjid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: deleteProject, -3]';
   END IF;
 
   SELECT pr_id INTO _result
@@ -36,7 +36,7 @@ BEGIN
    WHERE (pr_prj_id=pPrjid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: deleteProject, -4]';
   END IF;
 
   SELECT poitem_id INTO _result
@@ -44,7 +44,7 @@ BEGIN
    WHERE (poitem_prj_id=pPrjid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -5;
+    RAISE EXCEPTION '[xtuple: deleteProject, -5]';
   END IF;
 
   SELECT invchead_id INTO _result
@@ -52,7 +52,7 @@ BEGIN
    WHERE (invchead_prj_id=pPrjid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -6;
+    RAISE EXCEPTION '[xtuple: deleteProject, -6]';
   END IF;
 
   DELETE FROM comment

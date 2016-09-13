@@ -18,7 +18,7 @@ BEGIN
   IF ( ( SELECT itemsite_freeze
            FROM itemsite
           WHERE(itemsite_id=pItemsiteid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: balanceItemsite, -1]';
   END IF;
 
 --  Calculate the qoh

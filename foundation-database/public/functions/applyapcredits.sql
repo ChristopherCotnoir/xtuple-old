@@ -24,10 +24,10 @@ BEGIN
     IF (_result = 1) THEN
       SELECT postapcreditmemoapplication(_r.apopen_id) INTO _apopenid;
       IF (_apopenid < 0) THEN
-        RETURN -1;
+        RAISE EXCEPTION '[xtuple: applyapcredits, -1]';
       END IF;
     ELSE
-      RETURN -1;
+      RAISE EXCEPTION '[xtuple: applyapcredits, -1]';
     END IF;
 
   END LOOP;

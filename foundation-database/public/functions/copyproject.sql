@@ -15,23 +15,23 @@ DECLARE
 BEGIN
 
   IF (COALESCE(pPrjNumber, '') = '') THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: copyproject, -1]';
   END IF;
 
   IF (COALESCE(pPrjName, '') = '') THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: copyproject, -1]';
   END IF;
 
   IF (EXISTS(SELECT prj_id FROM prj WHERE UPPER(prj_number)=UPPER(pPrjNumber))) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: copyproject, -2]';
   END IF;
 
   IF (NOT EXISTS(SELECT prj_id FROM prj WHERE prj_id=pPrjId)) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: copyproject, -3]';
   END IF;
 
   IF (pDueDate IS NULL) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: copyproject, -4]';
   END IF;
 
   SELECT (pDueDate - prj_due_date) INTO _offset

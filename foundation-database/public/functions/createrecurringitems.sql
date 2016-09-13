@@ -53,7 +53,7 @@ BEGIN
     SELECT * INTO _rt FROM recurtype WHERE (UPPER(recurtype_type)=UPPER(pType));
     GET DIAGNOSTICS _count = ROW_COUNT;
     IF (_count <= 0) THEN
-      RETURN -10;
+      RAISE EXCEPTION 'Cannot create recurring items with an unrecognized object type. [xtuple: createRecurringItems, -10]';
     END IF;
 
     -- if the recurrence type has a max lookahead window, use it

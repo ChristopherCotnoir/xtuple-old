@@ -11,7 +11,7 @@ BEGIN
   WHERE (empgrpitem_empgrp_id=pempgrpid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Employee Group cannot be deleted as there are one or more Employees assigned to it. You must reassign these Employees before you may delete the selected Employee Group. [xtuple: deleteEmpGrp, -1]';
   END IF;
 
   DELETE FROM empgrp     WHERE (empgrp_id=pempgrpid);

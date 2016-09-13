@@ -161,7 +161,7 @@ BEGIN
 
 --  Check to make sure the itemsite specified is supplied at itemsite
   IF (NOT _itemsite.itemsite_wosupply) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Work Order can not be created because Site not allowed to Manufacture this Item. [xtuple: createWo, -1]';
   END IF;
 
 --  Check to make sure if this is a job item that it is tied to a sales order

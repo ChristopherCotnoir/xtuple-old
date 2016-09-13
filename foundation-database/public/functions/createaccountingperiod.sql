@@ -34,7 +34,7 @@ BEGIN
   FROM period
   WHERE (pStartDate BETWEEN period_start AND period_end);
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The Start Date falls within another Accounting Period. [xtuple: createaccountingperiod, -1]';
   END IF;
 
 --  Make that the passed end date doesn't fall into any existing period
@@ -42,7 +42,7 @@ BEGIN
   FROM period
   WHERE (pEndDate BETWEEN period_start AND period_end);
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The End Date falls within another Accounting Period. [xtuple: createaccountingperiod, -2]';
   END IF;
 
 --  Make that the passed start and end dates don't enclose an existing period
@@ -51,7 +51,7 @@ BEGIN
   WHERE ( (period_start >= pStartDate)
    AND (period_end <= pEndDate) );
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'The Start and End Dates enclose another Accounting Period. [xtuple: createaccountingperiod, -3]';
   END IF;
 
 -- Make sure period is inside fiscal year
@@ -61,7 +61,7 @@ BEGIN
   AND (pStartDate>=yearperiod_start)
   AND (pEndDate<=yearperiod_end));
   IF NOT (FOUND) THEN
-    RETURN -4;
+    RAISE EXCEPTION 'The Period dates are outside the selected Fiscal Year. [xtuple: createaccountingperiod, -4]';
   END IF;
 
 --  Determine if this is the initial accounting period

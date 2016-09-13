@@ -13,7 +13,7 @@ BEGIN
   WHERE (cust_shipchrg_id=pShipchrgid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteShippingChargeType, -1]';
   END IF;
 
 --  Check to see if the passed shipchrg is used as a default for any shiptos
@@ -22,7 +22,7 @@ BEGIN
   WHERE (shipto_shipchrg_id=pShipchrgid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: deleteShippingChargeType, -2]';
   END IF;
 
 --  Check to see if the passed shipchrg is used on any sales orders
@@ -31,7 +31,7 @@ BEGIN
   WHERE (cohead_shipchrg_id=pShipchrgid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: deleteShippingChargeType, -3]';
   END IF;
 
 --  Check to see if the passed shipchrg is used on any shippers
@@ -40,7 +40,7 @@ BEGIN
   WHERE (shiphead_shipchrg_id=pShipchrgid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: deleteShippingChargeType, -4]';
   END IF;
 
 --  Check to see if the passed shipchrg is used on any invoices
@@ -49,7 +49,7 @@ BEGIN
   WHERE (invchead_shipchrg_id=pShipchrgid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -5;
+    RAISE EXCEPTION '[xtuple: deleteShippingChargeType, -5]';
   END IF;
 
 --  Delete the passed shipchrg

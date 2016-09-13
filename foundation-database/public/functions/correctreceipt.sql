@@ -46,11 +46,11 @@ BEGIN
   END IF;
 
   IF (NOT _r.recv_order_type IN ('PO', 'RA', 'TO')) THEN
-    RETURN -11;
+    RAISE EXCEPTION '[xtuple: correctReceipt, -11]';
   END IF;
 
   IF (_r.split) THEN
-    RETURN -12;
+    RAISE EXCEPTION 'The receipt has been split and may not be corrected. [xtuple: correctReceipt, -12]';
   END IF;
 
   SELECT currToBase(orderitem_unitcost_curr_id, orderitem_unitcost,

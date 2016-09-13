@@ -8,14 +8,14 @@ BEGIN
   IF EXISTS (SELECT itemsite_id FROM itemsite
 		WHERE (itemsite_location_id=pLocationid)
 	    ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: checklocation, -1]';
   END IF;
 
 --  Check to see if any inventory is currently stored at the passed location
   IF EXISTS (SELECT itemloc_id FROM itemloc
 		WHERE (itemloc_location_id=pLocationid)
 	    ) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: checklocation, -2]';
   END IF;
 
 --  Check to see if any undistributed inventory transactions are currently posted at the passed location
@@ -23,14 +23,14 @@ BEGIN
 		WHERE ( (itemlocdist_source_type='L')
 		AND (itemlocdist_source_id=pLocationid) )
             ) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: checklocation, -3]';
   END IF;
 
 --  Check to see if the passed location has any Inventory Detail posted against it
   IF EXISTS (SELECT invdetail_id FROM invdetail
 		WHERE (invdetail_location_id=pLocationid)
              ) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: checklocation, -4]';
   END IF;
 
   RETURN pLocationid;

@@ -14,7 +14,7 @@ BEGIN
    WHERE (bankadj_bankadjtype_id=pBankadjtypeid)
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Bank Adjustment Type cannot be deleted because it is currently used by a Bank Adjustment. [xtuple: deleteBankAdjustmentType, -1]';
   END IF;
 
 --  Delete the Account

@@ -59,7 +59,7 @@ BEGIN
   RETURNING prj_id INTO _prjid;
 
   IF (_prjid IS NULL) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Copying an existing project failed, possibly because the source project does not exist. [xtuple: copyPrj, -1]';
   END IF;
 
   SELECT saveAlarm(NULL, NULL, _duedate,

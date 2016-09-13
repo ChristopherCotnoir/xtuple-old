@@ -12,7 +12,7 @@ BEGIN
   IF ( ( SELECT period_closed
          FROM period
          WHERE (period_id=pPeriodid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteAccountingPeriod, -1]';
   END IF;
 
 --  Check to make sure that there are not any posted G/L Transactions
@@ -24,7 +24,7 @@ BEGIN
    AND (period_id=pPeriodid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -4;
+    RAISE EXCEPTION 'The selected Accounting Period has G/L Transactions posted against it and, thus, cannot be deleted. [xtuple: deleteAccountingPeriod, -4]';
   END IF;
 
   SELECT b.period_id INTO _check
@@ -33,7 +33,7 @@ BEGIN
      AND (a.period_end < b.period_start))
    LIMIT 1;
   IF (FOUND) THEN
-    RETURN -5;
+    RAISE EXCEPTION 'The selected Accounting Period is not the last accounting period and cannot be deleted. [xtuple: deleteAccountingPeriod, -5]';
   END IF;
 
 --  Delete the period
