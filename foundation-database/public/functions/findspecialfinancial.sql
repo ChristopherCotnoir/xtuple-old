@@ -60,12 +60,12 @@ BEGIN
      FROM flhead
     WHERE (flhead_id=pSourceFlheadid);
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: copyFinancialLayout, -1]';
   END IF;
 
 -- Check that the name is valid
   IF (pDestName IS NULL OR pDestName = '''') THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: copyFinancialLayout, -2]';
   END IF;
 
 -- Check for the name to copy to does not exist
@@ -73,7 +73,7 @@ BEGIN
      FROM flhead
     WHERE (flhead_name=pDestName);
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: copyFinancialLayout, -3]';
   END IF;
 
 -- Copy the flhead record

@@ -15,7 +15,7 @@ BEGIN
     FROM flitem
    WHERE (flitem_id=pFlitemid);
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: moveFlItemUp, -1]';
   END IF;
 
   SELECT id, type, ord INTO _to

@@ -12,7 +12,7 @@ BEGIN
    WHERE ((taxtype_sys)
      AND  (taxtype_id=pTaxtypeid));
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteTaxType, -1]';
   END IF;
 
   SELECT taxass_id
@@ -20,7 +20,7 @@ BEGIN
     FROM taxass
    WHERE (taxass_taxtype_id=pTaxtypeid);
   IF (FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: deleteTaxType, -2]';
   END IF;
 
   SELECT taxhist_id
@@ -28,7 +28,7 @@ BEGIN
     FROM taxhist
    WHERE (taxhist_taxtype_id=pTaxtypeid);
   IF (FOUND) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: deleteTaxType, -3]';
   END IF;
 
   DELETE

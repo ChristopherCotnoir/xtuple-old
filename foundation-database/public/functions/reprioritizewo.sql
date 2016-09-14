@@ -15,7 +15,7 @@ BEGIN
   WHERE (wo_id=pWoid);
 
   IF (NOT (_status IN (''O'', ''E'',''R'',''I''))) THEN
-    return -1;
+    RAISE EXCEPTION '[xtuple: reprioritizeWo, -1]';
   END IF;
 
   UPDATE wo

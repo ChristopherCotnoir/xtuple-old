@@ -13,12 +13,12 @@ BEGIN
   -- cache some information
   SELECT * INTO _fc FROM fincharg;
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'assessFinanceCharge, configuration not set.';
+    RAISE EXCEPTION 'assessFinanceCharge, configuration not set. [xtuple: assessFinanceCharge, -1]';
   END IF;
 
   SELECT * INTO _ar FROM aropen WHERE (aropen_id=pAropenid);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'assessFinanceCharge, aropen not found.';
+    RAISE EXCEPTION 'assessFinanceCharge, aropen not found. [xtuple: assessFinanceCharge, -2]';
   END IF;
 
   -- create invoice head

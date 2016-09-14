@@ -13,7 +13,7 @@ BEGIN
   UPDATE ccpay SET ccpay_status = ''V'' WHERE (ccpay_id=pccpayid);
 
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: postCCVoid, -1]';
   END IF;
 
   RETURN 0;

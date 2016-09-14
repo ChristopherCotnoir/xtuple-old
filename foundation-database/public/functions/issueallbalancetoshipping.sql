@@ -53,7 +53,7 @@ BEGIN
     END LOOP;
 
   ELSE
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: issueAllBalanceToShipping, -1]';
   END IF;
 
   RETURN _itemlocSeries;

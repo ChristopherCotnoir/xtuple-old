@@ -34,7 +34,7 @@ BEGIN
 
   -- Check pCustId and pCustNumber.
   IF (pCustId IS NULL AND (pCustNumber IS NULL OR pCustNumber = '')) THEN
-    RAISE EXCEPTION 'You must specify a Customer ID or Number to get a freight quote.';
+    RAISE EXCEPTION 'You must specify a Customer ID or Number to get a freight quote. [xtuple: freightDetailQuote, -1]';
   ELSIF (pCustId IS NULL AND pCustNumber IS NOT NULL) THEN
     -- Get customer info using pCustNumber.
     SELECT
@@ -66,7 +66,7 @@ BEGIN
   END IF;
 
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION 'Invalid Customer specified when trying to get a freight quote.';
+    RAISE EXCEPTION 'Invalid Customer specified when trying to get a freight quote. [xtuple: freightDetailQuote, -2]';
   END IF;
 
   -- Check pShiptoId and pShiptoNum.
@@ -112,7 +112,7 @@ BEGIN
   END IF;
 
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION 'Invalid Ship-to specified when trying to get a freight quote.';
+    RAISE EXCEPTION 'Invalid Ship-to specified when trying to get a freight quote. [xtuple: freightDetailQuote, -3]';
   END IF;
 
   -- Get curr info.
@@ -125,7 +125,7 @@ BEGIN
     AND curr_id = _cust.cust_curr_id;
 
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION 'Could not find currency when trying to get a freight quote.';
+    RAISE EXCEPTION 'Could not find currency when trying to get a freight quote. [xtuple: freightDetailQuote, -4]';
   END IF;
 
   -- Check pOrderDate.
@@ -152,7 +152,7 @@ BEGIN
   -- Check pItemQty.
   IF (pItemQty IS NULL OR array_upper(pItemQty,1) IS NULL) THEN
     -- Item Array is NULL.
-    RAISE EXCEPTION 'You must specify an Item ID, Item Number or Itemsite ID to get a freight quote.';
+    RAISE EXCEPTION 'You must specify an Item ID, Item Number or Itemsite ID to get a freight quote. [xtuple: freightDetailQuote, -5]';
   ELSIF (pItemArrayType = 'item_number' AND (array_upper(pItemQty,1) > 0)) THEN
     -- Using item_number.
     FOR _weights IN
@@ -289,11 +289,11 @@ BEGIN
       RETURN NEXT _row;
     END LOOP;
   ELSE -- The item array provided is invalid.
-    RAISE EXCEPTION 'The Item/Itemsite array provided when trying to get a freight quote is invalid.';
+    RAISE EXCEPTION 'The Item/Itemsite array provided when trying to get a freight quote is invalid. [xtuple: freightDetailQuote, -6]';
   END IF;
 
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION 'Error trying to aggregated weights when getting a freight quote.';
+    RAISE EXCEPTION 'Error trying to aggregated weights when getting a freight quote. [xtuple: freightDetailQuote, -7]';
   END IF;
 
   -- Print debug.

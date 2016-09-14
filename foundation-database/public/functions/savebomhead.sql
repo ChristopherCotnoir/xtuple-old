@@ -41,7 +41,7 @@ BEGIN
     RETURN _seq;
   ELSE  -- Deal with Revision Control
     IF (COALESCE(pRevision,'') = '' AND getActiveRevId('BOM',pItemid) != -1) THEN 
-        RAISE EXCEPTION 'Revision Control records exist for item.  You must provide a new or existing revision number.';
+        RAISE EXCEPTION 'Revision Control records exist for item.  You must provide a new or existing revision number. [xtuple: saveBomHead, -1]';
     END IF;
     
     SELECT bomhead_id, bomhead_revision, item_number, rev_status, rev_number
@@ -82,7 +82,7 @@ BEGIN
       END IF;
     ELSE  -- We need to update a record
       IF (_p.rev_status = 'I') THEN
-        RAISE EXCEPTION 'Revision % for % is inactive.  Update not allowed.', _p.rev_number, _p.item_number;
+        RAISE EXCEPTION 'Revision % for % is inactive.  Update not allowed. [xtuple: saveBomHead, -2, %, %]', _p.rev_number, _p.item_number, _p.rev_number, _p.item_number;
 
       ELSIF (COALESCE(pRevision,'') = COALESCE(_p.bomhead_revision,'')) THEN  -- No change, just update
         UPDATE bomhead SET

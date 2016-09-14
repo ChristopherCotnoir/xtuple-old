@@ -11,7 +11,7 @@ BEGIN
   END IF;
 
   IF (NOT fetchMetricBool('RevControl')) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: getRevId, -1]';
   ELSIF ( (pRevision IS NULL) OR (LENGTH(pRevision)=0) ) THEN
     SELECT getActiveRevId(pType, getItemId(pItemNumber)) INTO _returnVal;
   ELSE
@@ -30,12 +30,12 @@ BEGIN
       AND (UPPER(item_number)=UPPER(pItemNumber))
       AND (rev_number=pRevision));   
     ELSE
-      RAISE EXCEPTION 'Invalid Revision Type.';
+      RAISE EXCEPTION 'Invalid Revision Type. [xtuple: getRevId, -2]';
     END IF;
   END IF;
     
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION '% revision % for % not found.', pType, pRevision, pItemNumber;
+    RAISE EXCEPTION '% revision % for % not found. [xtuple: getRevId, -3, %, %, %]', pType, pRevision, pItemNumber, pType, pRevision, pItemNumber;
   END IF;
 
   RETURN _returnVal;

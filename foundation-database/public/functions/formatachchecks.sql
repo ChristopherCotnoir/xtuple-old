@@ -41,10 +41,10 @@ BEGIN
   --    customers or tax authorities, or for debits or corrections.
 
   IF (NOT fetchMetricBool('ACHEnabled')) THEN
-    RAISE EXCEPTION 'Cannot format the ACH file because the system is not configured for ACH file generation.';
+    RAISE EXCEPTION 'Cannot format the ACH file because the system is not configured for ACH file generation. [xtuple: formatachchecks, -1]';
   END IF;
   IF (LENGTH(COALESCE(penckey, '')) <= 0) THEN
-    RAISE EXCEPTION 'Cannot format the ACH file because there is no encryption key.';
+    RAISE EXCEPTION 'Cannot format the ACH file because there is no encryption key. [xtuple: formatachchecks, -2]';
   END IF;
 
   SELECT * INTO _bank
@@ -52,13 +52,13 @@ BEGIN
   WHERE (bankaccnt_id=pbankaccntid);
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Could not find the bank information to create the ACH file.';
+    RAISE EXCEPTION 'Could not find the bank information to create the ACH file. [xtuple: formatachchecks, -3]';
   ELSIF (NOT _bank.bankaccnt_ach_enabled) THEN
-    RAISE EXCEPTION 'Cannot format the ACH file because the Bank Account % is not configured for ACH transactions.',
-      _bank.bankaccnt_name;
+    RAISE EXCEPTION 'Cannot format the ACH file because the Bank Account % is not configured for ACH transactions. [xtuple: formatachchecks, -4, %]',
+      _bank.bankaccnt_name, _bank.bankaccnt_name;
   ELSIF (LENGTH(COALESCE(_bank.bankaccnt_routing, '')) <= 0) THEN
-    RAISE EXCEPTION 'Cannot format the ACH file because the Bank Account % has no routing number.',
-      _bank.bankaccnt_name;
+    RAISE EXCEPTION 'Cannot format the ACH file because the Bank Account % has no routing number. [xtuple: formatachchecks, -5, %]',
+      _bank.bankaccnt_name, _bank.bankaccnt_name;
   END IF;
 
   _filenum := LPAD(fetchNextNumber('ACHBatch'), 8, '0');
@@ -69,8 +69,8 @@ BEGIN
   ELSIF (_bank.bankaccnt_ach_lastfileid = '9') THEN
     _bank.bankaccnt_ach_lastfileid = 'A';
   ELSIF (_bank.bankaccnt_ach_lastfileid = 'Z') THEN
-    RAISE EXCEPTION 'Cannot write % check % to an ACH file because too many files have been written for this bank already today.',
-                  _bank.bankaccnt_name, _check.checkhead_number;
+    RAISE EXCEPTION 'Cannot write % check % to an ACH file because too many files have been written for this bank already today. [xtuple: formatachchecks, -6, %, %]',
+                  _bank.bankaccnt_name, _check.checkhead_number, _bank.bankaccnt_name, _check.checkhead_number;
   ELSE
     _bank.bankaccnt_ach_lastfileid = CHR(ASCII(_bank.bankaccnt_ach_lastfileid) + 1);
   END IF;
@@ -155,11 +155,11 @@ BEGIN
                 END;
 
     IF (COALESCE(_check.vend_ach_routingnumber, '') = '') THEN
-      RAISE EXCEPTION 'Cannot write % check % to an ACH file because the routing number for % has not been supplied.',
-                  _bank.bankaccnt_name, _check.checkhead_number, _ccdnumber;
+      RAISE EXCEPTION 'Cannot write % check % to an ACH file because the routing number for % has not been supplied. [xtuple: formatachchecks, -7, %, %, %]',
+                  _bank.bankaccnt_name, _check.checkhead_number, _ccdnumber, _bank.bankaccnt_name, _check.checkhead_number, _ccdnumber;
     ELSIF (COALESCE(_check.vend_ach_accntnumber, '') = '') THEN
-      RAISE EXCEPTION 'Cannot write % check % to an ACH file because the account number for % has not been supplied.',
-                  _bank.bankaccnt_name, _check.checkhead_number, _ccdnumber;
+      RAISE EXCEPTION 'Cannot write % check % to an ACH file because the account number for % has not been supplied. [xtuple: formatachchecks, -8, %, %, %]',
+                  _bank.bankaccnt_name, _check.checkhead_number, _ccdnumber, _bank.bankaccnt_name, _check.checkhead_number, _ccdnumber;
     END IF;
     _check.vend_ach_routingnumber := decrypt(setbytea(_check.vend_ach_routingnumber),
                                          setbytea(penckey), 'bf');
@@ -283,8 +283,8 @@ BEGIN
       RETURN NEXT _row;
 
     ELSE
-      RAISE EXCEPTION 'Cannot write % check % to an ACH file because % is not a supported SEC code.',
-                    _bank.bankaccnt_name, _check.checkhead_number, _sec;
+      RAISE EXCEPTION 'Cannot write % check % to an ACH file because % is not a supported SEC code. [xtuple: formatachchecks, -9, %, %, %]',
+                    _bank.bankaccnt_name, _check.checkhead_number, _sec, _bank.bankaccnt_name, _check.checkhead_number, _sec;
     END IF;
 
     UPDATE checkhead
@@ -295,8 +295,8 @@ BEGIN
   END LOOP;
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Cannot write an ACH file for % because there are no checks pending in USD for ACH-enabled Vendors.',
-                    _bank.bankaccnt_name;
+    RAISE EXCEPTION 'Cannot write an ACH file for % because there are no checks pending in USD for ACH-enabled Vendors. [xtuple: formatachchecks, -10, %]',
+                    _bank.bankaccnt_name, _bank.bankaccnt_name;
   END IF;
 
   -- place a final batch control record

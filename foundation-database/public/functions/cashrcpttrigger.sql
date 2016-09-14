@@ -20,12 +20,12 @@ BEGIN
   IF (TG_OP = 'INSERT') THEN
     SELECT checkPrivilege('MaintainCashReceipts') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to add new Cash Receipts.';
+      RAISE EXCEPTION 'You do not have privileges to add new Cash Receipts. [xtuple: _cashrcpttrigger, -1]';
     END IF;
   ELSE
     SELECT checkPrivilege('MaintainCashReceipts') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to alter a Cash Receipt.';
+      RAISE EXCEPTION 'You do not have privileges to alter a Cash Receipt. [xtuple: _cashrcpttrigger, -2]';
     END IF;
   END IF;
 
@@ -45,7 +45,7 @@ BEGIN
   IF (FOUND) THEN
     NEW.cashrcpt_curr_rate := _currrate;
   ELSE
-    RAISE EXCEPTION 'Currency exchange rate not found';
+    RAISE EXCEPTION 'Currency exchange rate not found [xtuple: _cashrcpttrigger, -3]';
   END IF;
 
   -- Sort out Customer versus Customer Group

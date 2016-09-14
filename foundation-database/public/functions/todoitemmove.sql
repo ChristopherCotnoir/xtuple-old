@@ -14,7 +14,7 @@ BEGIN
   WHERE todoitem_id = ptodoItemId;
 
   IF NOT FOUND THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot change the Sequence of a non-existent To-Do List Item. Possible cause: no To-Do List Item was selected. [xtuple: todoItemMove, -1]';
   END IF;
 
   IF (_currseq + pHowFar <= 0) THEN

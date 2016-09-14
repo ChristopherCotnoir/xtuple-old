@@ -169,6 +169,6 @@ BEGIN
 	END IF;
     END IF;
 
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: updateStdCost, -1]';
 END;
 $$ LANGUAGE plpgsql;

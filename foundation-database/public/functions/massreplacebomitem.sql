@@ -15,7 +15,7 @@ BEGIN
 
   IF (BOMContains(pOriginalItemid, pNewItemid) OR
       BOMContains(pNewItemid, pOriginalItemid)) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot make this BOM Item replacement because it would create a recursive BOM. [xtuple: massReplaceBomitem, -1]';
   END IF;
 
   INSERT INTO bomitem

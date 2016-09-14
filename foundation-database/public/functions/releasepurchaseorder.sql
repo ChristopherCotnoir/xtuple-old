@@ -10,7 +10,7 @@ BEGIN
          FROM poitem
          WHERE ( (poitem_pohead_id=pPoheadid)
            AND   (poitem_status='U') ) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot release this Purchase Order because it does not have any unreleased Purchase Order Items. [xtuple: releasePurchaseOrder, -1]';
   END IF;
 
   IF ( ( SELECT (pohead_status='U')

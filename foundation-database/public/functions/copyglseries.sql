@@ -24,7 +24,7 @@ BEGIN
     FROM gltrans
     WHERE ( gltrans_sequence=pSequence );
   ELSE
-    RAISE EXCEPTION 'g/l transaction sequence not found';
+    RAISE EXCEPTION 'g/l transaction sequence not found [xtuple: copyGLSeries, -1]';
   END IF;
 
   RETURN _sequence;

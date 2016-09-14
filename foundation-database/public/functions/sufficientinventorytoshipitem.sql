@@ -22,7 +22,7 @@ DECLARE
 
 BEGIN
   IF (porderitemid IS NULL) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot figure out which line item to issue. [xtuple: sufficientInventoryToShipItem, -1]';
   END IF;
 
   IF (pordertype = 'SO') THEN
@@ -83,11 +83,11 @@ BEGIN
          AND  (NOT ((item_type IN ('R','J')) OR (itemsite_controlmethod = 'N'))) 
        AND  (toitem_id=porderitemid));
   ELSE
-    RETURN -11;
+    RAISE EXCEPTION 'Invalid Order Type.  Only Sales Orders and Transfer Orders may be shipped from this window. [xtuple: sufficientInventoryToShipItem, -11]';
   END IF;
 
   IF (NOT _isqtyavail) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'There is not enough Inventory to issue the amount required of Item in Site. [xtuple: sufficientInventoryToShipItem, -2]';
   END IF;
 
   IF (pordertype = 'SO') THEN
@@ -123,7 +123,7 @@ BEGIN
   END IF;
   
   IF (NOT _isqtyavail) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'One of the requested items is a Multiple Location or Lot/Serial controlled Item which is sort on Inventory. [xtuple: sufficientInventoryToShipItem, -3]';
   END IF;
 
   IF (pordertype = 'SO') THEN
@@ -140,7 +140,7 @@ BEGIN
   END IF;
 
   IF (NOT _isqtyavail) THEN
-    RETURN -4;
+    RAISE EXCEPTION 'There is not enough Inventory Reserved to issue the amount required of one of the items requested. [xtuple: sufficientInventoryToShipItem, -4]';
   END IF;
 
   RETURN 0;

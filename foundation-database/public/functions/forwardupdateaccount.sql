@@ -42,7 +42,7 @@ BEGIN
       RETURN forwardUpdateTrialBalance(_trialbalid);
   END IF;
 
-  RETURN -1;
+  RAISE EXCEPTION '[xtuple: forwardUpdateAccount, -1]';
 END;
 $$ LANGUAGE 'plpgsql';
 

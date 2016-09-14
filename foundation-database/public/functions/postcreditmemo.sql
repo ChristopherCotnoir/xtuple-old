@@ -53,11 +53,11 @@ BEGIN
   WHERE (cmhead_id=pCmheadid);
 
   IF (_p.cmhead_posted) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'This Return cannot be posted because it has already been posted. [xtuple: postCreditMemo, -10]';
   END IF;
 
   IF (_p.cmhead_hold) THEN
-    RETURN -11;
+    RAISE EXCEPTION 'This Return is on Hold and, thus, cannot be posted. [xtuple: postCreditMemo, -11]';
   END IF;
 
   _glDate := COALESCE(_p.cmhead_gldistdate, _p.cmhead_docdate);
@@ -141,7 +141,7 @@ BEGIN
                                           _p.cmhead_saletype_id, _p.cmhead_shipzone_id));
       IF (NOT FOUND) THEN
         PERFORM deleteGLSeries(_sequence);
-        RETURN -12;
+        RAISE EXCEPTION 'The Sales Account Assignment for this Return is not configured correctly. Because of this, G/L Transactions cannot be posted for this Return. You must contact your Systems Administrator to have this corrected before you may post this Return. [xtuple: postCreditMemo, -12]';
       END IF;
     END IF;
 
@@ -219,7 +219,7 @@ BEGIN
                                  _glDate, _p.cmhead_billtoname ) INTO _test;
       IF (_test < 0) THEN
         PERFORM deleteGLSeries(_sequence);
-        RAISE EXCEPTION 'Could not debit the sales account for the credit memo line item [xtuple: postcreditmemo, -12, %1, %2]',
+        RAISE EXCEPTION 'Could not debit the sales account for the credit memo line item [xtuple: postcreditmemo, -13]',
           _p.cmhead_number, _r.cmitem_itemsite_id;
       END IF;
 
@@ -292,7 +292,7 @@ BEGIN
 --  If the Misc. Charges Account was not found then punt
     IF (NOT FOUND) THEN
       PERFORM deleteGLSeries(_sequence);
-      RETURN -14;
+      RAISE EXCEPTION 'The Misc. Charge Account Assignment for this Return is not configured correctly. Because of this, G/L Transactions cannot be posted for this Return. You must contact your Systems Administrator to have this corrected before you may post this Return. [xtuple: postCreditMemo, -14]';
     END IF;
 
 --  Record the Sales History for any Misc. Charge
@@ -404,7 +404,7 @@ BEGIN
 --  If the Freight Charges Account was not found then punt
     IF (NOT FOUND) THEN
       PERFORM deleteGLSeries(_sequence);
-      RETURN -16;
+      RAISE EXCEPTION 'The Freight Account Assignment for this Return is not configured correctly. Because of this, G/L Transactions cannot be posted for this Return. You must contact your Systems Administrator to have this corrected before you may post this Return. [xtuple: postCreditMemo, -16]';
     END IF;
 
 --  Cache the Amount Distributed to Freight
@@ -476,7 +476,7 @@ BEGIN
                                   _glDate, _p.cmhead_billtoname);
     ELSE
       PERFORM deleteGLSeries(_sequence);
-      RETURN -18;
+      RAISE EXCEPTION 'The A/R Account Assignment for this Return is not configured correctly. Because of this, G/L Transactions cannot be posted for this Return. You must contact your Systems Administrator to have this corrected before you may post this Return. [xtuple: postCreditMemo, -18]';
     END IF;
   END IF;
 

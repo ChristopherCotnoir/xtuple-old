@@ -13,7 +13,7 @@ BEGIN
   END IF;
 
   IF (NOT fetchMetricBool(''Routings'')) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: getBooitemSeqId, -1]';
   ELSE
     SELECT booitem_seq_id INTO _returnVal
     FROM booitem(getItemId(pItemNumber))

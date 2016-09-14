@@ -51,7 +51,7 @@ BEGIN
         WHERE (trialbal_id=_trialbalid);
 
       ELSE
-        RAISE EXCEPTION 'Can not delete G/L Series.  Trial balance record not found.';
+        RAISE EXCEPTION 'Can not delete G/L Series.  Trial balance record not found. [xtuple: deleteGlSeries, -1]';
       END IF;
 
 --  Forward update if we should
@@ -80,13 +80,13 @@ BEGIN
       WHERE (gltrans_id=_r.gltrans_id);
 
     ELSIF (_r.period_freeze) THEN
-        RAISE EXCEPTION 'Can not delete a G/L Transaction in a frozen period';
+        RAISE EXCEPTION 'Can not delete a G/L Transaction in a frozen period [xtuple: deleteGlSeries, -2]';
     ELSIF (_r.period_closed) THEN
-        RAISE EXCEPTION 'Can not delete a G/L Transaction on account % in a closed period', formatGlAccount(_r.gltrans_accnt_id);
+        RAISE EXCEPTION 'Can not delete a G/L Transaction on account % in a closed period [xtuple: deleteGlSeries, -3, %]', formatGlAccount(_r.gltrans_accnt_id), formatGlAccount(_r.gltrans_accnt_id);
     ELSIF (_r.gltrans_rec) THEN
-        RAISE EXCEPTION 'Can not delete a G/L Transaction that has been reconciled';
+        RAISE EXCEPTION 'Can not delete a G/L Transaction that has been reconciled [xtuple: deleteGlSeries, -4]';
     ELSIF (NOT _r.gltrans_posted) THEN
-        RAISE EXCEPTION 'Can not delete a G/L Transaction that has not been posted to Trial Balance';
+        RAISE EXCEPTION 'Can not delete a G/L Transaction that has not been posted to Trial Balance [xtuple: deleteGlSeries, -5]';
     END IF;
 
   END LOOP;

@@ -68,7 +68,7 @@ BEGIN
        AND (shiphead_shipped)
        AND (NOT shipitem_invoiced)
        AND (coitem_id=pSoitemid) ) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The quantity you have approved for Billing is less than the quantity shipped. You may not bill for less than the quantity shipped. [xtuple: selectforbilling, -1]';
   END IF;
 
   SELECT cobill_id INTO _cobillid

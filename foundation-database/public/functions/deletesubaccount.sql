@@ -10,7 +10,7 @@ BEGIN
              WHERE ((accnt_company=subaccnt_number)
                AND  (subaccnt_id=pid))
             )) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Subaccount cannot be deleted as it is in use by existing Account. You must reclass these Accounts before you may delete the selected Subaccount. [xtuple: deleteSubaccount, -1]';
   END IF;
 
   DELETE FROM subaccnt

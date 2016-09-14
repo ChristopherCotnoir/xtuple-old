@@ -77,7 +77,7 @@ BEGIN
      AND (expcat_liability_accnt_id=lb.accnt_id)
      AND (expcat_id=_p.poitem_expcat_id) );
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'Cannot Post Credit Memo due to unassigned G/L Accounts.';
+      RAISE EXCEPTION 'Cannot Post Credit Memo due to unassigned G/L Accounts. [xtuple: postPoReturnCreditMemo, -1]';
     END IF;
   ELSE
     SELECT pp.accnt_id AS pp_accnt_id,
@@ -87,7 +87,7 @@ BEGIN
      AND (costcat_liability_accnt_id=lb.accnt_id)
      AND (costcat_id=_p.itemsite_costcat_id) );
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'Cannot Post Credit Memo due to unassigned G/L Accounts.';
+      RAISE EXCEPTION 'Cannot Post Credit Memo due to unassigned G/L Accounts. [xtuple: postPoReturnCreditMemo, -1]';
     END IF;
   END IF;
 
@@ -162,14 +162,14 @@ BEGIN
 --  Post to A/P
   SELECT findAPAccount(_p.pohead_vend_id) INTO _apaccntid;
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Cannot Post Credit Memo due to an unassigned A/P Account.';
+    RAISE EXCEPTION 'Cannot Post Credit Memo due to an unassigned A/P Account. [xtuple: postPoReturnCreditMemo, -2]';
   END IF;
 
   SELECT insertIntoGLSeries( _sequence, 'A/P', 'CM', _docNumber,
                              _apaccntid, round(_itemAmount_base + _taxAmount_base, 2) *-1,
                              current_date, _p.notes ) INTO _test;
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Cannot Post Credit Memo.';
+    RAISE EXCEPTION 'Cannot Post Credit Memo. [xtuple: postPoReturnCreditMemo, -3]';
   END IF;
 
 -- Clean up loose ends

@@ -77,7 +77,7 @@ BEGIN
       IF (EXISTS(SELECT cntct_id
                  FROM cntct
                  WHERE (cntct_id=pCntctId))) THEN
-        RETURN -10;
+        RAISE EXCEPTION '[xtuple: saveCntct, -10]';
       ELSE
         _isNew := true;
         _cntctNumber := fetchNextNumber('ContactNumber');

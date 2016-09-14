@@ -43,7 +43,7 @@ BEGIN
   IF ( ( SELECT wo_status
          FROM wo
          WHERE (wo_id=pWoid) ) NOT IN  ('R','E','I') ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Unable to post this Production because the Work Order status is not Exploded, Released, or InProcess. [xtuple: postproduction, -1]';
   END IF;
 
 --  Make sure that all Component Item Sites exist
@@ -66,7 +66,7 @@ BEGIN
            AND (component.itemsite_warehous_id=parent.itemsite_warehous_id) ) ) ) )
   LIMIT 1;
   IF (FOUND AND pBackflush) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'Unable to post this Production because backflushing component usage could not be completed due to missing Item Sites. [xtuple: postproduction, -2]';
   END IF;
 
   SELECT formatWoNumber(pWoid) INTO _woNumber;

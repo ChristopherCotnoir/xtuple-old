@@ -33,7 +33,7 @@ BEGIN
      AND (itemloc_itemsite_id=itemsite_id)
      AND (itemlocdist_id=pItemlocdistid));
   IF ( (NOT FOUND) OR (_itemlocid = -1) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: distributeToDefaultItemLoc, -1]';
   END IF;
 
 --  Determine the remaining qty required to distribute
@@ -44,7 +44,7 @@ BEGIN
    GROUP BY p.itemlocdist_qty;
 
   IF (_qty = 0) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: distributeToDefaultItemLoc, -2]';
   END IF;
 
 --  Check to see if an itemlocdist with the correct location/lotserial/expiration already exists

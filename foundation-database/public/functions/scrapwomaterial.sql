@@ -21,11 +21,11 @@ DECLARE
 BEGIN
   -- Validate
   IF (pQty <= 0) THEN
-    RAISE EXCEPTION 'Scrap quantity must be a positive number';
+    RAISE EXCEPTION 'Scrap quantity must be a positive number [xtuple: scrapWoMaterial, -1]';
   ELSIF ( ( SELECT (womatl_qtyiss < pQty)
 	     FROM womatl
 	     WHERE (womatl_id=pWomatlid) ) ) THEN
-    RAISE EXCEPTION 'You may not scrap more material than has been issued';
+    RAISE EXCEPTION 'You may not scrap more material than has been issued [xtuple: scrapWoMaterial, -2]';
   END IF;
 
   -- Get the wip G/L account
@@ -65,7 +65,7 @@ BEGIN
     WHERE (womatl_id=pWomatlid)
     GROUP BY itemsite_item_id,womatl_uom_id,womatl_qtywipscrap,womatl_scrapvalue;
   ELSE
-    RAISE EXCEPTION 'Cost method not supported to scrap this item';
+    RAISE EXCEPTION 'Cost method not supported to scrap this item [xtuple: scrapWoMaterial, -3]';
   END IF;
 
   --  Distribute to G/L

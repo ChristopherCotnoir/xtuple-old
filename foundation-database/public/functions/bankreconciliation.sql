@@ -22,7 +22,7 @@ BEGIN
     WHEN 'post'   THEN _post = TRUE;
     WHEN 'reopen' THEN _post = FALSE;
     ELSE RAISE EXCEPTION
-          'bankReconciliation got an invalid task %1 [xtuple: bankReconciliation, -2, %2]',
+          'bankReconciliation got an invalid task % [xtuple: bankReconciliation, -2, %]',
           pTask, pTask;
   END CASE;
 
@@ -33,7 +33,7 @@ BEGIN
     JOIN accnt     ON (bankaccnt_accnt_id=accnt_id)
    WHERE (bankrec_id=pBankrecid);
   IF ( NOT FOUND ) THEN
-    RAISE EXCEPTION 'bankReconciliation %1 %2 did not find the bank''s G/L account [xtuple: bankReconciliation, -1, %3, %4]',
+    RAISE EXCEPTION 'bankReconciliation % % did not find the bank''s G/L account [xtuple: bankReconciliation, -1, %, %]',
                     pTask, pBankrecid, pTask, pBankrecid;
   END IF;
 
@@ -54,7 +54,7 @@ BEGIN
       _sequence := postBankAdjustment(_r.bankrecitem_source_id);
 
       IF (_sequence < 0) THEN
-        RAISE EXCEPTION 'postBankAdjustment %1 %2 failed during bankReconciliation [xtuple: postBankAdjustment, -10, %3, %4, %5]',
+        RAISE EXCEPTION 'postBankAdjustment % % failed during bankReconciliation [xtuple: postBankAdjustment, -10, %, %, %]',
                          pTask, pBankrecid, pTask, pBankrecid, _sequence;
       END IF;
 
@@ -63,7 +63,7 @@ BEGIN
        WHERE ( (gltrans_sequence=_sequence)
          AND   (gltrans_accnt_id=_accntid) );
       IF ( NOT FOUND ) THEN
-        RAISE EXCEPTION 'bankReconciliation %1 %2 did not find exactly one gltrans record for %3 [xtuple: bankReconciliation, -11, %4, %5, %6]',
+        RAISE EXCEPTION 'bankReconciliation % % did not find exactly one gltrans record for % [xtuple: bankReconciliation, -11, %, %, %]',
                         pTask, pBankrecid, _sequence, pTask, pBankrecid, _sequence;
       END IF;
 
@@ -267,21 +267,21 @@ BEGIN
                            tax_sales_accnt_id, tax_dist_accnt_id, taxhist_docdate
       LOOP
         IF (_tax.tax_sales_accnt_id IS NULL OR _tax.tax_dist_accnt_id IS NULL) THEN
-          RAISE EXCEPTION 'Cannot post this bank reconciliation due to missing Tax Code G/L Account mappings';
+          RAISE EXCEPTION 'Cannot post this bank reconciliation due to missing Tax Code G/L Account mappings [xtuple: bankReconciliation, -12]';
         END IF;  
         SELECT insertIntoGLSeries( _sequence, _tax.source, _tax.doctype, _tax.docnumber,
                                    _tax.tax_dist_accnt_id, 
                                    _tax.taxbasevalue * _sign,
                                    COALESCE(_r.bankrecitem_effdate, _tax.distdate), _tax.custname ) INTO _result;
         IF (_result < 0) THEN
-          RAISE EXCEPTION 'insertIntoGLSeries failed, result=%', _result;
+          RAISE EXCEPTION 'insertIntoGLSeries failed, result=% [xtuple: bankReconciliation, -13, %]', _result, _result;
         END IF;
         SELECT insertIntoGLSeries( _sequence, _tax.source, _tax.doctype, _tax.docnumber,
                                    _tax.tax_sales_accnt_id, 
                                    (_tax.taxbasevalue * -1.0 * _sign),
                                    COALESCE(_r.bankrecitem_effdate, _tax.distdate), _tax.custname ) INTO _result;
         IF (_result < 0) THEN
-          RAISE EXCEPTION 'insertIntoGLSeries failed, result=%', _result;
+          RAISE EXCEPTION 'insertIntoGLSeries failed, result=% [xtuple: bankReconciliation, -13, %]', _result, _result;
         END IF;
       END LOOP;
 
@@ -398,7 +398,7 @@ BEGIN
 
     SELECT postGLSeries(_sequence, fetchJournalNumber('GL-MISC')) INTO _result;
     IF (_result < 0) THEN
-      RAISE EXCEPTION 'postGLSeries failed, result=%', _result;
+      RAISE EXCEPTION 'postGLSeries failed, result=% [xtuple: bankReconciliation, -14, %]', _result, _result;
     END IF;
 
   END IF;

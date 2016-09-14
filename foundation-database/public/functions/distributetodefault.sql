@@ -32,7 +32,7 @@ BEGIN
   WHERE ( (itemlocdist_itemsite_id=itemsite_id)
    AND (itemlocdist_id=pItemlocdistid) );
   IF ( (NOT FOUND) OR (_locationid = -1) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'There was an error distributing to default location. There is no default location defined for this Item Site. [xtuple: distributeToDefault, -1]';
   END IF;
 
 --  Determine the remaining qty required to distribute
@@ -42,7 +42,7 @@ BEGIN
   GROUP BY p.itemlocdist_qty;
 
   IF (_qty = 0) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'There was an error distributing to default location. There is no quantity to distribute for this Item Site. [xtuple: distributeToDefault, -2]';
   END IF;
 
 --  Check to see if an itemlocdist with the correct location/lotserial/expiration already exists

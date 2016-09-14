@@ -32,7 +32,7 @@ BEGIN
     RETURN _accntid;
   END IF;
 
-  RETURN -1;
+  RAISE EXCEPTION '[xtuple: findFreightAccount, -1]';
 
 END;
 $$ LANGUAGE 'plpgsql';

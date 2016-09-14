@@ -39,11 +39,11 @@ BEGIN
   WHERE (checkhead_id=pCheckid);
 
   IF (NOT _p.checkhead_posted) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'Cannot void this Payment because it has already been voided. [xtuple: voidPostedCheck, -10]';
   END IF;
 
   IF (_p.checkrecip_id IS NULL) THEN	-- outer join failed
-    RETURN -11;
+    RAISE EXCEPTION 'Cannot void this Payment because the recipient type is not valid. [xtuple: voidPostedCheck, -11]';
   END IF;
 
   -- Cannot void if already reconciled
@@ -61,7 +61,7 @@ BEGIN
            AND   (sltrans_misc_id=_p.checkhead_id)
            AND   ((sltrans_rec) OR (bankrecitem_id IS NOT NULL)) )
        ) THEN
-    RETURN -14;
+    RAISE EXCEPTION 'Cannot void this Payment because the Payment has has been reconciled in Bank Reconciliation. [xtuple: voidPostedCheck, -14]';
   END IF;
 
   _gltransNote := 'Void Posted Check #' || _p.checkhead_number || ' ' ||
@@ -97,12 +97,12 @@ BEGIN
       FROM expcat
       WHERE (expcat_id=_p.checkhead_expcat_id);
       IF (NOT FOUND) THEN
-        RETURN -12;
+        RAISE EXCEPTION 'Cannot void this Payment because the Expense Category could not be found. [xtuple: voidPostedCheck, -12]';
       END IF;
     END IF;
 
     IF (COALESCE(_credit_glaccnt, -1) < 0) THEN
-      RETURN -13;
+      RAISE EXCEPTION 'Cannot void this Payment because the Ledger Account to which the funds should be credited is not valid. [xtuple: voidPostedCheck, -13]';
     END IF;
 
     -- Check for tax records
@@ -317,8 +317,9 @@ BEGIN
 				     round(_p.checkhead_amount_base, 2)) * -1,
 				    pVoidDate, _gltransNote, pCheckid);
       ELSE
-	RAISE EXCEPTION 'checkhead_id % does not balance (% - % <> %)', pCheckid,
-	      _amount_base, _exchGain, _p.checkhead_amount_base;
+	RAISE EXCEPTION 'checkhead_id % does not balance (% - % <> %) [xtuple: voidPostedCheck, -1, %, %, %, %]', pCheckid,
+	      _amount_base, _exchGain, _p.checkhead_amount_base, pCheckid,
+              _amount_base, _exchGain, _p.checkhead_amount_base;
       END IF;
     END IF;
   END IF;

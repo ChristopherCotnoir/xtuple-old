@@ -33,7 +33,7 @@ BEGIN
     LIMIT 1;
 
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'Cannot find global uom conversion';
+      RAISE EXCEPTION 'Cannot find global uom conversion [xtuple: createItemUOMConv, -1]';
     END IF;
 
     -- Insert itemuomconv
@@ -56,7 +56,7 @@ BEGIN
   WHERE (uomtype_name=pUomType);
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Cannot find uom type';
+    RAISE EXCEPTION 'Cannot find uom type [xtuple: createItemUOMConv, -2]';
   END IF;
 
   -- Find the corresponding item uom

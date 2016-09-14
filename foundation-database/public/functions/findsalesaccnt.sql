@@ -95,14 +95,14 @@ BEGIN
     LIMIT 1;
 
   ELSE
-    RETURN -2;	-- invalid pidType
+    RAISE EXCEPTION '[xtuple: findSalesAccnt, -2]';	-- invalid pidType
   END IF;
 
   IF (FOUND) THEN
     RETURN _s.salesaccnt_id;
   END IF;
 
-  RETURN -1;
+  RAISE EXCEPTION '[xtuple: findSalesAccnt, -1]';
 
 END;
 $$

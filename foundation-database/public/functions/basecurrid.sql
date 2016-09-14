@@ -9,7 +9,7 @@ BEGIN
     FROM curr_symbol
    WHERE curr_base = TRUE;
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'No base currency found';
+    RAISE EXCEPTION 'No base currency found [xtuple: baseCurrID, -1]';
   END IF;
   RETURN returnVal;
 END;

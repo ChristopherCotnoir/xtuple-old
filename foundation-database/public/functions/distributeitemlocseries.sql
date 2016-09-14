@@ -112,7 +112,7 @@ BEGIN
         _itemlocid = _itemlocdist.sourceid;
 
         IF (_itemlocid IS NOT NULL AND (SELECT count(itemloc_id) = 0 FROM itemloc WHERE itemloc_id=_itemlocid)) THEN
-          RAISE EXCEPTION 'No record to distribute against. Someone else may have already distributed this record.';
+          RAISE EXCEPTION 'No record to distribute against. Someone else may have already distributed this record. [xtuple: distributeItemlocSeries, -1]';
         END IF;
       END IF;
 

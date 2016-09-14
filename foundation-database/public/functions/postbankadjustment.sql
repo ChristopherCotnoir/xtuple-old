@@ -25,7 +25,7 @@ BEGIN
      AND   (NOT bankadj_posted)
      AND   (bankadj_id=pBankadjid) );
   IF ( NOT FOUND ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'This Bank Adjustment could not be posted because the one or more required records do not exist. [xtuple: postBankAdjustment, -1]';
   END IF;
 
   IF (_sequence >= 0) THEN

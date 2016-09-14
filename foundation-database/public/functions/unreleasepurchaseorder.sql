@@ -12,7 +12,7 @@ BEGIN
                    (poitem_qty_returned > 0.0) OR
                    (poitem_qty_vouchered > 0.0) OR
                    (recv_id IS NOT NULL) ) ) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot unrelease this Purchase Order because it has in process Purchase Order Items. [xtuple: unreleasePurchaseOrder, -1]';
   END IF;
 
   IF ( ( SELECT (pohead_status='O')

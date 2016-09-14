@@ -77,7 +77,7 @@ BEGIN
                   ((itemsite_qtyonhand - round(pQty * coitem_qty_invuomratio, 6)) < 0.0) )
          FROM coitem JOIN itemsite ON (itemsite_id=coitem_itemsite_id)
          WHERE (coitem_id=pitemid) ) THEN
-      RETURN -20;
+      RAISE EXCEPTION 'There is not enough Inventory to issue the amount required of one of the Average Cost items requested.  Average Cost items may not have a negative quantity on hand. [xtuple: issueShipping, -20]';
     END IF;
 
     -- Check auto registration
@@ -89,7 +89,7 @@ BEGIN
                   JOIN crmacct ON (crmacct_cust_id=cohead_cust_id)
       WHERE (coitem_id=pitemid);
       IF (_cntctid = -1) THEN
-        RETURN -15;
+        RAISE EXCEPTION 'The selected Sales Order is configured for Auto Registration. The Customer Account does not have a Primary Contact. A Primary Contact must be assigned to this Customer Account before any inventory may be issued to this Order. [xtuple: issueShipping, -15]';
       END IF;
     END IF; 
   
@@ -99,11 +99,11 @@ BEGIN
     WHERE (coitem_id=pitemid);
 
     IF (_coholdtype = 'C') THEN
-      RETURN -12;
+      RAISE EXCEPTION 'The selected Sales Order is on Credit Hold and must be taken off of Credit Hold before any inventory may be issued to it. [xtuple: issueShipping, -12]';
     ELSIF (_coholdtype = 'P') THEN
-      RETURN -13;
+      RAISE EXCEPTION 'The selected Sales Order is on Packing Hold and must be taken off of Packing Hold before any inventory may be issued to it. [xtuple: issueShipping, -13]';
     ELSIF (_coholdtype = 'R') THEN
-      RETURN -14;
+      RAISE EXCEPTION 'The selected Sales Order is on Return Hold. The Customer must return all materials for a related Return Authorization before any inventory may be issued to this Order. [xtuple: issueShipping, -14]';
     END IF;
 
     SELECT shiphead_id INTO _shipheadid
@@ -115,7 +115,7 @@ BEGIN
 
       _shipnumber := fetchShipmentNumber();
       IF (_shipnumber < 0) THEN
-	RETURN -10;
+	RAISE EXCEPTION 'The Next Shipment Number has not been set in the Configure S/R window. Set that value and try issuing to shipping again. [xtuple: issueShipping, -10]';
       END IF;
 
       INSERT INTO shiphead
@@ -254,7 +254,7 @@ BEGIN
 
       _shipnumber := fetchShipmentNumber();
       IF (_shipnumber < 0) THEN
-	RETURN -10;
+	RAISE EXCEPTION 'The Next Shipment Number has not been set in the Configure S/R window. Set that value and try issuing to shipping again. [xtuple: issueShipping, -10]';
       END IF;
 
       INSERT INTO shiphead
@@ -291,7 +291,7 @@ BEGIN
     );
 
   ELSE
-    RETURN -11;
+    RAISE EXCEPTION '[xtuple: issueShipping, -11]';
   END IF;
 
   RETURN _itemlocSeries;

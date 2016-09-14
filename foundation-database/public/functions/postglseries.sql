@@ -65,7 +65,7 @@ BEGIN
       WHERE (glseries_sequence=pSequence)) _data;
     
     IF (_rows > 1) THEN
-      RAISE EXCEPTION 'G/L Series can not be posted because multiple companies are referenced in the same series.';
+      RAISE EXCEPTION 'G/L Series can not be posted because multiple companies are referenced in the same series. [xtuple: postGLSeries, -1]';
     END IF;
   END IF;
   
@@ -89,7 +89,7 @@ BEGIN
     END IF;
 
     IF (NOT FOUND) THEN
-      RETURN -5;
+      RAISE EXCEPTION 'Could not post this G/L Series because the G/L Series Discrepancy Account was not found. [xtuple: postGLSeries, -5]';
     END IF;
     
     INSERT INTO glseries
@@ -120,8 +120,7 @@ BEGIN
         FROM accnt LEFT OUTER JOIN
              period ON (_glseries.glseries_distdate BETWEEN period_start AND period_end)
         WHERE (accnt_id = _glseries.glseries_accnt_id)) THEN
-      RAISE EXCEPTION 'Cannot post to closed period (%).', _glseries.glseries_distdate;
-      RETURN -4;        -- remove raise exception when all callers check return code
+      RAISE EXCEPTION 'Cannot post to closed period (%). [xtuple: postGLSeries, -4, %]', _glseries.glseries_distdate, _glseries.glseries_distdate;
     END IF;
 
 -- refuse to accept postings into frozen periods without proper priv
@@ -130,15 +129,14 @@ BEGIN
         FROM accnt LEFT OUTER JOIN
              period ON (_glseries.glseries_distdate BETWEEN period_start AND period_end)
         WHERE (accnt_id = _glseries.glseries_accnt_id)) THEN
-      RAISE EXCEPTION 'Cannot post to frozen period (%).', _glseries.glseries_distdate;
-      RETURN -4;        -- remove raise exception when all callers check return code
+      RAISE EXCEPTION 'Cannot post to frozen period (%). [xtuple: postGLSeries, -2, %]', _glseries.glseries_distdate, _glseries.glseries_distdate;
     END IF;
 
 -- refuse to accept postings into nonexistent periods
     IF NOT EXISTS(SELECT period_id
                   FROM period
                   WHERE (_glseries.glseries_distdate BETWEEN period_start AND period_end)) THEN
-      RAISE EXCEPTION 'Cannot post to nonexistent period (%).', pDistDate;
+      RAISE EXCEPTION 'Cannot post to nonexistent period (%). [xtuple: postGLSeries, -3, %]', pDistDate, pDistDate;
     END IF;
 
     IF (_glseries.amount != 0 OR pPostZero) THEN

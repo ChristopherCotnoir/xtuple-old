@@ -35,7 +35,7 @@ BEGIN
   END IF;
   
   IF (_gain IS NULL) THEN
-    RAISE EXCEPTION 'Error processing currency gain/loss.';
+    RAISE EXCEPTION 'Error processing currency gain/loss. [xtuple: apcurrGain, -1]';
   END IF;
 
   RETURN _gain;

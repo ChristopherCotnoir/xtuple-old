@@ -32,7 +32,7 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN undefined_object OR invalid_schema_name THEN
 		RETURN 0;
-	      WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+	      WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -1, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSEIF (UPPER(pType) = 'TABLE') THEN
@@ -46,7 +46,7 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN undefined_table OR invalid_schema_name THEN
 		RETURN 0;
-	      WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+	      WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -2, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSIF (UPPER(pType) = 'VIEW') THEN
@@ -60,7 +60,7 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN undefined_table OR invalid_schema_name THEN
 		RETURN 0;
-	      WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+	      WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -3, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSIF (UPPER(pType) = 'TRIGGER') THEN
@@ -80,7 +80,7 @@ BEGIN
 		RETURN 0;
 	      WHEN undefined_table OR invalid_schema_name THEN
 		RETURN 0;
-	      WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+	      WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -4, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSIF (UPPER(pType) = 'FUNCTION') THEN
@@ -90,7 +90,7 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN undefined_object OR undefined_function OR invalid_schema_name THEN
 		RETURN 0;
-	      WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+	      WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -5, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSIF (UPPER(pType) = 'CONSTRAINT') THEN
@@ -101,7 +101,7 @@ BEGIN
             AND (conname=pObject)
             AND (nspname=pSchema))
          ) > 1 ) THEN
-      RAISE EXCEPTION 'dropIfExists called on constraint name that matches more than 1 constraint.';
+      RAISE EXCEPTION 'dropIfExists called on constraint name that matches more than 1 constraint. [xtuple: dropIfExists, -6]';
     END IF;
     SELECT relname INTO _table
     FROM pg_constraint, pg_class, pg_namespace
@@ -118,7 +118,7 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN undefined_table OR invalid_schema_name THEN
 		RETURN 0;
-	      WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+	      WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -7, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSIF (UPPER(pType) = 'SCHEMA') THEN
@@ -127,7 +127,7 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN invalid_schema_name THEN
                 RETURN 0;
-              WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+              WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -8, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSIF (UPPER(pType) = 'TYPE') THEN
@@ -141,11 +141,11 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN undefined_object OR invalid_schema_name THEN
                 RETURN 0;
-              WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+              WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -9, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSE
-    RAISE EXCEPTION 'dropIfExists(%, %): unknown pType %', pType, pObject, pType;
+    RAISE EXCEPTION 'dropIfExists(%, %): unknown pType % [xtuple: dropIfExists, -10, %, %, %]', pType, pObject, pType, pType, pObject, pType;
   END IF;
 
   RETURN 1;
@@ -181,11 +181,11 @@ BEGIN
       EXECUTE _query;
     EXCEPTION WHEN undefined_table OR invalid_schema_name THEN
 		RETURN 0;
-	      WHEN OTHERS THEN RAISE EXCEPTION '% %', SQLSTATE, SQLERRM;
+	      WHEN OTHERS THEN RAISE EXCEPTION '% % [xtuple: dropIfExists, -11, %, %]', SQLSTATE, SQLERRM, SQLSTATE, SQLERRM;
     END;
 
   ELSE
-    RAISE EXCEPTION 'dropIfExists(%, %, %, %): pType % is not supported when relation is specified', pType, pObject, pSchema, pRelation, pType;
+    RAISE EXCEPTION 'dropIfExists(%, %, %, %): pType % is not supported when relation is specified [xtuple: dropIfExists, -12, %, %, %, % %]', pType, pObject, pSchema, pRelation, pType, pType, pObject, pSchema, pRelation, pType;
   END IF;
 
   RETURN 1;

@@ -13,7 +13,7 @@ BEGIN
   WHERE (pohead_vendaddr_id=pVendaddrid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteVendorAddress, -1]';
   END IF;
 
 --  Delete the passed vendor address

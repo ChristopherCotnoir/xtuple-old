@@ -87,7 +87,7 @@ BEGIN
 
 --  If item is exclusive then list list price does not apply
   IF (_item.item_exclusive) THEN
-    RETURN -9999.0;
+    RAISE EXCEPTION '[xtuple: listprice, -9999]';
   END IF;
 
   RETURN _item.item_listprice;

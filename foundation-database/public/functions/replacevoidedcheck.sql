@@ -9,7 +9,7 @@ BEGIN
   IF ( ( SELECT ( (NOT checkhead_void) OR checkhead_posted OR checkhead_replaced )
          FROM checkhead
          WHERE (checkhead_id=pCheckid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot replace this voided Payment because either it has not been voided, it has already been posted, or it has already beenreplaced. [xtuple: replaceVoidedCheck, -1]';
   END IF;
 
   -- has someone created a new check for one of the items while this was void?
@@ -21,7 +21,7 @@ BEGIN
                 AND (dup.checkitem_checkhead_id=duphead.checkhead_id)
                 AND (NOT duphead.checkhead_void)
                 AND (orig.checkitem_checkhead_id=pCheckid))) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: replaceVoidedCheck, -2]';
   END IF;
 
   SELECT NEXTVAL('checkhead_checkhead_id_seq') INTO _newCheckid;

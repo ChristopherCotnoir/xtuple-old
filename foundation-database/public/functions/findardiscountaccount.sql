@@ -31,7 +31,7 @@ BEGIN
     RETURN _accntid;
   END IF;
 
-  RETURN -1;
+  RAISE EXCEPTION '[xtuple: findardiscountaccount, -1]';
 
 END;
 $$ LANGUAGE 'plpgsql';

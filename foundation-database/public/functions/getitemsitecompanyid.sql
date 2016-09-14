@@ -7,7 +7,7 @@ DECLARE
   _returnVal INTEGER;
 BEGIN
   IF (pItemSite IS NULL) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: getitemsitecompanyid, -1]';
   END IF;
 
   SELECT getcompanyid(warehous_default_accnt_id) INTO _returnVal
@@ -16,7 +16,7 @@ BEGIN
   WHERE itemsite_id = pItemSite;
 
   IF (_returnVal IS NULL) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: getitemsitecompanyid, -1]';
   END IF;
 
   RETURN _returnVal;

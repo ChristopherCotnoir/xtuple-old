@@ -121,7 +121,7 @@ BEGIN
     END IF;   
 
     IF (NOT FOUND) THEN
-      RETURN -1;
+      RAISE EXCEPTION 'Information for this order line item could not be found. If it is a Purchase Order Item then it does not appear to exist. If it is a Transfer Order Item then either the Transfer Order does not exist or there is no Item Site for this line item. [xtuple: enterReceipt, -1]';
     END IF;
 
     -- default to orderitem_unitcost if recv_purchcost is not specified

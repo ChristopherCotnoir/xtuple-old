@@ -14,13 +14,13 @@ BEGIN
   WHERE (locale_id=pLocaleid);
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Attempt to copy a non-existent locale-id.';
+    RAISE EXCEPTION 'Attempt to copy a non-existent locale-id. [xtuple: copyLocale, -1]';
   END IF;
 
   IF (EXISTS(SELECT locale_id
              FROM locale
              WHERE (locale_code = (_localecode || '-COPY')))) THEN
-    RAISE EXCEPTION 'Attempt to copy a Locale Code that already exists.';
+    RAISE EXCEPTION 'Attempt to copy a Locale Code that already exists. [xtuple: copyLocale, -2]';
   END IF;
 
   SELECT NEXTVAL('locale_locale_id_seq') INTO _localeid;

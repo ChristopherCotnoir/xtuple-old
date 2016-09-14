@@ -22,7 +22,7 @@ BEGIN
         WHERE ((poitem_id=pPoitemid)
         AND (pohead_curr_id=pCurrId));
   IF (_count = 0) THEN
-        RETURN -3;
+        RAISE EXCEPTION 'The purchase order and voucher have different currencies. Please distribute manually. [xtuple: distributeVoucherLine, -3]';
   END IF;
 
 --  Validate and get cost element
@@ -35,7 +35,7 @@ BEGIN
                 AND (poitem_id=pPoitemId));
 
         IF (_count > 1) THEN
-                RETURN -5;
+                RAISE EXCEPTION 'Item has multiple cost elements. Please distribute manually. [xtuple: distributeVoucherLine, -5]';
         ELSEIF (_count = 1) THEN
                 SELECT itemcost_costelem_id INTO _costelemId
                         FROM itemcost, item, itemsite, poitem
@@ -117,9 +117,9 @@ BEGIN
                 WHERE (poitem_id=pPoitemId);
 
         IF _r.balance < 0 THEN
-                RETURN -4;
+                RAISE EXCEPTION 'Distribution would result in a negative amount. [xtuple: distributeVoucherLine, -4]';
         ELSEIF ( ((_r.qty_received <> 0) OR (_r.qty_received <> 0)) AND (_r.qty_received - _r.qty_rejected = 0) ) THEN
-                RETURN -2;
+                RAISE EXCEPTION 'Distribution would result in zero quantity and amount. [xtuple: distributeVoucherLine, -2]';
         ELSEIF ((_r.qty_received - _r.qty_rejected) = 0) THEN
                 RETURN 0;
         END IF;

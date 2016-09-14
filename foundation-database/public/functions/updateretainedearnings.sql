@@ -20,7 +20,7 @@ BEGIN
   SELECT * INTO _r FROM yearperiod where yearperiod_id = pYearPeriodid;
 
   IF (NOT FOUND) THEN
-    RETURN -6;
+    RAISE EXCEPTION '[xtuple: updateRetainedEarnings, -6]';
   END IF;
 
 --  Now we need to find the next yearperiod
@@ -28,7 +28,7 @@ BEGIN
   SELECT * INTO _n FROM yearperiod WHERE yearperiod_start = _r.yearperiod_end + interval '1 day';
 
   IF (NOT FOUND) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: updateRetainedEarnings, -4]';
   END IF;
 
 --  Now we have to find where to stick the end of year data
@@ -36,7 +36,7 @@ BEGIN
   SELECT period_id INTO _periodid FROM period WHERE period_start = _n.yearperiod_start;
 
   IF (NOT FOUND) THEN
-    RETURN -8;
+    RAISE EXCEPTION '[xtuple: updateRetainedEarnings, -8]';
   END IF;
 
 --  Loop through companies and process each one
@@ -48,7 +48,7 @@ BEGIN
     SELECT CAST ( metric_value AS integer ) INTO _accntid FROM metric WHERE metric_name = 'YearEndEquityAccount';
 
     IF (NOT FOUND) THEN
-      RETURN -7;
+      RAISE EXCEPTION '[xtuple: updateRetainedEarnings, -7]';
     END IF;
 
   --  So far so good.  Now we need to calculate the profit-loss for the year that we are closing
@@ -72,7 +72,7 @@ BEGIN
        AND   (trialbal_accnt_id = _accntid) );
 
     IF (NOT FOUND) THEN
-      RETURN -9;
+      RAISE EXCEPTION '[xtuple: updateRetainedEarnings, -9]';
     END IF;
 
   -- Lets do the update for the trialbal

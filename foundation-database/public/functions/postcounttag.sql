@@ -274,7 +274,7 @@ BEGIN
     RETURN 0;
 
   ELSE
-    RETURN -9;
+    RAISE EXCEPTION '[xtuple: postCountTag, -9]';
   END IF;
 
 END;

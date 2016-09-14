@@ -92,7 +92,7 @@ BEGIN
       RETURN _itemcostid;
 
     ELSE
-      RETURN -1;
+      RAISE EXCEPTION '[xtuple: updateCost, -1]';
     END IF;
 
   ELSE
@@ -158,7 +158,7 @@ BEGIN
       RETURN _itemcostid;
 
     ELSE
-      RETURN -1;
+      RAISE EXCEPTION '[xtuple: updateCost, -1]';
     END IF;
 
   ELSE

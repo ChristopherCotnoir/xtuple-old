@@ -94,7 +94,7 @@ BEGIN
 
   IF (_flag = 'CHECK') THEN
     IF addrUseCount(_addr.addr_id) > 1 THEN
-      RETURN -2;        /* do NOT raise exception here */
+      RAISE EXCEPTION '[xtuple: saveAddr, -2]';        /* do NOT raise exception here */
     ELSIF NOT EXISTS (SELECT 1 FROM addr WHERE addr_id = _addr.addr_id) THEN
       _flag := 'CHANGEONE';
     ELSE

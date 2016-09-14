@@ -17,7 +17,7 @@ BEGIN
   IF (NOT EXISTS(SELECT ophead_id
                  FROM ophead
                  WHERE (ophead_id=pOpheadid))) THEN
-    RAISE EXCEPTION 'The selected Sales Order cannot be attached because the Opportunity cannot be found.' [xtuple: attachSalesOrderToOpportunity, -2]';
+    RAISE EXCEPTION 'The selected Sales Order cannot be attached because the Opportunity cannot be found. [xtuple: attachSalesOrderToOpportunity, -2]';
   END IF;
 
 -- Cannot attach if already attached

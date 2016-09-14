@@ -9,7 +9,7 @@ DECLARE
 
 BEGIN
   IF (version() < 'PostgreSQL 8.2') THEN
-    RETURN -1;
+    RAISE EXCEPTION 'This version of the PostgreSQL database server does not support package enabling or disabling. [xtuple: disablePackage, -1]';
   END IF;
 
   FOR _i IN ARRAY_LOWER(_tabs,1)..ARRAY_UPPER(_tabs,1) LOOP
@@ -34,7 +34,7 @@ BEGIN
   FROM pkghead
   WHERE (pkghead_id=ppkgheadid);
   IF (NOT FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'Could not find a package with the internal id % to enable or disable. [xtuple: disablePackage, -2, %]', ppkgheadid, ppkgheadid;
   END IF;
 
   RETURN disablePackage(_pkgname);

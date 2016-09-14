@@ -18,7 +18,7 @@ BEGIN
     AND  (orderitem_orderhead_id=porderid));
 
   IF (_qtyToRecv <= 0) THEN
-    RETURN -11;
+    RAISE EXCEPTION '[xtuple: postReceipts, -11]';
   END IF;
 
   IF (_itemlocSeries IS NULL OR _itemlocSeries <= 0) THEN

@@ -43,7 +43,7 @@ BEGIN
       RETURN forwardUpdateInvbalance(_invbalid);
   END IF;
 
-  RETURN -1;
+  RAISE EXCEPTION '[xtuple: forwardUpdateItemsite, -1]';
 END;
 $$ LANGUAGE 'plpgsql';
 

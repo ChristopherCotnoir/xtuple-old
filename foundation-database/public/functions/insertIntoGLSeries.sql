@@ -98,7 +98,8 @@ BEGIN
 
 --  Verify the target accnt
   IF ( (pAccntid IS NULL) OR (pAccntid = -1) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot add to a G/L Series because the "
+				 "Account is NULL or -1. [xtuple: insertIntoGLSeries, -1]';
   END IF;
 
 -- refuse to accept postings into closed periods
@@ -106,8 +107,7 @@ BEGIN
       FROM accnt LEFT OUTER JOIN
            period ON (pDistDate BETWEEN period_start AND period_end)
       WHERE (accnt_id = pAccntid)) THEN
-    RAISE EXCEPTION 'Cannot post to closed period (%).', pDistDate;
-    RETURN -4;  -- remove raise exception when all callers check return code
+    RAISE EXCEPTION 'Cannot post to closed period (%). [xtuple: insertIntoGLSeries, -4, %]', pDistDate, pDistDate;
   END IF;
 
 -- refuse to accept postings into frozen periods without proper priv
@@ -116,15 +116,14 @@ BEGIN
       FROM accnt LEFT OUTER JOIN
            period ON (pDistDate BETWEEN period_start AND period_end)
       WHERE (accnt_id = pAccntid)) THEN
-    RAISE EXCEPTION 'Cannot post to frozen period (%).', pDistDate;
-    RETURN -4;  -- remove raise exception when all callers check return code
+    RAISE EXCEPTION 'Cannot post to frozen period (%). [xtuple: insertIntoGLSeries, -2, %]', pDistDate, pDistDate;
   END IF;
 
 -- refuse to accept postings into nonexistent periods
   IF NOT EXISTS(SELECT period_id
                 FROM period
                 WHERE (pDistDate BETWEEN period_start AND period_end)) THEN
-    RAISE EXCEPTION 'Cannot post to nonexistent period (%).', pDistDate;
+    RAISE EXCEPTION 'Cannot post to nonexistent period (%). [xtuple: insertIntoGLSeries, -3, %]', pDistDate, pDistDate;
   END IF;
 
 -- Insert into the glseries

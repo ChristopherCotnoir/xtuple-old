@@ -40,7 +40,7 @@ BEGIN
   FROM shiphead
   WHERE (shiphead_id=pshipheadid);
   IF (NOT FOUND OR NOT _shiphead.shiphead_shipped) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'This shipment cannot be recalled because it does not appear to have been shipped. [xtuple: recallShipment, -1]';
   END IF;
 
   IF (_shiphead.shiphead_order_type = 'SO') THEN
@@ -49,7 +49,7 @@ BEGIN
       FROM cohead
      WHERE (cohead_id=_shiphead.shiphead_order_id);
     IF (NOT FOUND) THEN
-      RETURN -1;
+      RAISE EXCEPTION 'This shipment cannot be recalled because it does not appear to have been shipped. [xtuple: recallShipment, -1]';
     END IF;
 
     SELECT COALESCE(BOOL_AND(shipitem_invoiced), FALSE) INTO _allInvoiced
@@ -58,7 +58,7 @@ BEGIN
       AND  (shipitem_shiphead_id=pshipheadid));
 
     IF (_allInvoiced AND NOT checkPrivilege('RecallInvoicedShipment')) THEN
-      RETURN -2;
+      RAISE EXCEPTION 'This shipment cannot be recalled because it appears to have been invoiced. [xtuple: recallShipment, -2]';
     END IF;
 
     -- Check for any associated posted Invoices
@@ -68,7 +68,7 @@ BEGIN
     WHERE (shipitem_shiphead_id=pshipheadid);
 
     IF (_invoicePosted) THEN
-      RETURN -4;
+      RAISE EXCEPTION 'This shipment cannot be recalled because it appears to have been invoiced and the invoice has been posted. [xtuple: recallShipment, -4]';
     END IF;
 
     -- Delete any associated unposted Invoices
@@ -175,10 +175,10 @@ BEGIN
       FROM tohead
      WHERE (tohead_id=_shiphead.shiphead_order_id);
     IF (NOT FOUND) THEN
-      RETURN -1;
+      RAISE EXCEPTION 'This shipment cannot be recalled because it does not appear to have been shipped. [xtuple: recallShipment, -1]';
     END IF;
     IF (_to.tohead_status = 'C') THEN
-      RETURN -6;
+      RAISE EXCEPTION 'This shipment cannot be recalled because the associated Transfer Order is closed. [xtuple: recallShipment, -6]';
     END IF;
 
     FOR _ti IN SELECT toitem_id, toitem_qty_received,

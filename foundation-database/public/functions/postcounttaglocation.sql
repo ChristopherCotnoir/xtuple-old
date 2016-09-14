@@ -41,7 +41,7 @@ BEGIN
    AND (NOT invcnt_posted)
    AND (invcnt_id=pInvcntid) );
   IF (NOT FOUND) THEN
-    RETURN -9;
+    RAISE EXCEPTION '[xtuple: postCountTagLocation, -9]';
   END IF;
 
   SELECT COALESCE(SUM(itemloc_qty),0.0) INTO _origLocQty

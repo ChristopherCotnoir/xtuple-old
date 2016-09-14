@@ -11,7 +11,7 @@ DECLARE
 
 BEGIN
   IF (LENGTH(COALESCE(pname, '')) <= 0) THEN
-    RAISE EXCEPTION 'Cannot create a schema for this package without a name.';
+    RAISE EXCEPTION 'Cannot create a schema for this package without a name. [xtuple: createPkgSchema, -1]';
   END IF;
 
   SELECT oid INTO _namespaceoid

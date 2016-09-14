@@ -36,7 +36,7 @@ BEGIN
   SELECT * INTO _shiphead
   FROM shiphead WHERE (shiphead_id=pshipheadid);
   IF (NOT FOUND) THEN
-    RETURN -50;
+    RAISE EXCEPTION 'This Shipment cannot be shipped because it does not appear to exist. [xtuple: shipShipment, -50]';
   END IF;
 
   IF (_shiphead.shiphead_order_type = 'SO') THEN
@@ -53,13 +53,13 @@ BEGIN
     WHERE (shiphead_id=pshipheadid);
 
     IF (_coholdtype = 'C') THEN
-      RETURN -12;
+      RAISE EXCEPTION 'The selected Order is on Credit Hold and must be taken off of Credit Hold before it may be shipped. [xtuple: shipShipment, -12]';
     ELSIF (_coholdtype = 'P') THEN
-      RETURN -13;
+      RAISE EXCEPTION 'The selected Order is on Packing Hold and must be taken off of Packing Hold before it may be shipped. [xtuple: shipShipment, -13]';
     ELSIF (_coholdtype = 'R') THEN
-      RETURN -14;
+      RAISE EXCEPTION 'The selected Order is on Return Hold. The Customer must return all materials for a related Return Authorization before this order may be shipped. [xtuple: shipShipment, -14]';
     ELSIF (_coholdtype = 'S') THEN
-      RETURN -15;
+      RAISE EXCEPTION 'The selected Order is on Shipping Hold and must be taken off of Shipping Hold before it may be shipped. [xtuple: shipShipment, -15]';
     END IF;
 
 ---Must Ship Kit components (coitem_subnumber <> 0 complete---------------
@@ -106,7 +106,7 @@ BEGIN
 	      GROUP BY coitem_id, coitem_qtyshipped, coitem_qtyord,
 		       coitem_qtyreturned LOOP
 	IF (_c.remain > 0) THEN
-	  RETURN -99;
+	  RAISE EXCEPTION 'This Order may not be shipped because it has been marked as Ship Complete and quantities for one or more Line Items are still not completely issued. Please correct this before shipping the Order. [xtuple: shipShipment, -99]';
 	END IF;
       END LOOP;
     END IF;
@@ -213,7 +213,7 @@ BEGIN
 
   ELSEIF (_shiphead.shiphead_order_type = 'TO') THEN
     IF (_shiphead.shiphead_shipped) THEN
-      RETURN -8;
+      RAISE EXCEPTION 'This Shipment cannot be shipped because it appears to have already shipped. [xtuple: shipShipment, -8]';
     END IF;
 
     SELECT tohead.* INTO _to
@@ -230,7 +230,7 @@ BEGIN
 		   AND  (toitem_tohead_id=_shiphead.shiphead_order_id))
 	      GROUP BY toitem_qty_shipped, toitem_qty_ordered LOOP
 	IF (_ti.remain > 0) THEN
-	  RETURN -99;
+	  RAISE EXCEPTION 'This Order may not be shipped because it has been marked as Ship Complete and quantities for one or more Line Items are still not completely issued. Please correct this before shipping the Order. [xtuple: shipShipment, -99]';
 	END IF;
       END LOOP;
     END IF;
@@ -247,7 +247,7 @@ BEGIN
 		     WHERE ((itemsite_item_id=_ti.toitem_item_id)
 		     AND  (itemsite_warehous_id = _to.tohead_trns_warehous_id))
 		     )) THEN
-	RETURN -6;
+	RAISE EXCEPTION 'This Transfer Order may not be shipped because there is no Item Site for the Transit Site. [xtuple: shipShipment, -6]';
       END IF;
 
       _itemlocSeries := NEXTVAL('itemloc_series_seq');

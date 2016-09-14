@@ -50,7 +50,7 @@ BEGIN
 	     WHERE ((ccpay_status IN ('C'))
 	       AND  (ccpay_id=payco_ccpay_id)
 	       AND  (payco_cohead_id=pSoheadid)))) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'This Sales Order cannot be deleted because a Credit Card has been charged for it. [xtuple: deleteSo, -1]';
   END IF;
 
 -- Cannot delete if credit card history
@@ -59,7 +59,7 @@ BEGIN
 	     WHERE ((ccpay_status != 'C')
 	       AND  (ccpay_id=payco_ccpay_id)
 	       AND  (payco_cohead_id=pSoheadid)))) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'This Sales Order cannot be deleted because there is Credit Card transaction history for it. [xtuple: deleteSo, -2]';
   END IF;
 
 -- Delete Sales Order Items
@@ -103,7 +103,7 @@ BEGIN
   END IF;
 
   IF (_poStatus < 0) THEN
-    RETURN -20;
+    RAISE EXCEPTION 'The Sales Order was deleted successfully. However, the Released Purchase Orders associated with one or more line items of this Sales Order could not be deleted. You must delete these Purchase Orders seperately if desired. [xtuple: deleteSo, -20]';
   ELSE
     RETURN 0;
   END IF;

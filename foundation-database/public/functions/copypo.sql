@@ -23,7 +23,7 @@ BEGIN
     RAISE EXCEPTION 'Could not find the P/O to copy. [xtuple: copyPO, -1]';
   END IF;
   IF (_head.pohead_vend_id != pVendid) THEN
-    RETURN -2;		-- not supported now but should be in the future
+    RAISE EXCEPTION 'Could not find the P/O to copy. [xtuple: copyPO, -2]';		-- not supported now but should be in the future
   END IF;		-- when enabled, set pRecheckVendinfo if vendors don't match
 
   IF (pOrderdate IS NULL) THEN

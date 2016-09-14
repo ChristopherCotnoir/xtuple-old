@@ -44,7 +44,7 @@ BEGIN
 
       GET DIAGNOSTICS _count = ROW_COUNT;
       IF (_count = 0) THEN
-        RAISE EXCEPTION 'An inventory balance record was not found for updating standard costs';
+        RAISE EXCEPTION 'An inventory balance record was not found for updating standard costs [xtuple: postValueintoInvBalanace, -1]';
       END IF;
     END IF;
 
@@ -79,7 +79,7 @@ BEGIN
     WHERE (invbal_id=_invbalid);  
 
   ELSE
-    RAISE EXCEPTION 'No period exists for date %.', pDate;
+    RAISE EXCEPTION 'No period exists for date %. [xtuple: postValueintoInvBalanace, -2, %]', pDate, pDate;
   END IF;
 
   RETURN TRUE;

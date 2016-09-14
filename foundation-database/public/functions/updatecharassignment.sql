@@ -52,7 +52,7 @@ BEGIN
    LIMIT 1;
   IF (FOUND) THEN
     IF (_explodedJob AND pValue != _value) THEN
-      RAISE EXCEPTION  'Characteristic may not be updated for Configured Item with exploded Work Order.';
+      RAISE EXCEPTION  'Characteristic may not be updated for Configured Item with exploded Work Order. [xtuple: updateCharAssignment, -1]';
     ELSIF(COALESCE(pValue, '')!='') THEN
         UPDATE charass
         SET charass_value = pValue,
@@ -66,7 +66,7 @@ BEGIN
     END IF;
   ELSE
     IF ( (_explodedJob) AND (COALESCE(pValue, '')!='') ) THEN
-      RAISE EXCEPTION  'Characteristics may not be updated for Configured Item with exploded Work Order.';
+      RAISE EXCEPTION  'Characteristics may not be updated for Configured Item with exploded Work Order. [xtuple: updateCharAssignment, -2]';
     ELSIF(COALESCE(pValue, '')!='') THEN
       SELECT nextval('charass_charass_id_seq') INTO _charassid;
       INSERT INTO charass

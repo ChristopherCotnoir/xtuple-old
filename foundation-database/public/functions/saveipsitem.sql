@@ -17,11 +17,11 @@ BEGIN
 
   -- Validation
   IF (SELECT COUNT(item_id)=0 FROM item WHERE (item_id=pItemId)) THEN
-    RAISE EXCEPTION 'You must provide a valid Item';
+    RAISE EXCEPTION 'You must provide a valid Item [xtuple: saveIpsItem, -1]';
   ELSIF (COALESCE(pQtyBreak,0) < 0) THEN
-    RAISE EXCEPTION 'Quantity can not be a negative value';
+    RAISE EXCEPTION 'Quantity can not be a negative value [xtuple: saveIpsItem, -2]';
   ELSIF (COALESCE(pPrice,0) < 0) THEN
-    RAISE EXCEPTION 'Price must be a negative value';
+    RAISE EXCEPTION 'Price must be a negative value [xtuple: saveIpsItem, -3]';
   ELSIF ((pQtyUomId IS NOT NULL) AND (SELECT COUNT(item_id)=0 FROM
         (SELECT item_id
          FROM item
@@ -45,7 +45,7 @@ BEGIN
            AND (itemuom_itemuomconv_id=itemuomconv_id)
            AND (itemuom_uomtype_id=uomtype_id)
            AND (uomtype_name='Selling'))) AS data)) THEN
-    RAISE EXCEPTION 'Qty UOM Must be a valid Selling UOM for the Item';
+    RAISE EXCEPTION 'Qty UOM Must be a valid Selling UOM for the Item [xtuple: saveIpsItem, -4]';
   ELSIF ((pPriceUomId IS NOT NULL) AND (SELECT COUNT(item_id)=0 FROM
         (SELECT item_id
          FROM item
@@ -69,7 +69,7 @@ BEGIN
            AND (itemuom_itemuomconv_id=itemuomconv_id)
            AND (itemuom_uomtype_id=uomtype_id)
            AND (uomtype_name='Selling'))) AS data)) THEN
-    RAISE EXCEPTION 'Price UOM Must be a valid Selling UOM for the Item';
+    RAISE EXCEPTION 'Price UOM Must be a valid Selling UOM for the Item [xtuple: saveIpsItem, -5]';
   END IF;
 
   _new := TRUE;
@@ -82,7 +82,7 @@ BEGIN
     IF (FOUND) THEN
       _new := FALSE;
     ELSE
-      RAISE EXCEPTION 'Pricing Schedule Item not found.';
+      RAISE EXCEPTION 'Pricing Schedule Item not found. [xtuple: saveIpsItem, -6]';
     END IF;
   ELSE
     SELECT ipsitem_id INTO _ipsitemid

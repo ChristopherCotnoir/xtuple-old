@@ -33,7 +33,7 @@ BEGIN
           LEFT OUTER JOIN prj ON (prj_id = pr_prj_id)
   WHERE (pr_id = pPrId);
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: releasePR, -1]';
   END IF;
 
   SELECT cntct_id, cntct_honorific, cntct_first_name, cntct_middle,
@@ -57,10 +57,10 @@ BEGIN
       AND (_pr.pr_duedate BETWEEN COALESCE(itemsrc_effective, startOfTime()) AND COALESCE(itemsrc_expires, endOfTime()))
     GROUP BY itemsrc_item_id;
     IF (NOT FOUND) THEN
-      RETURN -2;
+      RAISE EXCEPTION '[xtuple: releasePR, -2]';
     END IF;
     IF (_rows > 1) THEN
-      RETURN -2;
+      RAISE EXCEPTION '[xtuple: releasePR, -2]';
     END IF;
   END IF;
     

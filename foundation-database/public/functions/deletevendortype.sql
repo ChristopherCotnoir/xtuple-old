@@ -13,7 +13,7 @@ BEGIN
   WHERE (vend_vendtype_id=pVendtypeid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: deleteVendorType, -1]';
   END IF;
 
 --  Delete the passed vendor type

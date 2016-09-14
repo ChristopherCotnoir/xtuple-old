@@ -37,7 +37,7 @@ BEGIN
   --AND (wo_itemsite_id=itemsite_id)
   --AND (itemsite_costmethod = 'J'));
   --IF (FOUND) THEN
-  --  RAISE EXCEPTION 'Work orders for Job items are closed when all quantities are shipped';
+  --  RAISE EXCEPTION 'Work orders for Job items are closed when all quantities are shipped [xtuple: closeWo, -1]';
   --END IF;
 
   SELECT formatWoNumber(pWoid) INTO _woNumber;
@@ -49,7 +49,7 @@ BEGIN
        JOIN item ON ((itemsite_item_id=item_id) AND (item_type='T'))
        WHERE ((womatl_wo_id=pWoid)
          AND  (womatl_qtyiss > 0)) ) THEN
-    RAISE EXCEPTION 'All Tools must be returned before the W/O can be closed';
+    RAISE EXCEPTION 'All Tools must be returned before the W/O can be closed [xtuple: closeWo, -2]';
   END IF;
 
 --  Distribute any remaining wo_wipvalue to G/L - debit Inventory Cost, credit WIP

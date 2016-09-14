@@ -24,8 +24,8 @@ BEGIN
   LOOP
     -- Validate
     IF (ARRAY_UPPER(_fk.seq,1) > 1) THEN
-      RAISE EXCEPTION 'Checks to tables where the address is one of multiple foreign key columns is not supported. Error on Table: %',
-        pg_namespace.nspname || '.' || con.relname;
+      RAISE EXCEPTION 'Checks to tables where the address is one of multiple foreign key columns is not supported. Error on Table: % [xtuple: addrUseCount, -1, %]',
+        pg_namespace.nspname || '.' || con.relname, pg_namespace.nspname || '.' || con.relname;
     END IF;
     
     _seq := _fk.seq[1];

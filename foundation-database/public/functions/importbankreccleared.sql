@@ -26,20 +26,20 @@ BEGIN
   FROM bankrec JOIN bankaccnt ON (bankaccnt_id=bankrec_bankaccnt_id)
   WHERE (bankrec_id=_bankrecid);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'bankrec not found';
+    RAISE EXCEPTION 'bankrec not found [xtuple: importBankrecCleared, -1]';
   END IF;
   IF (_b.bankrec_posted) THEN
-    RAISE EXCEPTION 'bankrec already posted';
+    RAISE EXCEPTION 'bankrec already posted [xtuple: importBankrecCleared, -2]';
   END IF;
 
    _debitbankadjtypeid := fetchMetricValue('ImportBankRecDebitAdj');
   IF COALESCE(_debitbankadjtypeid, -1) = -1 THEN
-    RAISE EXCEPTION 'Metric ImportBankRecDebitAdj not defined [xtuple: reconcileBankAccount, -1]';
+    RAISE EXCEPTION 'Metric ImportBankRecDebitAdj not defined [xtuple: importBankrecCleared, -3]';
   END IF;
 
    _creditbankadjtypeid := fetchMetricValue('ImportBankRecCreditAdj');
   IF COALESCE(_creditbankadjtypeid, -1) = -1 THEN
-    RAISE EXCEPTION 'Metric ImportBankRecCreditAdj not defined [xtuple: reconcileBankAccount, -2]';
+    RAISE EXCEPTION 'Metric ImportBankRecCreditAdj not defined [xtuple: importBankrecCleared, -4]';
   END IF;
 
   -- loop thru bankrecimport and toggle cleared items

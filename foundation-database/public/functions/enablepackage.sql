@@ -9,7 +9,7 @@ DECLARE
 
 BEGIN
   IF (version() < 'PostgreSQL 8.2') THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: enablePackage, -1]';
   END IF;
 
   FOR _i IN ARRAY_LOWER(_tabs,1)..ARRAY_UPPER(_tabs,1) LOOP
@@ -34,7 +34,7 @@ BEGIN
   FROM pkghead
   WHERE (pkghead_id=ppkgheadid);
   IF (NOT FOUND) THEN
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: enablePackage, -2]';
   END IF;
 
   RETURN enablePackage(_pkgname);

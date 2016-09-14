@@ -15,13 +15,13 @@ DECLARE
   
 BEGIN
   IF (pTableName IS NULL) THEN
-    RAISE EXCEPTION 'A table name is required to calculate tax history';
+    RAISE EXCEPTION 'A table name is required to calculate tax history [xtuple: calculatetaxhist, -1]';
   ELSEIF (pParentId IS NULL) THEN
-    RAISE EXCEPTION 'A parent ID is required to calculate tax history';
+    RAISE EXCEPTION 'A parent ID is required to calculate tax history [xtuple: calculatetaxhist, -2]';
   ELSEIF (pDate IS NULL) THEN
-    RAISE EXCEPTION 'A date is required to calculate tax history';
+    RAISE EXCEPTION 'A date is required to calculate tax history [xtuple: calculatetaxhist, -3]';
   ELSEIF (pAmount IS NULL) THEN
-     RAISE EXCEPTION 'An amount is required to calculate tax history';
+     RAISE EXCEPTION 'An amount is required to calculate tax history [xtuple: calculatetaxhist, -4]';
   END IF;
 
   -- Build a query that deletes any previous tax history for this document record

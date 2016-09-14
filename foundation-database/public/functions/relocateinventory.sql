@@ -53,7 +53,7 @@ BEGIN
 
 --  Check to make sure the qty being transfered exists
   IF (_p.itemloc_qty < pQty) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'You cannot Relocate more inventory than is available. [xtuple: relocateInventory, -1]';
   END IF;
 
 --  Create the RL transaction
@@ -161,7 +161,7 @@ BEGIN
         AND  (reserve_supply_id=pSourceItemlocid))
       ORDER BY reserve_qty;
       IF (NOT FOUND) THEN
-        RAISE EXCEPTION 'Cannot find reservation to unreserve.';
+        RAISE EXCEPTION 'Cannot find reservation to unreserve. [xtuple: relocateInventory, -2]';
       END IF;
       IF (_rsrv.reserve_qty > _qtyunreserved) THEN
         _qtytomove := _qtyunreserved;
@@ -173,8 +173,8 @@ BEGIN
                                 _qtytomove,
                                 pSourceItemlocid) INTO _result;
       IF (_result < 0) THEN
-        RAISE EXCEPTION 'unreserveSOLineQty failed with result=%, reserve_id=%, qty=%',
-                        _result, _rsrv.reserve_id, _qtytomove;
+        RAISE EXCEPTION 'unreserveSOLineQty failed with result=%, reserve_id=%, qty=% [xtuple: relocateInventory, -3, %, %, %]',
+                        _result, _rsrv.reserve_id, _qtytomove, _result, _rsrv.reserve_id, _qtytomove;
       END IF;
       -- Reserve to new Location
       SELECT reserveSOLineQty(_rsrv.reserve_demand_id,
@@ -182,8 +182,8 @@ BEGIN
                               _qtytomove,
                               _targetItemlocid) INTO _result;
       IF (_result < 0) THEN
-        RAISE EXCEPTION 'reserveSOLineQty failed with result=%, reserve_id=%, qty=%',
-                        _result, _rsrv.reserve_id, _qtytomove;
+        RAISE EXCEPTION 'reserveSOLineQty failed with result=%, reserve_id=%, qty=% [xtuple: relocateInventory, -4, %, %, %]',
+                        _result, _rsrv.reserve_id, _qtytomove, _result, _rsrv.reserve_id, _qtytomove;
       END IF;
       -- Calculate running total
       _qtyunreserved := _qtyunreserved - _qtytomove;

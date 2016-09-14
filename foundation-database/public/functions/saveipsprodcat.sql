@@ -15,11 +15,11 @@ BEGIN
 
   -- Validation
   IF (SELECT COUNT(*)=0 FROM prodcat WHERE (prodcat_id=pProdcatId)) THEN
-    RAISE EXCEPTION 'You must provide a valid Product Category';
+    RAISE EXCEPTION 'You must provide a valid Product Category [xtuple: saveIpsProdcat, -1]';
   ELSIF (COALESCE(pQtyBreak,0) < 0) THEN
-    RAISE EXCEPTION 'Quantity can not be a negative value';
+    RAISE EXCEPTION 'Quantity can not be a negative value [xtuple: saveIpsProdcat, -2]';
   ELSIF (COALESCE(pDiscount,0) < 0) THEN
-    RAISE EXCEPTION 'Discount must be a negative value';
+    RAISE EXCEPTION 'Discount must be a negative value [xtuple: saveIpsProdcat, -3]';
   END IF;
     
   _new := TRUE;
@@ -32,7 +32,7 @@ BEGIN
     IF (FOUND) THEN
       _new := FALSE;
     ELSE
-      RAISE EXCEPTION 'Pricing Schedule Product Category not found';
+      RAISE EXCEPTION 'Pricing Schedule Product Category not found [xtuple: saveIpsProdcat, -4]';
     END IF;
   ELSE
     SELECT ipsitem_id INTO _ipsitemid

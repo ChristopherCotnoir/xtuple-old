@@ -11,7 +11,7 @@ DECLARE
 BEGIN
   -- validate
   IF (COALESCE(pQty,0) <= 0) THEN
-    RETURN -7;
+    RAISE EXCEPTION 'The split quantity must be a positive number. [xtuple: splitReceipt, -7]';
   END IF;
   
   SELECT * INTO _check
@@ -20,19 +20,19 @@ BEGIN
 
   IF (FOUND) THEN
     IF (_check.recv_order_type != ''PO'') THEN
-      RETURN -1;
+      RAISE EXCEPTION 'Only Purchase Order Receipts may be split. [xtuple: splitReceipt, -1]';
     ELSIF ( NOT _check.recv_posted) THEN
-      RETURN -2;
+      RAISE EXCEPTION 'Only posted receipts may be split. [xtuple: splitReceipt, -2]';
     ELSIF ( (_check.recv_invoiced)
          OR (_check.recv_vohead_id IS NOT NULL) ) THEN
-      RETURN -3;
+      RAISE EXCEPTION 'Vouchered receitps may not be split. [xtuple: splitReceipt, -3]';
     ELSIF (pqty >= _check.recv_qty) THEN
-      RETURN -4;
+      RAISE EXCEPTION 'Split quantity must me less than original receipt quantity. [xtuple: splitReceipt, -4]';
     ELSIF (COALESCE(pfreight,0) > _check.recv_freight) THEN
-      RETURN -5;
+      RAISE EXCEPTION 'Split freight may not be greater than original freight. [xtuple: splitReceipt, -5]';
     END IF;
   ELSE
-    RETURN -6;
+    RAISE EXCEPTION 'Receipt not found. [xtuple: splitReceipt, -6]';
   END IF;
 
   -- Create new receipt record

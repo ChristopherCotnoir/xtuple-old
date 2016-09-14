@@ -9,7 +9,7 @@ DECLARE
 BEGIN
   
   IF (pCoheadid IS NULL) THEN
-    RAISE EXCEPTION 'Customer Id is required.';
+    RAISE EXCEPTION 'Customer Id is required. [xtuple: coheadstatecolor, -1]';
   END IF;
   
   SELECT 

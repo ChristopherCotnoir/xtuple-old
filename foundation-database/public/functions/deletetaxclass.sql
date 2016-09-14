@@ -14,7 +14,7 @@ SELECT tax_id INTO _result
 FROM tax
 WHERE (tax_taxclass_id = pTaxclassid);
 IF (FOUND) THEN
-   RETURN -1;
+   RAISE EXCEPTION 'This Tax Class cannot be deleted as there are Tax Codes that refer to it. [xtuple: deletetaxclass, -1]';
 END IF;
 
 -- Delete the tax class if the above condition doesn't match

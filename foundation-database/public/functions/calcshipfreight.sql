@@ -23,7 +23,7 @@ BEGIN
   WHERE (shiphead_id=pShipheadId);
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Shipment not found';
+    RAISE EXCEPTION 'Shipment not found [xtuple: calcShipFreight, -1]';
   END IF;
 
   IF (_shipment.shiphead_order_type = 'SO') THEN
@@ -50,7 +50,7 @@ BEGIN
     WHERE (cohead_id=_shipment.shiphead_order_id);
 
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'Order not found';
+      RAISE EXCEPTION 'Order not found [xtuple: calcShipFreight, -2]';
     END IF;
 
     IF (_debug) THEN

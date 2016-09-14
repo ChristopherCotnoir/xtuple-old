@@ -33,11 +33,11 @@ BEGIN
   WHERE (aropen_id=pAropenid)
   GROUP BY aropen_amount, aropen_paid;
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'There are no A/R Credit Memo applications to post. [xtuple: postARCreditMemoApplication, -1]';
   ELSIF (_p.toApply = 0) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'Either there are no A/R Credit Memo applications to post or there is no exchange rate for one of the applications. [xtuple: postARCreditMemoApplication, -2]';
   ELSIF (_p.toApply > _p.balance) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'The total value of the applications that you are attempting to post is greater than the value of the A/R Credit Memo itself. Please reduce the applications to total less than the value of the Credit Memo. [xtuple: postARCreditMemoApplication, -3]';
   END IF;
 
 -- cache source CM
@@ -47,7 +47,7 @@ BEGIN
   FROM aropen
   WHERE (aropen_id=pAropenid);
   IF (NOT FOUND) THEN
-    RETURN -5;
+    RAISE EXCEPTION 'The A/R Credit Memo to apply was not found. [xtuple: postARCreditMemoApplication, -5]';
   END IF;
 
 -- loop thru each arcreditapply
@@ -63,7 +63,7 @@ BEGIN
   LOOP
 
     IF (_r.arcreditapply_amountTarget IS NULL) THEN
-      RETURN -4;
+      RAISE EXCEPTION 'At least one A/R Credit Memo application cannot be posted because there is no current exchange rate for its currency. [xtuple: postARCreditMemoApplication, -4]';
     END IF;
 
     IF (_r.arcreditapply_amountTarget <> 0) THEN
@@ -139,7 +139,7 @@ BEGIN
      WHERE ((db.accnt_id = findDeferredAccount(_p.aropen_cust_id))
        AND  (cr.accnt_id = findARAccount(_p.aropen_cust_id)) );
     IF(NOT FOUND OR _result < 0) THEN
-      RAISE EXCEPTION 'There was an error posting the Customer Deposit GL Transactions.';
+      RAISE EXCEPTION 'There was an error posting the Customer Deposit GL Transactions. [xtuple: postARCreditMemoApplication, -6]';
     END IF;
   END IF;
 

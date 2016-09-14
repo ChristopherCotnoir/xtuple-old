@@ -12,7 +12,7 @@ BEGIN
   IF ( ( SELECT (NOT period_closed)
          FROM period
          WHERE (period_id=pPeriodid) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot open this Accounting Period because it is already open. [xtuple: openAccountingPeriod, -1]';
   END IF;
 
   IF ( ( SELECT (count(period_id) > 0)
@@ -23,7 +23,7 @@ BEGIN
             WHERE (period_id=pPeriodId))
           )
            AND (period_closed)) ) ) THEN
-    RETURN -3;
+    RAISE EXCEPTION 'Cannot open this Accounting Period because subsequent periods are closed. [xtuple: openAccountingPeriod, -3]';
   END IF;
   
 --  Make sure the year is open
@@ -31,7 +31,7 @@ BEGIN
          FROM yearperiod
            JOIN period ON (period_yearperiod_id=yearperiod_id)
          WHERE (period_id=pPeriodid) ) ) THEN
-    RETURN -4;
+    RAISE EXCEPTION 'Cannot open this Accounting Period because the fiscal year is closed. [xtuple: openAccountingPeriod, -4]';
   END IF;
 
 --  Reset the period_closed flag

@@ -18,12 +18,12 @@ BEGIN
    SELECT * INTO _r FROM coitem WHERE (coitem_id=pSoitemid);
 
    IF (NOT FOUND) THEN
-     RETURN -999;
+     RAISE EXCEPTION '[xtuple: deleteSoItem, -999]';
    END IF;
 
 -- Cannot delete if shipped
   IF (_r.coitem_qtyshipped > 0) THEN
-    RETURN -101;
+    RAISE EXCEPTION 'This Sales Order Item cannot be deleted as it has already been shipped. [xtuple: deleteSoItem, -101]';
   END IF;
 
 -- Cannot delete if issued to shipping
@@ -32,7 +32,7 @@ BEGIN
   WHERE (shipitem_orderitem_id=pSoitemid)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -102;
+    RAISE EXCEPTION 'This Sales Order Item cannot be deleted as it has already been issued to shipping. [xtuple: deleteSoItem, -102]';
   END IF;
 
 -- Cannot delete if returned
@@ -43,7 +43,7 @@ BEGIN
        OR   (raitem_new_coitem_id=pSoitemid) )
     LIMIT 1;
     IF (FOUND) THEN
-      RETURN -103;
+      RAISE EXCEPTION 'This Sales Order Item cannot be deleted as it is linked to a Return Authorization. [xtuple: deleteSoItem, -103]';
     END IF;
   END IF;
 
@@ -54,7 +54,7 @@ BEGIN
     AND   (invhist_ordtype='SO') )
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -105;
+    RAISE EXCEPTION 'This Sales Order Item cannot be deleted as it has generated Inventory History.  You may want to consider cancelling this Sales Order Item. [xtuple: deleteSoItem, -105]';
   END IF;
 
 -- If Kit, check deletion of component items
@@ -76,7 +76,7 @@ BEGIN
         WHERE (poitem_id = _s.coitem_order_id);
 
         IF ((_recvId > 0) OR (_poStatus = 'C')) THEN
-          RETURN -10;
+          RAISE EXCEPTION 'This Sales Order Item cannot be deleted as it has associated Purchase Order Line Item which is either closed or has receipts associated with it. You may want to consider cancelling this Sales Order Item instead. [xtuple: deleteSoItem, -10]';
         ELSIF ((_recvId = -1) AND (_poStatus = 'O')) THEN
           _deletePO := _deletePO - 1;
         END IF;
@@ -93,7 +93,7 @@ BEGIN
 -- Delete associated Job Work Order
     SELECT deleteWo(_r.coitem_order_id, TRUE, TRUE) INTO _result;
     IF (_result < 0) THEN
-      RETURN -104;
+      RAISE EXCEPTION 'This Sales Order Item cannot be deleted as it is linked to an In Process Work Order.  You must resolve this conflict before [xtuple: deleteSoItem, -104]';
     END IF;
   ELSIF (_r.coitem_order_type='W') THEN
 -- Delete associated Job Work Order
@@ -132,7 +132,7 @@ BEGIN
   WHERE (coitem_id=pSoitemid);
 
   IF (_deletePO < 0) THEN
-    RETURN -20;
+    RAISE EXCEPTION 'The Sales Order Item was deleted successfully. However, the Purchase Order Line Item associated with this Sales Line could not be deleted. You must delete this Purchase Line Item seperately if desired. [xtuple: deleteSoItem, -20]';
   ELSE
     RETURN 0;
   END IF;

@@ -54,7 +54,7 @@ BEGIN
     RETURN 1;
 
   ELSE
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: postCountSlip, -1]';
   END IF;
 
 END;

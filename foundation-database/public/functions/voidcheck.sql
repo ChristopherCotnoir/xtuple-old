@@ -9,7 +9,7 @@ BEGIN
   IF ( SELECT (checkhead_void OR checkhead_posted OR checkhead_replaced)
        FROM checkhead
        WHERE (checkhead_id=pCheckid) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'Cannot void this Payment because either it has already been voided, posted, or replaced, or it has been transmitted electronically. If this Payment has been posted, try Void Posted Payment with the Payment Register window. [xtuple: voidCheck, -1]';
   END IF;
 
   UPDATE checkhead

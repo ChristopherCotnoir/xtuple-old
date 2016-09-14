@@ -17,11 +17,11 @@ DECLARE
 BEGIN
   -- Validate
   IF (pSourceCntctId IS NULL) THEN
-    RAISE EXCEPTION 'Source contact id can not be null';
+    RAISE EXCEPTION 'Source contact id can not be null [xtuple: cntctmerge, -1]';
   ELSIF (pTargetCntctId IS NULL) THEN
-    RAISE EXCEPTION 'Target contact id can not be null';
+    RAISE EXCEPTION 'Target contact id can not be null [xtuple: cntctmerge, -2]';
   ELSIF (pPurge IS NULL) THEN
-    RAISE EXCEPTION 'Purge flag can not be null';
+    RAISE EXCEPTION 'Purge flag can not be null [xtuple: cntctmerge, -3]';
   END IF;
   
   -- Determine where this contact is used by analyzing foreign key linkages and update each
@@ -36,8 +36,8 @@ BEGIN
   LOOP
     -- Validate
     IF (ARRAY_UPPER(_fk.seq,1) > 1) THEN
-      RAISE EXCEPTION 'Updates to tables where the contact is one of multiple foreign key columns is not supported. Error on Table: %',
-        pg_namespace.nspname || '.' || con.relname;
+      RAISE EXCEPTION 'Updates to tables where the contact is one of multiple foreign key columns is not supported. Error on Table: % [xtuple: cntctmerge, -4, %]',
+        pg_namespace.nspname || '.' || con.relname, pg_namespace.nspname || '.' || con.relname;
     END IF;
     
     _seq := _fk.seq[1];
@@ -75,7 +75,7 @@ BEGIN
         EXECUTE _qry
       LOOP
         IF (_multi) THEN
-          RAISE EXCEPTION 'Reference tables with composite primary keys not supported.  Try the merge and purge option.';
+          RAISE EXCEPTION 'Reference tables with composite primary keys not supported.  Try the merge and purge option. [xtuple: cntctmerge, -5]';
         END IF;
         _pkcol := _pk.key;
         _multi := true;
@@ -366,7 +366,7 @@ BEGIN
       UPDATE cntct SET cntct_owner_username=_sel.cntct_owner_username WHERE (cntct_id=pTargetCntctId);
     END IF;
   ELSE
-    RAISE EXCEPTION 'Source Contact not Found';
+    RAISE EXCEPTION 'Source Contact not Found [xtuple: cntctmerge, -6]';
   END IF;
 
   -- Disposition source contact

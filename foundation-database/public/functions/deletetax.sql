@@ -8,10 +8,10 @@ DECLARE
 BEGIN
   -- these checks allow nice error reporting instead of throwing an SQL error
   IF EXISTS(SELECT taxass_id FROM taxass WHERE (taxass_tax_id=ptaxid)) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'This Tax Code cannot be deleted as there are Tax Assignments that refer to it. Change those Tax Assignments before trying to delete this Tax Code. [xtuple: deletetax, -10]';
   END IF;
   IF EXISTS(SELECT taxhist_id FROM taxhist WHERE (taxhist_tax_id=ptaxid)) THEN
-    RETURN -20;
+     RAISE EXCEPTION '[xtuple: deletetax, -20]';
   END IF;
 
   DELETE FROM taxrate WHERE (taxrate_tax_id = ptaxid);

@@ -23,7 +23,7 @@ DECLARE
 BEGIN
 -- Make sure we have some itemtypes
   IF (pUomTypes IS NULL) OR (ARRAY_UPPER(pUomTypes,1) = 0) THEN
-	RAISE EXCEPTION ''You must include at least one item type.'';
+	RAISE EXCEPTION ''You must include at least one item type. [xtuple: saveItemUomConv, -1]'';
   END IF;
 
 -- If this is a global UOM, over-ride with global data.
@@ -58,7 +58,7 @@ BEGIN
   AND (f.uom_id=itemuomconv_from_uom_id)
   AND (t.uom_id=itemuomconv_to_uom_id));
   IF (FOUND) THEN
-    RAISE EXCEPTION ''Unit of measure conversion already exists going from % to %.'',_p.f_uom,_p.t_uom;
+    RAISE EXCEPTION ''Unit of measure conversion already exists going from % to %. [xtuple: saveItemUomConv, -2, %, %]'',_p.f_uom,_p.t_uom,_p.f_uom,_p.t_uom;
   END IF;
 
 -- See if an item conversion record exists
@@ -98,7 +98,7 @@ BEGIN
     AND (uomtype_name != ''Selling'')
     AND (itemuom_uomtype_id=pUomTypes[_i]));
     IF (FOUND) THEN
-      RAISE EXCEPTION ''Unit of Measure Type % is already used on this item'',_uomtype;
+      RAISE EXCEPTION ''Unit of Measure Type % is already used on this item [xtuple: saveItemUomConv, -3, %]'',_uomtype,_uomtype;
     ELSE
       INSERT INTO itemuom (itemuom_itemuomconv_id,itemuom_uomtype_id)
       VALUES (_seq,pUomTypes[_i]);

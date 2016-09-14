@@ -7,7 +7,7 @@ DECLARE
   _returnVal INTEGER;
 BEGIN
   IF (pGlAccnt IS NULL) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: getcompanyid, -1]';
   END IF;
 
   SELECT company_id INTO _returnVal
@@ -16,7 +16,7 @@ BEGIN
   WHERE (accnt_id=pGlAccnt);
 
   IF (_returnVal IS NULL) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: getcompanyid, -1]';
   END IF;
 
   RETURN _returnVal;

@@ -24,12 +24,12 @@ BEGIN
 
   _prepaidaccntid := findPrepaidAccount(pCustid);
   IF (_prepaidaccntid = -1) THEN
-    RAISE EXCEPTION 'There was an error creating the Customer Deposit GL Transactions. No Prepaid Account is assigned.';
+    RAISE EXCEPTION 'There was an error creating the Customer Deposit GL Transactions. No Prepaid Account is assigned. [xtuple: createARCashDeposit, -1]';
   END IF;
 
   _deferredaccntid := findDeferredAccount(pCustid);
   IF (_deferredaccntid = -1) THEN
-    RAISE EXCEPTION 'There was an error creating the Customer Deposit GL Transactions. No Deferred Account is assigned.';
+    RAISE EXCEPTION 'There was an error creating the Customer Deposit GL Transactions. No Deferred Account is assigned. [xtuple: createARCashDeposit, -2]';
   END IF;
 
   SELECT NEXTVAL('aropen_aropen_id_seq') INTO _aropenid;

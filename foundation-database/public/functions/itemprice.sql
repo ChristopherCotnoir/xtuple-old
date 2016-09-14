@@ -18,7 +18,7 @@ BEGIN
   IF (FOUND) THEN
     RETURN itemPrice(pItemid, pCustid, pShiptoid, pQty, _item.item_inv_uom_id, _item.item_price_uom_id, pCurrid, pEffective);
   END IF;
-  RETURN -9999;
+  RAISE EXCEPTION '[xtuple: itemPrice, -9999]';
 END;
 $$ LANGUAGE plpgsql;
 

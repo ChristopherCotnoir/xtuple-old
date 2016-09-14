@@ -14,7 +14,7 @@ BEGIN
       FROM sltrans
       WHERE ((NOT sltrans_posted )
        AND (sltrans_sequence=pSequence))) THEN
-     RAISE EXCEPTION 'Can not post journals. Transactions do not balance in selected date range.';
+     RAISE EXCEPTION 'Can not post journals. Transactions do not balance in selected date range. [xtuple: postJournals, -1]';
   END IF;
 
 --  March through the sltrans members, posting them one at a time
@@ -31,8 +31,7 @@ BEGIN
         FROM accnt LEFT OUTER JOIN
              period ON (CURRENT_DATE BETWEEN period_start AND period_end)
         WHERE (accnt_id = _sltrans.sltrans_accnt_id)) THEN
-      RAISE EXCEPTION 'Cannot post to closed period (%).', _sltrans.sltrans_distdate;
-      RETURN -4;        -- remove raise exception when all callers check return code
+      RAISE EXCEPTION 'Cannot post to closed period (%). [xtuple: postJournals, -4, %]', _sltrans.sltrans_distdate, _sltrans.sltrans_distdate;
     END IF;
 
 -- refuse to accept postings into frozen periods without proper priv
@@ -41,8 +40,7 @@ BEGIN
         FROM accnt LEFT OUTER JOIN
              period ON (CURRENT_DATE BETWEEN period_start AND period_end)
         WHERE (accnt_id = _sltrans.sltrans_accnt_id)) THEN
-      RAISE EXCEPTION 'Cannot post to frozen period (%).', _sltrans.sltrans_distdate;
-      RETURN -4;        -- remove raise exception when all callers check return code
+      RAISE EXCEPTION 'Cannot post to frozen period (%). [xtuple: postJournals, -2, %]', _sltrans.sltrans_distdate, _sltrans.sltrans_distdate;
     END IF;
 
     IF (_sltrans.amount != 0) THEN
@@ -112,7 +110,7 @@ BEGIN
       WHERE ((NOT sltrans_posted )
        AND (sltrans_source=pSource)
        AND (sltrans_date BETWEEN pStartDate AND pEndDate))) THEN
-     RAISE EXCEPTION 'Can not post journals. Transactions do not balance in selected date range.';
+     RAISE EXCEPTION 'Can not post journals. Transactions do not balance in selected date range. [xtuple: postJournals, -3]';
   END IF;
 
 --  March through the sltrans members, posting them one at a time
@@ -131,8 +129,7 @@ BEGIN
         FROM accnt LEFT OUTER JOIN
              period ON (pDistDate BETWEEN period_start AND period_end)
         WHERE (accnt_id = _sltrans.sltrans_accnt_id)) THEN
-      RAISE EXCEPTION 'Cannot post to frozen period (%).', _sltrans.sltrans_distdate;
-      RETURN -4;        -- remove raise exception when all callers check return code
+      RAISE EXCEPTION 'Cannot post to frozen period (%). [xtuple: postJournals, -2, %]', _sltrans.sltrans_distdate, _sltrans.sltrans_distdate;
     END IF;
 
     IF (_sltrans.amount != 0) THEN

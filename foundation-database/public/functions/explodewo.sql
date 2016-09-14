@@ -14,7 +14,7 @@ DECLARE
 BEGIN
 
   IF NOT EXISTS(SELECT 1 FROM wo WHERE wo_status = 'O' AND wo_id=pWoid) THEN
-    RETURN -4;
+    RAISE EXCEPTION 'Work Order cannot be Exploded because it is not Open. [xtuple: explodewo, -4]';
   END IF;
 
 --  Make sure that all Component Item Sites exist and are valid
@@ -37,7 +37,7 @@ BEGIN
            AND (component.itemsite_active)
            AND (component.itemsite_warehous_id=parent.itemsite_warehous_id) ) ) )
     )  THEN
-    RETURN -2;
+    RAISE EXCEPTION 'Work Order cannot be Exploded as there are one or more Component Items on the Bill of Materials for the Work Order Item that are not valid in the Work Order Site. You must create a valid Item Site for all of the Component Items before you may explode this Work Order. [xtuple: explodewo, -2]';
   END IF;
 
 --  If the Parent Item is a Breeder, make sure that all the
@@ -63,7 +63,7 @@ BEGIN
                            AND (woEffectiveDate(wo_startdate) BETWEEN bbomitem_effective AND (bbomitem_expires - 1))
                            AND (component.itemsite_active)
                            AND (component.itemsite_warehous_id=parent.itemsite_warehous_id) ) ) ) THEN
-      RETURN -3;
+      RAISE EXCEPTION 'Work Order cannot be Exploded as there are one or more Co-Product/By-Product Items on the Breeder Bill of Materials for the Work Order Item that do not exist in the Work Order Site. You must create a valid Item Site for all of the Co-Product/By-Product Items before you may explode this Work Order. [xtuple: explodewo, -3]';
     END IF;
   END IF;
 

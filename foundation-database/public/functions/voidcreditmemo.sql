@@ -34,10 +34,10 @@ BEGIN
   FROM cmhead
   WHERE (cmhead_id=pCmheadid);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Cannot Void Credit Memo as cmhead not found';
+    RAISE EXCEPTION 'Cannot Void Credit Memo as cmhead not found [xtuple: voidCreditMemo, -1]';
   END IF;
   IF (NOT _p.cmhead_posted) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'Unable to void this Credit Memo because it has not been posted. [xtuple: voidCreditMemo, -10]';
   END IF;
 
 --  Cache AROpen Information
@@ -46,7 +46,7 @@ BEGIN
   WHERE ( (aropen_doctype='C')
     AND   (aropen_docnumber=_p.cmhead_number) );
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Cannot Void Credit Memo as aropen not found';
+    RAISE EXCEPTION 'Cannot Void Credit Memo as aropen not found [xtuple: voidCreditMemo, -4]';
   END IF;
 
 --  Check for ARApplications
@@ -56,7 +56,7 @@ BEGIN
      OR (arapply_source_aropen_id=_n.aropen_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -20;
+    RAISE EXCEPTION 'Unable to void this Credit Memo because there A/R Applications posted against this Credit Memo. [xtuple: voidCreditMemo, -20]';
   END IF;
 
   _glDate := COALESCE(_p.cmhead_gldistdate, _p.cmhead_docdate);
@@ -103,7 +103,7 @@ BEGIN
                                           _p.cmhead_saletype_id, _p.cmhead_shipzone_id));
       IF (NOT FOUND) THEN
         PERFORM deleteGLSeries(_glSequence);
-        RETURN -11;
+        RAISE EXCEPTION 'Unable to void this Credit Memo because the Sales Account was not found. [xtuple: voidCreditMemo, -11]';
       END IF;
     END IF;
 

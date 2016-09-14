@@ -171,7 +171,7 @@ BEGIN
   ELSE
     IF (_itemsite.itemsite_costmethod = 'J') THEN
       IF (_parentType = ' ' OR _parentId = -1) THEN
-        RAISE EXCEPTION 'Work Orders for Item Sites that are Job cost must have a parent order.';
+        RAISE EXCEPTION 'Work Orders for Item Sites that are Job cost must have a parent order. [xtuple: createWo, -2]';
       ELSE
         SELECT COALESCE(itemsite_cosdefault,fetchmetrictext('JobItemCosDefault'),'D') INTO _cosmethod FROM itemsite WHERE itemsite_id=pItemsiteid;
       END IF;

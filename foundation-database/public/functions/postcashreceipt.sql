@@ -45,7 +45,7 @@ BEGIN
   LOOP
 
   IF (_cashcust.rcptcust IS NULL) THEN
-    RAISE EXCEPTION 'Cash Receipt % is assigned to a Customer Group but no allocations have been made.  Please fully allocate this Cash Receipt before posting.', _cashcust.cashrcpt_number;
+    RAISE EXCEPTION 'Cash Receipt % is assigned to a Customer Group but no allocations have been made.  Please fully allocate this Cash Receipt before posting. [xtuple: postCashReceipt, -3, %]', _cashcust.cashrcpt_number, _cashcust.cashrcpt_number;
   END IF;
 
   SELECT salescat_ar_accnt_id INTO _arAccntid
@@ -54,7 +54,7 @@ BEGIN
   IF COALESCE(_arAccntid, -1) < 0 THEN
 	_arAccntid := findArAccount(_cashcust.rcptcust);
     IF COALESCE(_arAccntid, -1) < 0 THEN
-      RETURN -5;
+      RAISE EXCEPTION 'The selected Cash Receipt cannot be posted as the A/R Account cannot be determined. You must make an A/R Account Assignment for the Customer Type to which this Customer is assigned before you may post this Cash Receipt. [xtuple: postCashReceipt, -5]';
     END IF;
   END IF;
 
@@ -80,19 +80,19 @@ BEGIN
 	 WHERE cashrcpt_id = pCashrcptid
 	   AND COALESCE(cashrcptitem_cust_id, _cashcust.rcptcust) = _cashcust.rcptcust;
   IF (NOT FOUND OR COALESCE(_p.prepaid_accnt_id, -1) < 0) THEN
-    RETURN -7;
+    RAISE EXCEPTION 'The selected Cash Receipt cannot be posted, probably because the Customer's Prepaid Account was not found. [xtuple: postCashReceipt, -7]';
   END IF;
 
   IF (COALESCE(_p.cashrcpt_distdate > _p.applydate, false)) THEN
-    RAISE EXCEPTION 'Cannot post cashrcpt % because application date is before distribution date.', _p.cashrcpt_docnumber;
+    RAISE EXCEPTION 'Cannot post cashrcpt % because application date is before distribution date. [xtuple: postCashReceipt, -4, %]', _p.cashrcpt_docnumber, _p.cashrcpt_docnumber;
   END IF;
 
   IF (COALESCE(_p.cashrcpt_posted, false)) THEN
-    RAISE EXCEPTION 'Cannot post cashrcpt % because the document has already been posted.', _p.cashrcpt_docnumber;
+    RAISE EXCEPTION 'Cannot post cashrcpt % because the document has already been posted. [xtuple: postCashReceipt, -9, %]', _p.cashrcpt_docnumber, _p.cashrcpt_docnumber;
   END IF;
 
   IF (COALESCE(_p.cashrcpt_void, false)) THEN
-    RAISE EXCEPTION 'Cannot post cashrcpt % because the document has been voided.', _p.cashrcpt_docnumber;
+    RAISE EXCEPTION 'Cannot post cashrcpt % because the document has been voided. [xtuple: postCashReceipt, -10, %]', _p.cashrcpt_docnumber, _p.cashrcpt_docnumber;
   END IF;
 
   _predist := COALESCE(_p.cashrcpt_distdate < _p.applydate, false);
@@ -111,7 +111,7 @@ BEGIN
       WHERE ((ccpay_order_number IN (CAST(pCashrcptid AS TEXT), _p.cashrcpt_docnumber))
          AND (ccpay_status IN ('C', 'A')));
       IF (NOT FOUND) THEN
-        RETURN -8;
+        RAISE EXCEPTION 'Cannot post this Cash Receipt because the credit card records could not be found. [xtuple: postCashReceipt, -8]';
       ELSE
         RAISE WARNING 'PostCashReceipt() found ccpay_id % for order number %/% (ref 8848).',
                       _ccpayid, pCashrcptid, _p.cashrcpt_docnumber;
@@ -129,7 +129,7 @@ BEGIN
        AND (bankaccnt_accnt_id=accnt_id)
        AND (cashrcpt_id=pCashrcptid) );
       IF (NOT FOUND) THEN
-        RETURN -6;
+        RAISE EXCEPTION 'The selected Cash Receipt cannot be posted as the Bank Account cannot be determined. You must make a Bank Account Assignment for this Cash Receipt before you may post it. [xtuple: postCashReceipt, -6]';
       END IF;
     END IF;
   ELSE
@@ -139,7 +139,7 @@ BEGIN
      AND (bankaccnt_accnt_id=accnt_id)
      AND (cashrcpt_id=pCashrcptid) );
     IF (NOT FOUND) THEN
-      RETURN -6;
+      RAISE EXCEPTION 'The selected Cash Receipt cannot be posted as the Bank Account cannot be determined. You must make a Bank Account Assignment for this Cash Receipt before you may post it. [xtuple: postCashReceipt, -6]';
     END IF;
   END IF;
 
@@ -169,12 +169,12 @@ BEGIN
 
 --  Check to see if the C/R is over applied
   IF ((_postToAR + _postToMisc) > _p.cashrcpt_amount) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The selected Cash Receipt cannot be posted as the amount distributed is greater than the amount received. You must correct this before you may post this Cash Receipt. [xtuple: postCashReceipt, -1]';
   END IF;
 
 --  Check to see if the C/R is positive amount
   IF (_p.cashrcpt_amount <= 0) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'The selected Cash Receipt cannot be posted as the amount received must be greater than zero. You must correct this before you may post this Cash Receipt. [xtuple: postCashReceipt, -2]';
   END IF;
 
 --  Distribute A/R Applications
@@ -331,8 +331,8 @@ BEGIN
 --  Prevent Posting of unapplied amounts on receipts against a customer group
 --  This is due to not being able to create customer documents as we cannot determine the customer id
     IF (_p.groupid > 0) THEN
-      RAISE EXCEPTION 'Cannot post Receipt % as there is an outstanding amount of %. Please add a miscellanous distribution to assign this amount to a customer',
-             _p.cashrcpt_docnumber, (round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2));
+      RAISE EXCEPTION 'Cannot post Receipt % as there is an outstanding amount of %. Please add a miscellanous distribution to assign this amount to a customer [xtuple: postCashReceipt, -11, %, %]',
+             _p.cashrcpt_docnumber, (round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2))_p.cashrcpt_docnumber, (round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2));
     END IF;
 
     _comment := ('Unapplied from ' || _p.cashrcpt_fundstype || '-' || _p.cashrcpt_docnumber);
@@ -376,8 +376,9 @@ BEGIN
 --  Prevent Posting of currency rounding amounts on receipts against a customer group
 --  This is due to not being able to create customer documents as we cannot determine the customer id
     IF (_p.groupid > 0) THEN
-      RAISE EXCEPTION 'Cannot post Receipt % as there is an currency rounding error of %. Please add a miscellanous distribution to assign this amount to a customer',
-             _p.cashrcpt_docnumber, abs(round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2));
+      RAISE EXCEPTION 'Cannot post Receipt % as there is an currency rounding error of %. Please add a miscellanous distribution to assign this amount to a customer [xtuple: postCashReceipt, -12, %, %]',
+             _p.cashrcpt_docnumber, abs(round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2)), _p.cashrcpt_docnumber, abs(round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2));
+
     END IF;
 
     PERFORM insertIntoGLSeries(_sequence, 'A/R', 'CR',

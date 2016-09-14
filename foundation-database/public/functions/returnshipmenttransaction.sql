@@ -145,7 +145,7 @@ BEGIN
 
       ELSE
         -- Don't know what kind of order this is
-        RETURN -11;
+        RAISE EXCEPTION [xtuple: returnShipmentTransaction, -11];
       END IF;
 
       UPDATE shiphead

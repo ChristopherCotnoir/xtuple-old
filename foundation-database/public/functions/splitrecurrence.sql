@@ -15,13 +15,13 @@ DECLARE
 
 BEGIN
   IF (pParentid IS NULL) THEN
-    RETURN -11;
+    RAISE EXCEPTION 'Cannot create recurring items without a valid parent item to copy. [xtuple: splitRecurrence, -11]';
   END IF;
 
   SELECT * INTO _rt FROM recurtype WHERE (UPPER(recurtype_type)=pType);
   GET DIAGNOSTICS _count = ROW_COUNT;
   IF (_count <= 0) THEN
-    RETURN -10;
+    RAISE EXCEPTION '[xtuple: splitRecurrence, -10]';
   END IF;
 
   _newparentstmt := 'SELECT [table]_id FROM [fulltable]'

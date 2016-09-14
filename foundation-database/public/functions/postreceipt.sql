@@ -37,12 +37,12 @@ BEGIN
 
   IF (NOT FOUND) THEN
     IF (_itemlocSeries = 0) THEN
-      RETURN -10;
+      RAISE EXCEPTION 'This Receipt Line has already been posted. [xtuple: postreceipt, -10]';
     END IF;
     RETURN _itemlocSeries;
 
   ELSEIF (_r.recv_qty <= 0) THEN
-    RETURN -11;
+    RAISE EXCEPTION 'This Receipt Line cannot be posted because it has a quantity of 0. [xtuple: postreceipt, -11]';
 
   ELSIF (_r.recv_order_type ='PO') THEN
     _ordertypeabbr := ('P/O for ' || _r.vend_name || ' for item ' || _r.item_number);
@@ -91,12 +91,12 @@ BEGIN
       AND  (NOT recv_posted)
       AND  (recv_id=precvid));
   ELSE
-    RETURN -13;	-- don't know how to handle this order type
+    RAISE EXCEPTION 'This Receipt Line cannot be posted because it has a quantity of 0. [xtuple: postreceipt, -11]';	-- don't know how to handle this order type
   END IF;
 
   IF (NOT FOUND) THEN
     IF (_itemlocSeries = 0) THEN
-      RETURN -10;
+      RAISE EXCEPTION 'This Receipt Line has already been posted. [xtuple: postreceipt, -10]';
     END IF;
     RETURN _itemlocSeries;
   END IF;
@@ -180,12 +180,12 @@ BEGIN
   ELSEIF ( (_r.recv_order_type = 'RA') AND
            (_r.itemsite_id = -1 OR _r.itemsite_id IS NULL) ) THEN
     RAISE WARNING 'itemsite controlmethod is %, cannot post receipt.', _r.itemsite_controlmethod;
-    RETURN -14;	-- otherwise how do we get the accounts?
+    RAISE EXCEPTION '[xtuple: postreceipt, -14]';	-- otherwise how do we get the accounts?
 
   ELSEIF ( (_r.recv_order_type = 'TO') AND
            (_r.itemsite_id = -1 OR _r.itemsite_id IS NULL) ) THEN
     RAISE WARNING 'itemsite missing';
-    RETURN -14;	-- otherwise how do we get the accounts?
+    RAISE EXCEPTION '[xtuple: postreceipt, -14]';	-- otherwise how do we get the accounts?
 
   ELSE	-- not ELSIF: some code is shared between diff order types
     IF (_r.recv_order_type = 'PO') THEN
@@ -204,11 +204,11 @@ BEGIN
       WHERE ( (itemsite_costcat_id=costcat_id)
        AND (itemsite_id=_r.itemsite_id) );
       IF (NOT FOUND) THEN
-	RAISE EXCEPTION 'Could not post inventory transaction: no cost category found for itemsite_id %',
-	  _r.itemsite_id;
+	RAISE EXCEPTION 'Could not post inventory transaction: no cost category found for itemsite_id % [xtuple: postreceipt, -1, %]',
+	  _r.itemsite_id, _r.itemsite_id;
       ELSIF (_tmp < -1) THEN -- less than -1 because -1 means it is a none controlled item
 	IF(_tmp = -3) THEN
-	  RETURN -12; -- The GL trans value was 0 which means we likely do not have a std cost
+	  RAISE EXCEPTION 'This Purchase Order Receipt Line has no Standard Cost assigned to it. [xtuple: postreceipt, -12]'; -- The GL trans value was 0 which means we likely do not have a std cost
 	END IF;
 	RETURN _tmp;
       END IF;
@@ -236,8 +236,8 @@ BEGIN
           WHERE ((itemsite_costcat_id=costcat_id)
              AND (itemsite_id=_r.itemsite_id) );
           IF (NOT FOUND) THEN
-            RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id %',
-            _r.itemsite_id;
+            RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id % [xtuple: postreceipt, -1, %]',
+            _r.itemsite_id, _r.itemsite_id;
           ELSIF (_tmp < 0 AND _tmp != -3) THEN -- error but not 0-value transaction
             RETURN _tmp;
           ELSE
@@ -260,8 +260,8 @@ BEGIN
       WHERE ( (itemsite_costcat_id=costcat_id)
        AND (itemsite_id=_r.itemsite_id) );
       IF (NOT FOUND) THEN
-	RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id %',
-	  _r.itemsite_id;
+	RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id % [xtuple: postreceipt, -1, %]',
+	  _r.itemsite_id, _r.itemsite_id;
       ELSIF (_tmp < 0 AND _tmp != -3) THEN -- error but not 0-value transaction
 	RETURN _tmp;
       ELSE
@@ -296,7 +296,7 @@ BEGIN
         FROM itemsite JOIN costcat ON (costcat_id=itemsite_costcat_id)
         WHERE(itemsite_id=_r.itemsite_id);
         IF (NOT FOUND) THEN
-          RAISE EXCEPTION 'Could not post inventory transaction: no cost category found for itemsite_id %', _r.itemsite_id;
+          RAISE EXCEPTION 'Could not post inventory transaction: no cost category found for itemsite_id % [xtuple: postreceipt, -1, %]', _r.itemsite_id, _r.itemsite_id;
 --        ELSIF (_tmp < -1) THEN
 --          RETURN _tmp;
         END IF;
@@ -321,11 +321,11 @@ BEGIN
          AND (itemsite_id=_r.itemsite_id) );
 
         IF (NOT FOUND) THEN
-          RAISE EXCEPTION 'Could not post inventory transaction: no cost category found for itemsite_id %', _r.itemsite_id;
+          RAISE EXCEPTION 'Could not post inventory transaction: no cost category found for itemsite_id % [xtuple: postreceipt, -1, %]', _r.itemsite_id, _r.itemsite_id;
         ELSIF (_tmp < -1) THEN -- less than -1 because -1 means it is a none controlled item
           IF(_tmp = -3) THEN
             RAISE WARNING 'The GL trans value was 0 which means we likely do not have a std cost';
-            RETURN -12; -- The GL trans value was 0 which means we likely do not have a std cost
+            RAISE EXCEPTION 'This Purchase Order Receipt Line has no Standard Cost assigned to it. [xtuple: postreceipt, -12]'; -- The GL trans value was 0 which means we likely do not have a std cost
           END IF;
           RETURN _tmp;
         END IF;

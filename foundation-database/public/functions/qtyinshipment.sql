@@ -10,11 +10,11 @@ DECLARE
 BEGIN
 
   IF (pordertype NOT IN (''SO'', ''TO'')) THEN
-    RAISE EXCEPTION ''% is not a valid order type'', pordertype;
+    RAISE EXCEPTION ''% is not a valid order type [xtuple: qtyInShipment, -1, %]'', pordertype, pordertype;
   END IF;
 
   IF (pshipheadid IS NULL) THEN
-    RAISE EXCEPTION ''Cannot calculate quantity in a shipment with a NULL shipment'';
+    RAISE EXCEPTION ''Cannot calculate quantity in a shipment with a NULL shipment [xtuple: qtyInShipment, -2]'';
   END IF;
 
   SELECT SUM(COALESCE(shipitem_qty, 0.0)) INTO _qty

@@ -43,7 +43,7 @@ BEGIN
     RETURN _itemlocSeries;
 
   ELSE 
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: returnWoMaterialBatch, -1]';
   END IF;
 
 END;

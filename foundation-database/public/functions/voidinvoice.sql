@@ -46,7 +46,7 @@ BEGIN
                     pInvcheadid;
   END IF;
   IF (NOT _p.invchead_posted) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'Unable to void this Invoice because it has not been posted. [xtuple: voidInvoice, -10]';
   END IF;
 
 --  Cache AROpen Information
@@ -65,7 +65,7 @@ BEGIN
   WHERE (arapply_target_aropen_id=_n.aropen_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RETURN -20;
+    RAISE EXCEPTION 'Unable to void this Invoice because there A/R Applications posted against this Invoice. [xtuple: voidInvoice, -20]';
   END IF;
 
   SELECT fetchGLSequence() INTO _glSequence;
@@ -133,7 +133,7 @@ BEGIN
 --  If the Sales Account Assignment was not found then punt
       IF (NOT FOUND) THEN
         PERFORM deleteGLSeries(_glSequence);
-        RETURN -11;
+        RAISE EXCEPTION 'Unable to void this Invoice because the Sales Account was not found. [xtuple: voidInvoice, -11]';
       END IF;
 
       _roundedBase := round(currToBase(_p.invchead_curr_id, _amount, _firstExchDate), 2);

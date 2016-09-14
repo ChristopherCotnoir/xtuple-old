@@ -53,7 +53,7 @@ BEGIN
   IF ( ( SELECT invchead_posted
          FROM invchead
          WHERE (invchead_id=pInvcheadid) ) ) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'Unable to post this Invoice because it has already been posted. [xtuple: postInvoice, -10]';
   END IF;
 
 --  Cache some parameters
@@ -173,7 +173,7 @@ BEGIN
         DELETE FROM cohist
          WHERE ((cohist_sequence=_p.sequence)
            AND  (cohist_invcnumber=_p.invchead_invcnumber));
-        RETURN -11;
+        RAISE EXCEPTION 'Unable to post this Invoice because the Sales Account was not found. [xtuple: postInvoice, -11]';
       END IF;
 
       _roundedBase := round(currToBase(_p.invchead_curr_id, _amount, _firstExchDate), 2);
@@ -550,7 +550,7 @@ BEGIN
       DELETE FROM cohist
        WHERE ((cohist_sequence=_p.sequence)
          AND  (cohist_invcnumber=_p.invchead_invcnumber));
-      RETURN -17;
+      RAISE EXCEPTION 'Unable to post this Invoice because the A/R Account was not found. [xtuple: postInvoice, -17]';
     END IF;
   END IF;
 

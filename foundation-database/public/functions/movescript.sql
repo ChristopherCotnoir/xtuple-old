@@ -27,7 +27,7 @@ BEGIN
     WHERE pkghead_id=poldpkgid;
 
     IF NOT FOUND THEN
-      RETURN -1;
+      RAISE EXCEPTION '[xtuple: moveScript, -1]';
     END IF;
   END IF;
 
@@ -39,7 +39,7 @@ BEGIN
     WHERE pkghead_id=pnewpkgid;
 
     IF NOT FOUND THEN
-      RETURN -2;
+      RAISE EXCEPTION '[xtuple: moveScript, -2]';
     END IF;
   END IF;
 
@@ -53,7 +53,7 @@ BEGIN
   GET DIAGNOSTICS _rows = ROW_COUNT;
   --RAISE NOTICE '% rows from %', _rows, _deletestr;
   IF (_rows < 1) THEN
-    RETURN -3;
+    RAISE EXCEPTION '[xtuple: moveScript, -3]';
   ELSIF (_rows > 1) THEN
     RAISE EXCEPTION 'Tried to delete % scripts with the id % when there should be exactly 1',
                     _rows, pscriptid;
@@ -73,7 +73,7 @@ BEGIN
   GET DIAGNOSTICS _rows = ROW_COUNT;
   --RAISE NOTICE '% rows from %', _rows, _insertstr;
   IF (_rows < 1) THEN
-    RETURN -4;
+    RAISE EXCEPTION '[xtuple: moveScript, -4]';
   ELSIF (_rows > 1) THEN
     RAISE EXCEPTION 'Tried to insert % scripts with the id % when there should be exactly 1',
                     _rows, pscriptid;

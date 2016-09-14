@@ -92,7 +92,7 @@ BEGIN
     WHERE (rahead_id=pOrderId);
 
   ELSE
-    RAISE EXCEPTION 'Invalid order type.';
+    RAISE EXCEPTION 'Invalid order type. [xtuple: freightDetail, -1]';
   END IF;
 
   IF (_debug) THEN

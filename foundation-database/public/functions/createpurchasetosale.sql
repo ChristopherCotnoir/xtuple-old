@@ -152,7 +152,7 @@ BEGIN
 
   IF (FOUND) THEN
     IF (pPoheadId = -1) THEN
-      RAISE EXCEPTION 'Problem creating new PO';
+      RAISE EXCEPTION 'Problem creating new PO [xtuple: createPurchaseToSale, -3]';
     END IF;
     _poheadid := _temp;
     UPDATE pohead
@@ -160,7 +160,7 @@ BEGIN
     WHERE (pohead_id = _poheadid);
   ELSE
     IF (pPoheadId > 0) THEN
-      RAISE EXCEPTION 'Problem adding to existing PO';
+      RAISE EXCEPTION 'Problem adding to existing PO [xtuple: createPurchaseToSale, -4]';
     END IF;
     SELECT NEXTVAL('pohead_pohead_id_seq') INTO _poheadid;
     SELECT fetchPoNumber() INTO _ponumber;

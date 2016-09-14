@@ -49,11 +49,11 @@ BEGIN
 
   --Post the Inventory Transactions
   IF (_r.nocontrol) THEN
-    RETURN -1; -- non-fatal error so dont throw an exception?
+    RAISE EXCEPTION 'Could not post an inventory transaction because the Item Site has no Control Method or the Item has an Item Type of Reference. [xtuple: postInvTrans, -1]'; -- non-fatal error so dont throw an exception?
   END IF;
 
   IF (COALESCE(pItemlocSeries,0) = 0) THEN
-    RAISE EXCEPTION 'Transaction series must be provided';
+    RAISE EXCEPTION 'Transaction series must be provided [xtuple: postInvTrans, -3]';
   END IF;
 
   SELECT NEXTVAL('invhist_invhist_id_seq') INTO _invhistid;
@@ -112,7 +112,7 @@ BEGIN
 
   IF((_r.itemsite_costmethod='A') AND (_r.itemsite_qtyonhand + round(_sense * pQty, 6)) < 0) THEN
     -- Can not let average costed itemsites go negative
-    RAISE EXCEPTION 'This transaction will cause an Average Costed item to go negative which is not allowed [xtuple: postinvtrans, -2]';
+    RAISE EXCEPTION 'This transaction will cause an Average Costed item to go negative which is not allowed [xtuple: postInvTrans, -2]';
   END IF;
 
   INSERT INTO invhist

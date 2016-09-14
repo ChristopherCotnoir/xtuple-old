@@ -31,7 +31,7 @@ BEGIN
       END IF;
 
       ELSE
-        RAISE EXCEPTION 'Invalid Revision Type';
+        RAISE EXCEPTION 'Invalid Revision Type [xtuple: getActiveRevId, -1]';
       END IF;
     END IF;
 

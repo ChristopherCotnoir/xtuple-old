@@ -16,7 +16,7 @@ BEGIN
   IF ( ( SELECT cobmisc_posted
          FROM cobmisc
          WHERE (cobmisc_id=pCobmiscid) ) ) THEN
-    RAISE EXCEPTION '[xtuple: createInvoice, -1]';
+    RAISE EXCEPTION 'This Billing Approval cannot be posted because it has already been posted. [xtuple: createInvoice, -1]';
   END IF;
 
   SELECT NEXTVAL('invchead_invchead_id_seq') INTO _invcheadid;

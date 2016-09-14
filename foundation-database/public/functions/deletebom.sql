@@ -14,7 +14,7 @@ BEGIN
     AND (rev_target_type = ''BOM''))
     LIMIT 1;
     IF (FOUND) THEN
-      RAISE EXCEPTION ''Bill of Materials has revision control records and may not be deleted.'';
+      RAISE EXCEPTION ''Bill of Materials has revision control records and may not be deleted. [xtuple: deletebom, -1]'';
     END IF;
   END IF;
 

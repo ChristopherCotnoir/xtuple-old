@@ -49,7 +49,7 @@ BEGIN
       WHERE ( (findARAccount(_custgrp.rcptcust)=accnt_id)
        AND (cashrcpt_id=pCashrcptid) );
       IF (NOT FOUND) THEN
-        RETURN -5;
+        RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed as the A/R Account cannot be determined. You must make an A/R Account Assignment for the Customer Type to which this Customer is assigned before you may reverse this Cash Receipt. [xtuple: reverseCashReceipt, -5]';
       END IF;
     END IF;
 
@@ -76,7 +76,7 @@ BEGIN
      AND (COALESCE(cashrcptitem_cust_id, _custgrp.rcptcust) = _custgrp.rcptcust));
 
     IF (NOT FOUND) THEN
-      RETURN -7;
+      RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed, probably because the Customer's Prepaid Account was not found. [xtuple: reverseCashReceipt, -7]';
     END IF;
 
     IF (isPrePayFundsType(_p.cashrcpt_fundstype)) THEN
@@ -93,7 +93,7 @@ BEGIN
         WHERE ((ccpay_order_number IN (CAST(pCashrcptid AS TEXT), _p.cashrcpt_docnumber))
            AND (ccpay_status IN ('C', 'A')));
         IF (NOT FOUND) THEN
-          RETURN -8;
+          RAISE EXCEPTION 'Cannot reverse this Cash Receipt because the credit card records could not be found. [xtuple: reverseCashReceipt, -8]';
         ELSE
           RAISE WARNING 'PostCashReceipt() found ccpay_id % for order number %/% (ref 8848).',
                       _ccpayid, pCashrcptid, _p.cashrcpt_docnumber;
@@ -111,7 +111,7 @@ BEGIN
          AND (bankaccnt_accnt_id=accnt_id)
          AND (cashrcpt_id=pCashrcptid) );
         IF (NOT FOUND) THEN
-          RETURN -6;
+          RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed as the Bank Account cannot be determined. You must make a Bank Account Assignment for this Cash Receipt before you may reverse it. [xtuple: reverseCashReceipt, -6]';
         END IF;
       END IF;
     ELSE
@@ -121,7 +121,7 @@ BEGIN
        AND (bankaccnt_accnt_id=accnt_id)
        AND (cashrcpt_id=pCashrcptid) );
       IF (NOT FOUND) THEN
-        RETURN -6;
+        RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed as the Bank Account cannot be determined. You must make a Bank Account Assignment for this Cash Receipt before you may reverse it. [xtuple: reverseCashReceipt, -6]';
       END IF;
     END IF;
 
@@ -144,12 +144,12 @@ BEGIN
 
 --  Check to see if the C/R is over applied
     IF ((_postToAR + _postToMisc) > _p.cashrcpt_amount) THEN
-      RETURN -1;
+      RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed as the amount distributed is greater than the amount received. [xtuple: reverseCashReceipt, -1]';
     END IF;
 
 --  Check to see if the C/R is positive amount
     IF (_p.cashrcpt_amount <= 0) THEN
-      RETURN -2;
+      RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed as the amount received must be greater than zero. [xtuple: reverseCashReceipt, -2]';
     END IF;
 
 --  Distribute A/R Applications

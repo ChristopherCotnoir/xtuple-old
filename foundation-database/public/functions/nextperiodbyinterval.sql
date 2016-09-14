@@ -14,7 +14,7 @@ BEGIN
    ORDER BY b.period_start
    LIMIT 1 OFFSET pInterval;
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: nextPeriodByInterval, -1]';
   END IF;
   RETURN _periodid;
 END;

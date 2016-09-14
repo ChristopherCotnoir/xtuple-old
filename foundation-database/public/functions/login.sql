@@ -44,15 +44,15 @@ BEGIN
   WHERE (usr_username=getEffectiveXtUser());
 
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION 'The specified Username does not exist in the specified Database. Contact your Systems Administrator to report this issue [xtuple: login, -1]';
 
   ELSIF (NOT _p.usr_active) THEN
     IF(SELECT metric_value='AdminOnly'
          FROM metric
         WHERE metric_name='AllowedUserLogins') THEN
-      RETURN -3;
+      RAISE EXCEPTION 'The specified Database is currently in Maintenance Mode and can only be accessed by System Administators. Contact your Systems Administrator to report this issue. [xtuple: login, -3]';
     END IF;
-    RETURN -2;
+    RAISE EXCEPTION 'The specified Username exists in the specified Database but is not Active. Contact your Systems Administrator to report this issue. [xtuple: login, -2]';
   END IF;
 
   IF (_setSearchPath) THEN

@@ -21,29 +21,28 @@ BEGIN
 
   IF (pDeleteForce) THEN
     IF (NOT woStatus IN ('O', 'E', 'R', 'C')) THEN
-      RETURN -3;
+      RAISE EXCEPTION 'The Work Order cannot be deleted in the current status. Please close the associated Sales Order instead of trying to Delete it. [xtuple: deleteWo, -3]';
     END IF;
   ELSE
     IF (NOT woStatus IN ('O', 'E')) THEN
-      RETURN -3;
+      RAISE EXCEPTION 'The Work Order cannot be deleted in the current status. Please close the associated Sales Order instead of trying to Delete it. [xtuple: deleteWo, -3]';
     END IF;
 
     IF (itemType = 'J') THEN
-      RETURN -2;
+      RAISE EXCEPTION 'The Work Order cannot be deleted for Job Item Types. Please close the associated Sales Order [xtuple: deleteWo, -2]';
     END IF;
   END IF;
 
   IF fetchMetricBool('Routings') AND woStatus != 'C'
      AND packageIsEnabled('xtmfg') THEN
     IF EXISTS(SELECT 1 FROM xtmfg.wotc WHERE wotc_wo_id = pWoid) THEN
-      RETURN -1;
+      RAISE EXCEPTION 'The Work Order cannot be deleted because time clock entries exist for it. Please Close it instead of trying to Delete it. [xtuple: deleteWo, -1]';`
     END IF;
   END IF;
 
   IF (woStatus = 'R') THEN
     PERFORM postEvent('RWoRequestCancel', 'W', wo_id,
                       itemsite_warehous_id, formatWoNumber(wo_id),
-                      NULL, NULL, NULL, NULL)
     FROM wo JOIN itemsite ON (itemsite_id=wo_itemsite_id)
             JOIN item ON (item_id=itemsite_item_id)
     WHERE (wo_id=pWoid);

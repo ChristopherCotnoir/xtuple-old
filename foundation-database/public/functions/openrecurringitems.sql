@@ -12,13 +12,13 @@ DECLARE
 
 BEGIN
   IF (pParentid IS NULL) THEN
-    RETURN -11;
+    RAISE EXCEPTION 'Cannot count open recurring items without a valid parent item. [xtuple: openRecurringItems, -11]';
   END IF;
   
   SELECT * INTO _rt FROM recurtype WHERE (UPPER(recurtype_type)=pType);
   GET DIAGNOSTICS _count = ROW_COUNT;
   IF (_count <= 0) THEN
-    RETURN -10;
+    RAISE EXCEPTION 'Cannot count open recurring items with an invalid type. [xtuple: openRecurringItems, -10]';
   END IF;
 
   _countstmt := 'SELECT COUNT(*) FROM [fulltable]'

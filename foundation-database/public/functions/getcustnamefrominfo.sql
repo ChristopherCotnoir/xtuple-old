@@ -55,8 +55,8 @@ BEGIN
   END IF;
 
   IF (_custcount > 1) THEN
-    RAISE EXCEPTION ''Found % possible Customers for % and % and %'',
-		    _custcount, _email, _company, _fullname;
+    RAISE EXCEPTION ''Found % possible Customers for % and % and % [xtuple: getCustNameFromInfo, -1, %, %, %, %]'',
+		    _custcount, _email, _company, _fullname, _custcount, _email, _company, _fullname;
   END IF;
 
   IF (_custcount <= 0 AND _generate) THEN
@@ -67,13 +67,13 @@ BEGIN
     ELSIF (_fullname != '''') THEN
       RETURN _fullname;
     ELSE
-      RAISE EXCEPTION ''Could not generate a new Customer Name without an email address or the name of a company or person'';
+      RAISE EXCEPTION ''Could not generate a new Customer Name without an email address or the name of a company or person [xtuple: getCustNameFromInfo, -2]'';
     END IF;
   END IF;
 
   IF (_custname IS NULL OR _custname = '''') THEN
-    RAISE EXCEPTION ''Could not find Customer Name for % and %'',
-		    _company, _fullname;
+    RAISE EXCEPTION ''Could not find Customer Name for % and % [xtuple: getCustNameFromInfo, -3, %, %]'',
+		    _company, _fullname, _company, _fullname;
   END IF;
 
   RETURN _custname;

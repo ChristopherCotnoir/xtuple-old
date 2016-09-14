@@ -58,7 +58,7 @@ BEGIN
     FROM itemsite
    WHERE(itemsite_id=pItemsiteid);
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION 'No Item Site for the specified line was found.';
+    RAISE EXCEPTION 'No Item Site for the specified line was found. [xtuple: explodeKit, -1]';
   END IF;
 
   FOR _item IN
@@ -81,9 +81,9 @@ BEGIN
      AND (CURRENT_DATE BETWEEN bomitem_effective AND (bomitem_expires - 1)))
    ORDER BY bomitem_seqnumber LOOP
     IF (NOT _item.active) THEN
-      RAISE EXCEPTION 'One or more of the components for the kit is inactive for the selected item site.';
+      RAISE EXCEPTION 'One or more of the components for the kit is inactive for the selected item site. [xtuple: explodeKit, -2]';
     ELSIF (NOT _item.sold) THEN
-      RAISE EXCEPTION 'One or more of the components for the kit is not sold for the selected item site.';
+      RAISE EXCEPTION 'One or more of the components for the kit is not sold for the selected item site. [xtuple: explodeKit, -3]';
     ELSIF (_item.item_type='F') THEN
       SELECT explodeKit(pSoheadid, pLinenumber, _subnumber, _item.itemsite_id, _item.qty)
         INTO _subnumber;

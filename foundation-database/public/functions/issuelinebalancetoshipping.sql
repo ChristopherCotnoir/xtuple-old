@@ -41,7 +41,7 @@ BEGIN
     FROM toitem
     WHERE (toitem_id=pitemid);
   ELSE
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: issueLineBalanceToShipping, -1]';
   END IF;
 
   IF (_qty > 0) THEN

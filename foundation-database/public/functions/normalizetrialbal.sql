@@ -15,7 +15,7 @@ BEGIN
   WHERE ( (trialbal_accnt_id=accnt_id)
    AND (trialbal_id=pTrialbalid) );
   IF (NOT FOUND) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: normalizeTrialBal, -1]';
   END IF;
 
 -- If we are looking for the Ending Balance, cache it

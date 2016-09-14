@@ -13,7 +13,7 @@ DECLARE
 BEGIN
 
   IF (pItemsiteid IS NULL OR pQty IS NULL) THEN
-    RAISE EXCEPTION 'You must enter an Item Site and a Quantity.';
+    RAISE EXCEPTION 'You must enter an Item Site and a Quantity. [xtuple: postMiscCount, -1]';
   END IF;
 
 --  Make sure the passed itemsite points to a real item
@@ -54,7 +54,7 @@ BEGIN
 
     RETURN _result;
   ELSE
-    RETURN -2;
+    RAISE EXCEPTION '[xtuple: postMiscCount, -2]';
   END IF;
 
 END;

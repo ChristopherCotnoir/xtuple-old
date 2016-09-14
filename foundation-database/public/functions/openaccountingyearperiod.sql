@@ -12,7 +12,7 @@ BEGIN
   IF ( ( SELECT (NOT yearperiod_closed)
          FROM yearperiod
          WHERE (yearperiod_id=pYearPeriodId) ) ) THEN
-    RETURN -1;
+    RAISE EXCEPTION '[xtuple: openAccountingYearPeriod, -1]';
   END IF;
 
   IF ( ( SELECT (count(yearperiod_id) > 0)
@@ -23,7 +23,7 @@ BEGIN
             WHERE (yearperiod_id=pYearPeriodId))
           )
            AND (yearperiod_closed)) ) ) THEN
-    RETURN -2;
+    RAISE EXCEPTION 'Cannot open this Accounting Year because subsequent years are closed. [xtuple: openAccountingYearPeriod, -2]';
   END IF;
 
 --  Reset the yearperiod_closed flag
