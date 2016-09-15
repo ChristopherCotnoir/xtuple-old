@@ -38,7 +38,7 @@ BEGIN
   FROM vohead
   WHERE (vohead_id=NEW.voitem_vohead_id);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Voucher head not found';
+    RAISE EXCEPTION 'Voucher head not found [xtuple: _voitemAfterTrigger, -1]';
   END IF;
 
 -- Calculate Tax

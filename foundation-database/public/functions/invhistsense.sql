@@ -16,7 +16,7 @@ BEGIN
 
   GET DIAGNOSTICS _count = ROW_COUNT;
   IF (_count = 0) THEN
-    RAISE EXCEPTION 'Record not found for invhist_id=%',pInvhistId;
+    RAISE EXCEPTION 'Record not found for invhist_id=% [xtuple: invhistSense, -1, %]',pInvhistId, pInvhistId;
   END IF;
   
   -- increase inventory: AD RM RT RP RR RS RX RB TR

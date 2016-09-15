@@ -13,7 +13,7 @@ BEGIN
   WHERE (ipshead_name=pIpsName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Pricing Schedule % not found.', pIpsName;
+	RAISE EXCEPTION 'Pricing Schedule % not found. [xtuple: getIpsheadId, -1, %]', pIpsName, pIpsName;
   END IF;
 
   RETURN _returnVal;

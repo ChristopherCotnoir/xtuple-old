@@ -13,7 +13,7 @@ BEGIN
   WHERE (curr_abbr=pCurrName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Currency % not found.', pCurrName;
+	RAISE EXCEPTION 'Currency % not found. [xtuple: getCurrId, -1, %]', pCurrName, pCurrName;
   END IF;
 
   RETURN _returnVal;

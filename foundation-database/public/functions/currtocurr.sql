@@ -32,7 +32,7 @@ BEGIN
     AND pEffective BETWEEN curr_effective AND curr_expires;
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'No exchange rate for % on %', pFromCurr, pEffective;
+    RAISE EXCEPTION 'No exchange rate for % on % [xtuple: currToCurr, -1, %, %]', pFromCurr, pEffective, pFromCurr, pEffective;
   END IF;
 
   SELECT curr_rate INTO _toRate
@@ -41,7 +41,7 @@ BEGIN
     AND pEffective BETWEEN curr_effective AND curr_expires;
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'No exchange rate for % on %', pToCurr, pEffective;
+    RAISE EXCEPTION 'No exchange rate for % on % [xtuple: currToCurr, -1, %, %]', pToCurr, pEffective, pToCurr, pEffective;
   END IF;
 
   _convertedValue := pValue * _toRate / _fromRate;

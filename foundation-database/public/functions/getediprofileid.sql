@@ -22,7 +22,7 @@ BEGIN
   WHERE (ediprofile_name=pEdiProfileName);
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'EDI Profile % not found.', pEdiProfileName;
+    RAISE EXCEPTION 'EDI Profile % not found. [xtuple: getEdiProfileId, -1, %]', pEdiProfileName, pEdiProfileName;
   END IF;
 
   RETURN _returnVal;

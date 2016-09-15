@@ -42,7 +42,7 @@ BEGIN
   GET DIAGNOSTICS _rows = ROW_COUNT;
   
   IF (_rows = 0) THEN
-    RAISE EXCEPTION 'No transaction found for invhist_id %', pInvhistId;
+    RAISE EXCEPTION 'No transaction found for invhist_id % [xtuple: returnWoMaterial, -1, %]', pInvhistId, pInvhistId;
   END IF;
   
   SELECT itemuomtouom(itemsite_item_id, NULL, womatl_uom_id, _invqty)

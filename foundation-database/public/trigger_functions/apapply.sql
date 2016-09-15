@@ -15,7 +15,7 @@ BEGIN
     IF (FOUND) THEN
       NEW.apapply_target_paid := _tpaid;
     ELSE
-      RAISE EXCEPTION 'Error calculating paid amount on application';
+      RAISE EXCEPTION 'Error calculating paid amount on application [xtuple: _apapplyTrigger, -1]';
     END IF;
   END IF;
 

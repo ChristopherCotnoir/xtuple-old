@@ -5,7 +5,7 @@ BEGIN
 
 -- Privilege Checks
    IF (NOT checkPrivilege(''MaintainItemSources'')) THEN
-     RAISE EXCEPTION ''You do not have privileges to maintain Item Sources.'';
+     RAISE EXCEPTION ''You do not have privileges to maintain Item Sources. [xtuple: _itemsrcpTrigger, -1]'';
    END IF;
 
 -- Set defaults

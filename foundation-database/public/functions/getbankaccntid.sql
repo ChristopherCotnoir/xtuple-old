@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(bankaccnt_name)=UPPER(pBankAccntName));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Bank Account % not found.'', pBankAccntName;
+	RAISE EXCEPTION ''Bank Account % not found. [xtuple: getBankAccntId, -1, %]'', pBankAccntName, pBankAccntName;
   END IF;
 
   RETURN _returnVal;

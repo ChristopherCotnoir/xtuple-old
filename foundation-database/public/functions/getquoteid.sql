@@ -14,7 +14,7 @@ BEGIN
   WHERE (quhead_number=pQuoteNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Quote Number % not found.'', pQuoteNumber;
+	RAISE EXCEPTION ''Quote Number % not found. [xtuple: getQuoteId, -1, %]'', pQuoteNumber, pQuoteNumber;
   END IF;
 
   RETURN _returnVal;

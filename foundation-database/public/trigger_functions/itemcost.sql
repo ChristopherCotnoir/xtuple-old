@@ -5,15 +5,15 @@ BEGIN
 
   --Privilege Checks
   IF ( (TG_OP = 'INSERT') AND (NOT checkPrivilege('CreateCosts')) AND (NOT checkPrivilege('PostVouchers')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to enter Item Costs.';
+    RAISE EXCEPTION 'You do not have privileges to enter Item Costs. [xtuple: _itemCostTrigger, -1]';
   END IF;
 
   IF ( (TG_OP = 'UPDATE') AND (NOT checkPrivilege('EnterActualCosts')) AND (NOT checkPrivilege('PostVouchers')) AND (NOT checkPrivilege('UpdateActualCosts')) AND (NOT checkPrivilege('PostActualCosts')) AND (NOT checkPrivilege('PostStandardCosts')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to update Item Costs.';
+    RAISE EXCEPTION 'You do not have privileges to update Item Costs. [xtuple: _itemCostTrigger, -2]';
   END IF;
 
   IF ( (TG_OP = 'DELETE') AND (NOT checkPrivilege('DeleteCosts')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to delete Item Costs.';
+    RAISE EXCEPTION 'You do not have privileges to delete Item Costs. [xtuple: _itemCostTrigger, -3]';
   END IF;
 
   IF (TG_OP = 'UPDATE') THEN

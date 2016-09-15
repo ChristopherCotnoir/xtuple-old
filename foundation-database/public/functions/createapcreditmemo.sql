@@ -267,7 +267,7 @@ BEGIN
   IF (_test < 0) THEN
     DELETE FROM apopen WHERE (apopen_id=_apopenid);
     PERFORM deleteGLSeries(_glSequence);
-    RAISE EXCEPTION 'postGLSeries commit failed with %', _test;
+    RAISE EXCEPTION 'postGLSeries commit failed with % [xtuple: createAPCreditMemo, -1, %]', _test, _test;
   END IF;
 
   RETURN pJournalNumber;

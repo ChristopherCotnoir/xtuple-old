@@ -34,8 +34,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                        FROM script
                        WHERE ((script_id=NEW.pkgitem_item_id)
                           AND (script_name=NEW.pkgitem_name)))) THEN
-          RAISE EXCEPTION 'Cannot create Script % as a Package Item without a corresponding script record.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Script % as a Package Item without a corresponding script record. [xtuple: _pkgitembeforetrigger, -1, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'D') THEN
@@ -43,8 +43,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                        FROM cmd
                        WHERE ((cmd_id=NEW.pkgitem_item_id)
                           AND (cmd_name=NEW.pkgitem_name)))) THEN
-          RAISE EXCEPTION 'Cannot create Custom Command % as a Package Item without a corresponding cmd record.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Custom Command % as a Package Item without a corresponding cmd record. [xtuple: _pkgitembeforetrigger, -2, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'F') THEN
@@ -54,8 +54,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                           AND (proname = (_object))
                           AND (pronamespace=pg_namespace.oid)
                           AND (nspname=_schema)) )) THEN
-          RAISE EXCEPTION 'Cannot create Function % (oid %) as a Package Item without a corresponding function in the database.',
-                          NEW.pkgitem_name, NEW.pkgitem_item_id;
+          RAISE EXCEPTION 'Cannot create Function % (oid %) as a Package Item without a corresponding function in the database. [xtuple: _pkgitembeforetrigger, -3, %, %]',
+                          NEW.pkgitem_name, NEW.pkgitem_item_id, NEW.pkgitem_name, NEW.pkgitem_item_id;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'G') THEN
@@ -65,8 +65,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                         AND (tgrelid=pg_class.oid)
                         AND (relnamespace=pg_namespace.oid)
                         AND (nspname=_schema)))) THEN
-          RAISE EXCEPTION 'Cannot create Trigger % as a Package Item without a corresponding trigger in the database.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Trigger % as a Package Item without a corresponding trigger in the database. [xtuple: _pkgitembeforetrigger, -4, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'I') THEN
@@ -74,8 +74,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                        FROM image
                        WHERE ((image_id=NEW.pkgitem_item_id)
                           AND (image_name=NEW.pkgitem_name)))) THEN
-          RAISE EXCEPTION 'Cannot create Image % as a Package Item without a corresponding image record.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Image % as a Package Item without a corresponding image record. [xtuple: _pkgitembeforetrigger, -5, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'M') THEN
@@ -84,8 +84,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                        WHERE ((metasql_id=NEW.pkgitem_item_id)
                           AND (metasql_group=_group)
                           AND (metasql_name=_object)))) THEN
-          RAISE EXCEPTION 'Cannot create MetaSQL statement % as a Package Item without a corresponding metasql record.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create MetaSQL statement % as a Package Item without a corresponding metasql record. [xtuple: _pkgitembeforetrigger, -6, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'P') THEN
@@ -93,8 +93,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                        FROM priv
                        WHERE ((priv_id=NEW.pkgitem_item_id)
                           AND (priv_name=NEW.pkgitem_name)))) THEN
-          RAISE EXCEPTION 'Cannot create Privilege % as a Package Item without a corresponding priv record.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Privilege % as a Package Item without a corresponding priv record. [xtuple: _pkgitembeforetrigger, -7, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'R') THEN
@@ -102,16 +102,16 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                        FROM report
                        WHERE ((report_id=NEW.pkgitem_item_id)
                           AND (report_name=NEW.pkgitem_name)))) THEN
-          RAISE EXCEPTION 'Cannot create Report % as a Package Item without a corresponding report record.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Report % as a Package Item without a corresponding report record. [xtuple: _pkgitembeforetrigger, -8, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'S') THEN
         IF (NOT EXISTS(SELECT oid
                        FROM pg_namespace
                        WHERE (LOWER(nspname)=LOWER(NEW.pkgitem_name)))) THEN
-          RAISE EXCEPTION 'Cannot create Schema % as a Package Item without a corresponding schema in the database.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Schema % as a Package Item without a corresponding schema in the database. [xtuple: _pkgitembeforetrigger, -9, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'T') THEN
@@ -121,8 +121,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                         AND (relnamespace=pg_namespace.oid)
                         AND (relkind='r')
                         AND (nspname=_schema)))) THEN
-          RAISE EXCEPTION 'Cannot create Table % as a Package Item without a corresponding table in the database.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create Table % as a Package Item without a corresponding table in the database. [xtuple: _pkgitembeforetrigger, -10, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'U') THEN
@@ -130,8 +130,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                        FROM uiform
                        WHERE ((uiform_id=NEW.pkgitem_item_id)
                           AND (uiform_name=NEW.pkgitem_name)))) THEN
-          RAISE EXCEPTION 'Cannot create User Interface Form % as a Package Item without a corresponding uiform record.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create User Interface Form % as a Package Item without a corresponding uiform record. [xtuple: _pkgitembeforetrigger, -11, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSIF (NEW.pkgitem_type = 'V') THEN
@@ -141,13 +141,13 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
                         AND (relnamespace=pg_namespace.oid)
                         AND (relkind='v')
                         AND (nspname=_schema)))) THEN
-          RAISE EXCEPTION 'Cannot create View % as a Package Item without a corresponding view in the database.',
-            NEW.pkgitem_name;
+          RAISE EXCEPTION 'Cannot create View % as a Package Item without a corresponding view in the database. [xtuple: _pkgitembeforetrigger, -12, %]',
+            NEW.pkgitem_name, NEW.pkgitem_name;
         END IF;
 
       ELSE
-        RAISE EXCEPTION '"%" is not a valid type of package item.',
-          NEW.pkgitem_type;
+        RAISE EXCEPTION '"%" is not a valid type of package item. [xtuple: _pkgitembeforetrigger, -13, %]',
+          NEW.pkgitem_type, NEW.pkgitem_type;
       END IF;
 
     ELSIF (TG_OP = 'DELETE') THEN
@@ -227,8 +227,8 @@ CREATE OR REPLACE FUNCTION _pkgitembeforetrigger() RETURNS "trigger" AS $$
         PERFORM dropIfExists('VIEW', _object, _schema, true);
 
       ELSE
-        RAISE EXCEPTION '"%" is not a valid type of package item.',
-          OLD.pkgitem_type;
+        RAISE EXCEPTION '"%" is not a valid type of package item. [xtuple: _pkgitembeforetrigger, -14, %]',
+          OLD.pkgitem_type, OLD.pkgitem_type;
       END IF;
       RETURN OLD;
     END IF;

@@ -14,7 +14,7 @@ BEGIN
   WHERE (cohead_number=pSalesOrderNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Sales Order % not found.'', pSalesOrderNumber;
+	RAISE EXCEPTION ''Sales Order % not found. [xtuple: getCoheadId, -1, %]'', pSalesOrderNumber, pSalesOrderNumber;
   END IF;
 
   RETURN _returnVal;

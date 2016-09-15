@@ -14,7 +14,7 @@ BEGIN
   WHERE (cmnttype_name=pCmntType) LIMIT 1;
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Comment Type % not found.'', pCmntType;
+	RAISE EXCEPTION ''Comment Type % not found. [xtuple: getCmntTypeId, -1, %]'', pCmntType, pCmntType;
   END IF;
 
   RETURN _returnVal;

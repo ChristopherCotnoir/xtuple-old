@@ -20,7 +20,7 @@ BEGIN
   FROM evnttype
   WHERE (evnttype_name=pEvnttypename);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Event type % not found.', pEvnttypename;
+    RAISE EXCEPTION 'Event type % not found. [xtuple: postEvent, -1, %]', pEvnttypename, pEvnttypename;
   END IF;
 
   IF (pWhsid IS NULL) THEN

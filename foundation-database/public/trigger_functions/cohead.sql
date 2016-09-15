@@ -19,13 +19,13 @@ BEGIN
   IF (TG_OP = 'INSERT') THEN
     IF ( (NOT checkPrivilege('MaintainSalesOrders')) AND
        (NOT checkPrivilege('EnterReceipts')) ) THEN
-      RAISE EXCEPTION 'You do not have privileges to create a Sales Order.';
+      RAISE EXCEPTION 'You do not have privileges to create a Sales Order. [xtuple: _soheadTrigger, -1]';
     END IF;
   ELSIF (TG_OP = 'UPDATE') THEN
     IF ( (NOT checkPrivilege('MaintainSalesOrders')) AND
          (NOT checkPrivilege('IssueStockToShipping')) AND
          (NEW.cohead_holdtype = OLD.cohead_holdtype) ) THEN
-      RAISE EXCEPTION 'You do not have privileges to alter a Sales Order.';
+      RAISE EXCEPTION 'You do not have privileges to alter a Sales Order. [xtuple: _soheadTrigger, -2]';
     END IF;
   END IF;
 
@@ -34,7 +34,7 @@ BEGIN
     IF (NEW.cohead_imported) THEN
       SELECT fetchMetricText('CONumberGeneration') INTO _numGen;
       IF ((NEW.cohead_number IS NULL) AND (_numGen='M')) THEN
-        RAISE EXCEPTION 'You must supply an Order Number.';
+        RAISE EXCEPTION 'You must supply an Order Number. [xtuple: _soheadTrigger, -3]';
       ELSE
         IF (NEW.cohead_number IS NULL) THEN
           SELECT fetchsonumber() INTO NEW.cohead_number;
@@ -49,7 +49,7 @@ BEGIN
   ELSE
     IF (TG_OP = 'UPDATE') THEN
       IF (NEW.cohead_number <> OLD.cohead_number) THEN
-        RAISE EXCEPTION 'The order number may not be changed.';
+        RAISE EXCEPTION 'The order number may not be changed. [xtuple: _soheadTrigger, -4]';
       END IF;
     END IF;
   END IF;
@@ -101,7 +101,7 @@ BEGIN
                                Customers on Credit Hold.  The selected
                                Customer must be taken off of Credit Hold
                                before you may create a new Sales Order
-                               for the Customer.',_p.cust_number;
+                               for the Customer. [xtuple: _soheadTrigger, -5]',_p.cust_number,_p.cust_number;
             ELSE
               NEW.cohead_holdtype='C';
             END IF;
@@ -115,7 +115,7 @@ BEGIN
                               Customers on Credit Warning.  The
                               selected Customer must be taken off of
                               Credit Warning before you may create a
-                              new Sales Order for the Customer.',_p.cust_number;
+                              new Sales Order for the Customer. [xtuple: _soheadTrigger, -6]',_p.cust_number,_p.cust_number;
             ELSE
               NEW.cohead_holdtype='C';
             END IF;
@@ -188,7 +188,7 @@ BEGIN
 
         -- Check for required Purchase Order
         IF (_p.cust_usespos AND ((NEW.cohead_custponumber IS NULL) OR (TRIM(BOTH FROM NEW.cohead_custponumber)=''))) THEN
-            RAISE EXCEPTION 'You must enter a Customer P/O for this Sales Order.';
+            RAISE EXCEPTION 'You must enter a Customer P/O for this Sales Order. [xtuple: _soheadTrigger, -7]';
         END IF;
 
         -- Check for duplicate Purchase Orders if not allowed
@@ -210,7 +210,7 @@ BEGIN
                             already been used for another Sales Order.
                             Please verify the P/O Number and either
                             enter a new P/O Number or add to the
-                            existing Sales Order.';
+                            existing Sales Order. [xtuple: _soheadTrigger, -8]';
          END IF;
         END IF;
       END IF;
@@ -261,7 +261,7 @@ BEGIN
 
         IF (FOUND) THEN
           IF NEW.cohead_prj_id <> COALESCE(OLD.cohead_prj_id,-1) THEN
-            RAISE EXCEPTION 'You can not change the project ID on orders with closed lines.';
+            RAISE EXCEPTION 'You can not change the project ID on orders with closed lines. [xtuple: _soheadTrigger, -9]';
           END IF;
         END IF;
       END IF;
@@ -418,7 +418,7 @@ BEGIN
               NEW.cohead_shiptocountry := COALESCE(_a.addr_country,'');
             ELSE
               -- If no shipto data and free form not allowed, this won't work
-              RAISE EXCEPTION 'Free form Shipto is not allowed on this Customer. You must supply a valid Shipto ID.';
+              RAISE EXCEPTION 'Free form Shipto is not allowed on this Customer. You must supply a valid Shipto ID. [xtuple: _soheadTrigger, -10]';
             END IF;
           END IF;
         END IF;
@@ -591,7 +591,7 @@ BEGIN
 
   IF ( (NOT checkPrivilege('MaintainSalesOrders')) AND
        (NOT checkPrivilege('IssueStockToShipping')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Sales Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Sales Order. [xtuple: _coheadBeforeDeleteTrigger, -1]';
   END IF;
 
   DELETE FROM docass WHERE docass_source_id = OLD.cohead_id AND docass_source_type = 'S';

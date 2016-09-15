@@ -38,7 +38,7 @@ BEGIN
   FROM cobmisc
   WHERE (cobmisc_id=NEW.cobill_cobmisc_id);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Billing head not found';
+    RAISE EXCEPTION 'Billing head not found [xtuple: _cobillTrigger, -1]';
   END IF;
 
 -- Insert new row

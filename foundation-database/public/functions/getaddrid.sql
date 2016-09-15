@@ -13,7 +13,7 @@ BEGIN
   WHERE (addr_number=pAddressNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Address Number % not found.', pAddressNumber;
+	RAISE EXCEPTION 'Address Number % not found. [xtuple: getAddrId, -1, %]', pAddressNumber, pAddressNumber;
   END IF;
 
   RETURN _returnVal;

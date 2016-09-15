@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION _cmitemBeforeDeleteTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF NOT checkPrivilege('MaintainCreditMemos') THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos. [xtuple: _cmitemBeforeDeleteTrigger, -1]';
   END IF;
 
   DELETE FROM cmitemtax
@@ -24,18 +24,18 @@ DECLARE
   _id INTEGER;
 BEGIN
   IF NOT checkPrivilege('MaintainCreditMemos') THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos. [xtuple: _cmitemBeforeTrigger, -1]';
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
     IF ( (NEW.cmitem_qtycredit IS NULL) OR (NEW.cmitem_qtycredit = 0) ) THEN
-      RAISE EXCEPTION 'Quantity to Credit must be greater than zero.';
+      RAISE EXCEPTION 'Quantity to Credit must be greater than zero. [xtuple: _cmitemBeforeTrigger, -2]';
     END IF;
     SELECT cmitem_id INTO _id
     FROM cmitem
     WHERE ( (cmitem_cmhead_id=NEW.cmitem_cmhead_id) AND (cmitem_linenumber=NEW.cmitem_linenumber) );
     IF (FOUND) THEN
-      RAISE EXCEPTION 'The Memo Line Number is already in use.';
+      RAISE EXCEPTION 'The Memo Line Number is already in use. [xtuple: _cmitemBeforeTrigger, -3]';
     END IF;
   END IF;
 
@@ -78,7 +78,7 @@ BEGIN
   FROM cmhead
   WHERE (cmhead_id=NEW.cmitem_cmhead_id);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Credit Memo head not found';
+    RAISE EXCEPTION 'Credit Memo head not found [xtuple: _cmitemTrigger, -1]';
   END IF;
 
 -- Insert new row

@@ -10,21 +10,21 @@ BEGIN
 --  Checks
   SELECT checkPrivilege(''MaintainVendors'') INTO _check;
   IF NOT (_check) THEN
-    RAISE EXCEPTION ''You do not have privileges to maintain Vendors.'';
+    RAISE EXCEPTION ''You do not have privileges to maintain Vendors. [xtuple: _vendaddrTrigger, -1]'';
   END IF;
 
   IF (TG_OP IN (''INSERT'',''UPDATE'')) THEN
 
     IF (LENGTH(COALESCE(NEW.vendaddr_code, ''''))=0) THEN
-      RAISE EXCEPTION ''You must supply a valid Vendor Address Number.'';
+      RAISE EXCEPTION ''You must supply a valid Vendor Address Number. [xtuple: _vendaddrTrigger, -2]'';
     END IF;
 
     IF (LENGTH(COALESCE(NEW.vendaddr_name, ''''))=0) THEN
-      RAISE EXCEPTION ''You must supply a valid Vendor Address Name.'';
+      RAISE EXCEPTION ''You must supply a valid Vendor Address Name. [xtuple: _vendaddrTrigger, -3]'';
     END IF;
 
     IF (NEW.vendaddr_vend_id IS NULL) THEN
-      RAISE EXCEPTION ''You must supply a valid Vendor ID.'';
+      RAISE EXCEPTION ''You must supply a valid Vendor ID. [xtuple: _vendaddrTrigger, -4]'';
     END IF;
 
     SELECT vendaddr_code INTO _vendname
@@ -33,7 +33,7 @@ BEGIN
       AND (UPPER(vendaddr_code)=UPPER(NEW.vendaddr_code))
       AND (vendaddr_id<>NEW.vendaddr_id) );
     IF (FOUND) THEN
-      RAISE EXCEPTION ''The Vendor Address Number entered cannot be used as it is in use.'';
+      RAISE EXCEPTION ''The Vendor Address Number entered cannot be used as it is in use. [xtuple: _vendaddrTrigger, -5]'';
     END IF;
 
   END IF;

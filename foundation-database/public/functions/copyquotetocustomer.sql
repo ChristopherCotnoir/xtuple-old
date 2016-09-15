@@ -35,7 +35,7 @@ BEGIN
       WHERE prospect_id = pCustomerid ) data;
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Invalid Customer supplied: %', pCustomerid;
+    RAISE EXCEPTION 'Invalid Customer supplied: % [xtuple: copyquotetocustomer, -1, %]', pCustomerid, pCustomerid;
   END IF;  
   
   INSERT INTO quhead

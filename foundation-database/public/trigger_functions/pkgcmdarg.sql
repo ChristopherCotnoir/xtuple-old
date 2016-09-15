@@ -36,13 +36,13 @@ BEGIN
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
-    RAISE EXCEPTION 'You may not create command arguments in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not create command arguments in packages except using the xTuple Updater utility [xtuple: _pkgcmdargalterTrigger, -1]';
 
   ELSIF (TG_OP = 'UPDATE') THEN
-    RAISE EXCEPTION 'You may not alter command arguments in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter command arguments in packages except using the xTuple Updater utility [xtuple: _pkgcmdargalterTrigger, -2]';
 
   ELSIF (TG_OP = 'DELETE') THEN
-    RAISE EXCEPTION 'You may not delete command arguments from packages. Try deleting or disabling the package.';
+    RAISE EXCEPTION 'You may not delete command arguments from packages. Try deleting or disabling the package. [xtuple: _pkgcmdargalterTrigger, -3]';
 
   END IF;
 

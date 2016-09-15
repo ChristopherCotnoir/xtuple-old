@@ -7,7 +7,7 @@ BEGIN
 
   IF (TG_OP = 'UPDATE') THEN
     IF (OLD.curr_base = TRUE AND NEW.curr_base = FALSE) THEN
-       RAISE EXCEPTION 'You cannot alter the base currency as it has already been defined.';
+       RAISE EXCEPTION 'You cannot alter the base currency as it has already been defined. [xtuple: currOneBase, -1]';
     END IF;
   END IF;
 
@@ -19,8 +19,8 @@ BEGIN
         AND curr_id != NEW.curr_id;
     IF baseCount > 0 THEN
       RAISE EXCEPTION
-          'Cannot make % - % the base currency because one is already defined.',
-          NEW.curr_symbol, NEW.curr_abbr;
+          'Cannot make % - % the base currency because one is already defined. [xtuple: currOneBase, -2, %, %]',
+          NEW.curr_symbol, NEW.curr_abbr, NEW.curr_symbol, NEW.curr_abbr;
     ELSE
       SELECT count(*)
         INTO baseCount

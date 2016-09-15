@@ -12,28 +12,28 @@ BEGIN
   IF (TG_OP = 'INSERT') THEN
     SELECT checkPrivilege('MaintainWarehouses') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to add new Sites.';
+      RAISE EXCEPTION 'You do not have privileges to add new Sites. [xtuple: _warehousTrigger, -1]';
     END IF;
   ELSE
     SELECT checkPrivilege('MaintainWarehouses') OR checkPrivilege('IssueCountTags') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to alter a Site.';
+      RAISE EXCEPTION 'You do not have privileges to alter a Site. [xtuple: _warehousTrigger, -2]';
     END IF;
   END IF;
 
   -- Code is required
   IF (LENGTH(COALESCE(NEW.warehous_code,''))=0) THEN
-    RAISE EXCEPTION 'You must supply a valid Site Code.';
+    RAISE EXCEPTION 'You must supply a valid Site Code. [xtuple: _warehousTrigger, -3]';
   END IF;
 
   -- Sitetype is required
   IF (NEW.warehous_sitetype_id IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a valid Site Type.';
+    RAISE EXCEPTION 'You must supply a valid Site Type. [xtuple: _warehousTrigger, -4]';
   END IF;
 
   -- Cost Category is required for Transit types
   IF ((NEW.warehous_transit) AND (NEW.warehous_costcat_id IS NULL)) THEN
-    RAISE EXCEPTION 'You must supply a valid Cost Category for Transit Sites.';
+    RAISE EXCEPTION 'You must supply a valid Cost Category for Transit Sites. [xtuple: _warehousTrigger, -5]';
   END IF;
 
   -- Code must be unique
@@ -42,7 +42,7 @@ BEGIN
   WHERE ( (UPPER(warehous_code)=UPPER(NEW.warehous_code))
     AND   (warehous_id<>NEW.warehous_id) );
   IF (FOUND) THEN
-    RAISE EXCEPTION 'You must supply a unique Site Code.';
+    RAISE EXCEPTION 'You must supply a unique Site Code. [xtuple: _warehousTrigger, -6]';
   END IF;
 
   -- Count Tag Prefix must be unique
@@ -57,7 +57,7 @@ BEGIN
       AND   (warehous_id<>NEW.warehous_id) );
   END IF;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'You must supply a unique Count Tag Prefix.';
+    RAISE EXCEPTION 'You must supply a unique Count Tag Prefix. [xtuple: _warehousTrigger, -7]';
   END IF;
 
   -- Check Complete

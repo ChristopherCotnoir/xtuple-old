@@ -4,27 +4,27 @@ CREATE OR REPLACE FUNCTION _custTrigger () RETURNS TRIGGER AS $$
 BEGIN
   IF NOT (checkPrivilege('MaintainCustomerMasters') OR
           checkPrivilege('PostMiscInvoices')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Customers.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Customers. [xtuple: _custTrigger, -1]';
   END IF;
 
   IF (NEW.cust_number IS NULL) THEN
-        RAISE EXCEPTION 'You must supply a valid Customer Number.';
+        RAISE EXCEPTION 'You must supply a valid Customer Number. [xtuple: _custTrigger, -2]';
   END IF;
 
   IF (LENGTH(COALESCE(NEW.cust_name,''))=0) THEN
-        RAISE EXCEPTION 'You must supply a valid Customer Name.';
+        RAISE EXCEPTION 'You must supply a valid Customer Name. [xtuple: _custTrigger, -3]';
   END IF;
 
   IF (NEW.cust_custtype_id IS NULL) THEN
-        RAISE EXCEPTION 'You must supply a valid Customer Type ID.';
+        RAISE EXCEPTION 'You must supply a valid Customer Type ID. [xtuple: _custTrigger, -4]';
   END IF;
 
   IF (NEW.cust_salesrep_id IS NULL) THEN
-        RAISE EXCEPTION 'You must supply a valid Sales Rep ID.';
+        RAISE EXCEPTION 'You must supply a valid Sales Rep ID. [xtuple: _custTrigger, -5]';
   END IF;
 
   IF (NEW.cust_terms_id IS NULL) THEN
-        RAISE EXCEPTION 'You must supply a valid Terms Code ID.';
+        RAISE EXCEPTION 'You must supply a valid Terms Code ID. [xtuple: _custTrigger, -6]';
   END IF;
 
   IF (TG_OP = 'INSERT' AND fetchMetricText('CRMAccountNumberGeneration') IN ('A','O')) THEN
@@ -196,7 +196,7 @@ CREATE OR REPLACE FUNCTION _custinfoBeforeDeleteTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF NOT (checkPrivilege('MaintainCustomerMasters')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Customers.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Customers. [xtuple: _custinfoBeforeDeleteTrigger, -1]';
   END IF;
 
   UPDATE crmacct SET crmacct_cust_id = NULL
@@ -224,13 +224,13 @@ BEGIN
      NOT EXISTS(SELECT prospect_id
                   FROM prospect
                  WHERE prospect_id=OLD.cust_id)) THEN
-    RAISE EXCEPTION '[xtuple: deleteCustomer, -8]';
+    RAISE EXCEPTION '[xtuple: _custinfoAfterDeleteTrigger, -8]';
   END IF;
 
   IF EXISTS(SELECT invchead_id
               FROM invchead
              WHERE (invchead_cust_id=OLD.cust_id)) THEN
-    RAISE EXCEPTION '[xtuple: deleteCustomer, -7]';
+    RAISE EXCEPTION '[xtuple: _custinfoAfterDeleteTrigger, -7]';
   END IF;
   -- end TODO
 
@@ -238,7 +238,7 @@ BEGIN
               FROM checkhead
              WHERE ((checkhead_recip_id=OLD.cust_id)
                AND  (checkhead_recip_type='C'))) THEN
-    RAISE EXCEPTION '[xtuple: deleteCustomer, -6]';
+    RAISE EXCEPTION '[xtuple: _custinfoAfterDeleteTrigger, -6]';
   END IF;
 
   DELETE FROM taxreg

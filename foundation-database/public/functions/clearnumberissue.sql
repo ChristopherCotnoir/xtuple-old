@@ -15,7 +15,7 @@ BEGIN
   WHERE (orderseq_name=psequence);
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Invalid orderseq_name %', psequence;
+    RAISE EXCEPTION 'Invalid orderseq_name % [xtuple: clearNumberIssue, -1, %]', psequence, psequence;
   END IF;
 
   IF(ARRAY_LENGTH(COALESCE(__seqiss,__newiss),1) IS NULL) THEN

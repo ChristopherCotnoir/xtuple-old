@@ -17,7 +17,7 @@ BEGIN
   AND (quitem_linenumber=pLineNumber));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Quote Line Item %-%not found.'', pQuoteNumber,pLineNumber;
+	RAISE EXCEPTION ''Quote Line Item %-%not found. [xtuple: getQuoteLineItemId, -1, %, %]'', pQuoteNumber,pLineNumber,pQuoteNumber,pLineNumber;
   END IF;
 
   RETURN _returnVal;

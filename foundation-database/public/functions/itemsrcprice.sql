@@ -39,7 +39,7 @@ BEGIN
   FROM itemsrc JOIN item ON (item_id=itemsrc_item_id)
   WHERE (itemsrc_id=pItemsrcid);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'itemsrc % not found.', pItemsrcid;
+    RAISE EXCEPTION 'itemsrc % not found. [xtuple: itemsrcPrice, -1, %]', pItemsrcid, pItemsrcid;
   END IF;
 
 --  Determine price

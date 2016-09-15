@@ -13,7 +13,7 @@ BEGIN
   WHERE (incdtseverity_name=pIncdtSeverityName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Incident Severity Name % not found.', pIncdtSeverityName;
+	RAISE EXCEPTION 'Incident Severity Name % not found. [xtuple: getIncdtSeverityId, -1, %]', pIncdtSeverityName, pIncdtSeverityName;
   END IF;
 
   RETURN _returnVal;

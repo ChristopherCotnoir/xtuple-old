@@ -67,8 +67,8 @@ BEGIN
                 AND  (accnt_company=company_number)
                 AND  (accnt_company=NEW.company_number))
     ) THEN
-      RAISE EXCEPTION ''Cannot make Company % External because it is used in the local database.'',
-                      NEW.company_number;
+      RAISE EXCEPTION ''Cannot make Company % External because it is used in the local database. [xtuple: _companyTrigger, -1, %]'',
+                      NEW.company_number, NEW.company_number;
     ELSIF (fetchMetricBool(''EnableReturnAuth'')) THEN
       IF EXISTS(SELECT accnt_id
               FROM accnt, company, (
@@ -79,8 +79,8 @@ BEGIN
                 AND  (accnt_company=company_number)
                 AND  (accnt_company=NEW.company_number))
       ) THEN
-        RAISE EXCEPTION ''Cannot make Company % External because it is used in the local database.'',
-                        NEW.company_number;
+        RAISE EXCEPTION ''Cannot make Company % External because it is used in the local database. [xtuple: _companyTrigger, -2, %]'',
+                        NEW.company_number, NEW.company_number;
       END IF;
     END IF;
   END IF;

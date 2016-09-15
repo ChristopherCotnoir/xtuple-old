@@ -13,7 +13,7 @@ BEGIN
   WHERE (incdtresolution_name=pIncdtResolutionName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Incident Resolution Name % not found.', pIncdtResolutionName;
+	RAISE EXCEPTION 'Incident Resolution Name % not found. [xtuple: getIncdtResolutionId, -1, %]', pIncdtResolutionName, pIncdtResolutionName;
   END IF;
 
   RETURN _returnVal;

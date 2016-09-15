@@ -33,7 +33,7 @@ BEGIN
     FROM item
    WHERE(item_id=pItemid);
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION 'No item record was found for item id %', pItemid;
+    RAISE EXCEPTION 'No item record was found for item id % [xtuple: itemuomtouom, -1, %]', pItemid, pItemid;
   END IF;
 
   _uomidFrom := COALESCE(pUomidFrom, _item.item_inv_uom_id);
@@ -93,7 +93,7 @@ BEGIN
       _itemNumb := (SELECT item_number FROM item WHERE item_id=pItemid);
       _uom1     := (SELECT uom_name FROM uom WHERE uom_id=_uomidFrom);
       _uom2     := (SELECT uom_name FROM uom WHERE uom_id=_uomidInv);
-      RAISE EXCEPTION 'A conversion for item % from uom % to uom % was not found.', _itemNumb, _uom1, _uom2;
+      RAISE EXCEPTION 'A conversion for item % from uom % to uom % was not found. [xtuple: itemuomtouom, -2, %, %, %]', _itemNumb, _uom1, _uom2, _itemNumb, _uom1, _uom2;
     END IF;
     IF(_conv.itemuomconv_from_uom_id=_uomidInv) THEN
       _valueFrom := _conv.itemuomconv_from_value;
@@ -119,7 +119,7 @@ BEGIN
       _itemNumb := (SELECT item_number FROM item WHERE item_id=pItemid);
       _uom1     := (SELECT uom_name FROM uom WHERE uom_id=_uomidFrom);
       _uom2     := (SELECT uom_name FROM uom WHERE uom_id=_uomidInv);
-      RAISE EXCEPTION 'A conversion for item % from uom % to uom % was not found.', _itemNumb, _uom1, _uom2;
+      RAISE EXCEPTION 'A conversion for item % from uom % to uom % was not found. [xtuple: itemuomtouom, -2, %, %, %]', _itemNumb, _uom1, _uom2, _itemNumb, _uom1, _uom2;
     END IF;
     IF(_conv.itemuomconv_from_uom_id=_uomidInv) THEN
       _valueFrom := _conv.itemuomconv_from_value;

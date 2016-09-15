@@ -10,12 +10,12 @@ BEGIN
   SELECT checkPrivilege('MaintainCreditMemos') INTO _check;
   IF ( (TG_OP = 'INSERT') OR (TG_OP = 'DELETE') ) THEN
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos.';
+      RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos. [xtuple: _cmheadBeforeTrigger, -1]';
     END IF;
   END IF;
   IF (TG_OP = 'UPDATE') THEN
     IF ((OLD.cmhead_printed = NEW.cmhead_printed) AND NOT (_check) ) THEN
-      RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos.';
+      RAISE EXCEPTION 'You do not have privileges to maintain Credit Memos. [xtuple: _cmheadBeforeTrigger, -1]';
     END IF;
   END IF;
 
@@ -27,7 +27,7 @@ BEGIN
   END IF;
 
   IF ( (NEW.cmhead_number IS NULL) OR (LENGTH(NEW.cmhead_number) = 0) ) THEN
-    RAISE EXCEPTION 'You must enter a valid Memo # for this Credit Memo.';
+    RAISE EXCEPTION 'You must enter a valid Memo # for this Credit Memo. [xtuple: _cmheadBeforeTrigger, -2]';
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
@@ -35,7 +35,7 @@ BEGIN
     FROM cmhead
     WHERE (cmhead_number=NEW.cmhead_number);
     IF (FOUND) THEN
-      RAISE EXCEPTION 'The Memo # is already in use.';
+      RAISE EXCEPTION 'The Memo # is already in use. [xtuple: _cmheadBeforeTrigger, -3]';
     END IF;
 
     IF (fetchMetricText('CMNumberGeneration') IN ('A','O')) THEN
@@ -52,12 +52,12 @@ BEGIN
     FROM custinfo
     WHERE (cust_id=NEW.cmhead_cust_id);
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'You must enter a valid Customer # for this Credit Memo.';
+      RAISE EXCEPTION 'You must enter a valid Customer # for this Credit Memo. [xtuple: _cmheadBeforeTrigger, -4]';
     END IF;
   END IF;
 
   IF ( (NEW.cmhead_misc > 0) AND (NEW.cmhead_misc_accnt_id = -1) ) THEN
-    RAISE EXCEPTION 'You may not enter a Misc. Charge without indicating the G/L Sales Account.';
+    RAISE EXCEPTION 'You may not enter a Misc. Charge without indicating the G/L Sales Account. [xtuple: _cmheadBeforeTrigger, -5]';
   END IF;
   
   IF TG_OP IN ('INSERT', 'UPDATE') THEN

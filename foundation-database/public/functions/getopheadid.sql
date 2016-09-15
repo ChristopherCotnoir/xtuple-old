@@ -15,7 +15,7 @@ BEGIN
   WHERE (UPPER(ophead_name)=UPPER(pOpHeadName));
   
   IF (_returnVal IS NULL) THEN
-      RAISE EXCEPTION 'Opportunity % not found.', pOpHeadName;
+      RAISE EXCEPTION 'Opportunity % not found. [xtuple: getOpHeadId, -1, %]', pOpHeadName, pOpHeadName;
   END IF;
 
   RETURN _returnVal;

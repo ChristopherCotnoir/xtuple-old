@@ -5,7 +5,7 @@ BEGIN
 
 -- Privilege Checks
    IF (NOT checkPrivilege('MaintainItemMasters')) THEN
-     RAISE EXCEPTION 'You do not have privileges to maintain Item Substitutes.';
+     RAISE EXCEPTION 'You do not have privileges to maintain Item Substitutes. [xtuple: _itemsubTrigger, -1]';
    END IF;
 
   RETURN NEW;

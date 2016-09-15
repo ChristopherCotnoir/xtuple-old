@@ -13,7 +13,7 @@ BEGIN
   WHERE (incdt_number=pIncidentNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Incident Number % not found.', pIncidentNumber;
+	RAISE EXCEPTION 'Incident Number % not found. [xtuple: getInctCrmAcctId, -1, %]', pIncidentNumber, pIncidentNumber;
   END IF;
 
   RETURN _returnVal;

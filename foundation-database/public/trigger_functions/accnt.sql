@@ -27,7 +27,7 @@ BEGIN
      WHERE(subaccnt_number=NEW.accnt_sub)
      LIMIT 1;
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'You must supply a valid Sub Account Number.';
+      RAISE EXCEPTION 'You must supply a valid Sub Account Number. [xtuple: _accntTrigger, -1]';
     END IF;
   END IF;
 
@@ -38,14 +38,14 @@ BEGIN
      WHERE(prftcntr_number=NEW.accnt_profit)
      LIMIT 1;
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'You must supply a valid Profit Center Number.';
+      RAISE EXCEPTION 'You must supply a valid Profit Center Number. [xtuple: _accntTrigger, -2]';
     END IF;
   END IF;
 
   IF (TG_OP = 'UPDATE') THEN
     IF ((NEW.accnt_type != OLD.accnt_type) AND
         (SELECT (count(*) > 0) FROM gltrans WHERE (gltrans_accnt_id=NEW.accnt_id))) THEN
-      RAISE EXCEPTION 'You may not change the account type of an account that has transaction history';
+      RAISE EXCEPTION 'You may not change the account type of an account that has transaction history [xtuple: _accntTrigger, -3]';
     END IF;
   END IF;
 
@@ -67,7 +67,7 @@ BEGIN
   -- to enforce that with regular constraints.  It should be applied to accnt and any table that 
   -- inherits accnt.
   IF (SELECT (count(accnt_id) > 0) FROM accnt WHERE (accnt_id = NEW.accnt_id)) THEN
-    RAISE EXCEPTION 'Can not create record on account with duplicate key %.', NEW.accnt_id;
+    RAISE EXCEPTION 'Can not create record on account with duplicate key %. [xtuple: _accntUniqueTrigger, -1, %]', NEW.accnt_id, NEW.accnt_id;
   END IF;
   
   RETURN NEW;
@@ -103,7 +103,7 @@ BEGIN
      OR   (costcat_freight_accnt_id=OLD.accnt_id) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Cost Category';
+    RAISE EXCEPTION 'Can not delete, used in Cost Category [xtuple: _accntDeleteTrigger, -1]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Sales Account Assignment
@@ -114,7 +114,7 @@ BEGIN
      OR   (salesaccnt_cos_accnt_id=OLD.accnt_id) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Sales Account Assignment';
+    RAISE EXCEPTION 'Can not delete, used in Sales Account Assignment [xtuple: _accntDeleteTrigger, -2]';
   END IF;
 
 --  Check to see if the passed accnt is used in a A/R Account Assignment
@@ -125,7 +125,7 @@ BEGIN
      OR   (araccnt_prepaid_accnt_id=OLD.accnt_id) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in A/R Account Assignment';
+    RAISE EXCEPTION 'Can not delete, used in A/R Account Assignment [xtuple: _accntDeleteTrigger, -3]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Warehouse
@@ -134,7 +134,7 @@ BEGIN
   WHERE (warehous_default_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Site';
+    RAISE EXCEPTION 'Can not delete, used in Site [xtuple: _accntDeleteTrigger, -4]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Bank Account
@@ -143,7 +143,7 @@ BEGIN
   WHERE (bankaccnt_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Bank Account';
+    RAISE EXCEPTION 'Can not delete, used in Bank Account [xtuple: _accntDeleteTrigger, -5]';
   END IF;
 
 --  Check to see if the passed accnt is used in an Expense Category
@@ -155,7 +155,7 @@ BEGIN
      OR   (expcat_freight_accnt_id=OLD.accnt_id) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Expense Category';
+    RAISE EXCEPTION 'Can not delete, used in Expense Category [xtuple: _accntDeleteTrigger, -6]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Tax Code
@@ -164,7 +164,7 @@ BEGIN
   WHERE (tax_sales_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Tax Code';
+    RAISE EXCEPTION 'Can not delete, used in Tax Code [xtuple: _accntDeleteTrigger, -7]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Standard Journal Item
@@ -173,7 +173,7 @@ BEGIN
   WHERE (stdjrnlitem_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Standard Journal Item';
+    RAISE EXCEPTION 'Can not delete, used in Standard Journal Item [xtuple: _accntDeleteTrigger, -8]';
   END IF;
 
 --  Check to see if the passed accnt is used in a A/P Account Assignment
@@ -184,7 +184,7 @@ BEGIN
      OR   (apaccnt_discount_accnt_id=OLD.accnt_id) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in A/P Account Assignment';
+    RAISE EXCEPTION 'Can not delete, used in A/P Account Assignment [xtuple: _accntDeleteTrigger, -9]';
   END IF;
 
 --  Check to see if the passed accnt is used in an A/R Open Item record
@@ -193,7 +193,7 @@ BEGIN
    WHERE (aropen_accnt_id=OLD.accnt_id)
    LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in A/R Open Item';
+    RAISE EXCEPTION 'Can not delete, used in A/R Open Item [xtuple: _accntDeleteTrigger, -10]';
   END IF;
 
 --  Check to see if the passed accnt has been used in the G/L
@@ -202,7 +202,7 @@ BEGIN
   WHERE (gltrans_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in G/L Transaction';
+    RAISE EXCEPTION 'Can not delete, used in G/L Transaction [xtuple: _accntDeleteTrigger, -11]';
   END IF;
 
   SELECT sltrans_accnt_id INTO _check
@@ -210,7 +210,7 @@ BEGIN
   WHERE (sltrans_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in G/L Journal Transaction';
+    RAISE EXCEPTION 'Can not delete, used in G/L Journal Transaction [xtuple: _accntDeleteTrigger, -12]';
   END IF;
 
   SELECT glseries_accnt_id INTO _check
@@ -218,7 +218,7 @@ BEGIN
   WHERE (glseries_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in G/L Series';
+    RAISE EXCEPTION 'Can not delete, used in G/L Series [xtuple: _accntDeleteTrigger, -13]';
   END IF;
 
   SELECT trialbal_accnt_id INTO _check
@@ -227,7 +227,7 @@ BEGIN
     AND (trialbal_beginning != 0 OR trialbal_ending != 0)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Trial Balance';
+    RAISE EXCEPTION 'Can not delete, used in Trial Balance [xtuple: _accntDeleteTrigger, -14]';
   END IF;
 
   SELECT cashrcptmisc_accnt_id INTO _check
@@ -235,15 +235,15 @@ BEGIN
   WHERE (cashrcptmisc_accnt_id=OLD.accnt_id)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Can not delete, used in Cash Receipt Misc. Application';
+    RAISE EXCEPTION 'Can not delete, used in Cash Receipt Misc. Application [xtuple: _accntDeleteTrigger, -15]';
   END IF;
 
   -- TODO: everything above here should be replaced by fkeys
   IF (OLD.accnt_id = fetchMetricValue('DefaultAPAccount')) THEN
-    RAISE EXCEPTION 'Cannot delete the default A/P Account [xtuple: accnt, -1, %]',
+    RAISE EXCEPTION 'Cannot delete the default A/P Account [xtuple: _accntDeleteTrigger, -16, %]',
                     _accntnum;
   ELSIF (OLD.accnt_id = fetchMetricValue('DefaultARAccount')) THEN
-    RAISE EXCEPTION 'Cannot delete the default A/R Account [xtuple: accnt, -2, %]',
+    RAISE EXCEPTION 'Cannot delete the default A/R Account [xtuple: _accntDeleteTrigger, -17, %]',
                     _accntnum;
   END IF;
 

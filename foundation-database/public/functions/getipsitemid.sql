@@ -22,8 +22,8 @@ BEGIN
   AND (ipsitem_price_uom_id=getUomId(pPriceUom)));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Pricing Schedule Item for Schedule %, Item %,Qt Break %,Qty UOM %, Price UOM % not found.', 
-	pIpsName, pItemNumber, pQtyBreak, pQtyUom, pPriceUom;
+	RAISE EXCEPTION 'Pricing Schedule Item for Schedule %, Item %,Qt Break %,Qty UOM %, Price UOM % not found. [xtuple: getIpsitemId, -1, %, %, %, %, %]', 
+	pIpsName, pItemNumber, pQtyBreak, pQtyUom, pPriceUom, pIpsName, pItemNumber, pQtyBreak, pQtyUom, pPriceUom;
   END IF;
 
   RETURN _returnVal;

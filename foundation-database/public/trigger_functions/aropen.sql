@@ -17,11 +17,11 @@ BEGIN
        (NOT checkPrivilege('PostMiscInvoices')) AND
        (NOT checkPrivilege('MaintainSalesOrders')) AND -- #24608 Required to post payments on SOs
        (NOT checkPrivilege('PostARDocuments')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain A/R Memos.';
+    RAISE EXCEPTION 'You do not have privileges to maintain A/R Memos. [xtuple: _aropenTrigger, -1]';
   END IF;
 
   IF ( (NEW.aropen_docnumber IS NULL) OR (LENGTH(NEW.aropen_docnumber) = 0) ) THEN
-    RAISE EXCEPTION 'You must enter a valid Document # for this A/R Memo.';
+    RAISE EXCEPTION 'You must enter a valid Document # for this A/R Memo. [xtuple: _aropenTrigger, -2]';
   END IF;
 
   IF (TG_OP IN ('INSERT', 'UPDATE') AND NEW.aropen_cust_id < 0) THEN
@@ -41,7 +41,7 @@ BEGIN
       AND   (aropen_docnumber=NEW.aropen_docnumber) )
     LIMIT 1;
     IF (FOUND) THEN
-      RAISE EXCEPTION 'This Document Type/Number already exists. You may not enter a duplicate A/R Memo.';
+      RAISE EXCEPTION 'This Document Type/Number already exists. You may not enter a duplicate A/R Memo. [xtuple: _aropenTrigger, -3]';
     END IF;
 
     --- clear the number from the issue cache if applicable
@@ -96,7 +96,7 @@ BEGIN
     IF (FOUND) THEN
       NEW.aropen_curr_rate := _currrate;
     ELSE
-      RAISE EXCEPTION 'Currency exchange rate not found';
+      RAISE EXCEPTION 'Currency exchange rate not found [xtuple: _aropenTrigger, -4]';
     END IF;
   END IF;
 

@@ -46,9 +46,9 @@ BEGIN
 
 -- Added item_number to error messages displayed to fulfill Feature Request 21645
   IF (NEW.itemsite_qtyonhand < 0 AND NEW.itemsite_costmethod = 'A') THEN
-    RAISE EXCEPTION 'Itemsite (%) is set to use average costing and is not allowed to have a negative quantity on hand.', 'ID: ' || NEW.itemsite_id || ', Item: ' || _r.item_number;
+    RAISE EXCEPTION 'Itemsite (%) is set to use average costing and is not allowed to have a negative quantity on hand. [xtuple: _itemsiteTrigger, -1, %]', 'ID: ' || NEW.itemsite_id || ', Item: ' || _r.item_number, 'ID: ' || NEW.itemsite_id || ', Item: ' || _r.item_number;
   ELSIF (NEW.itemsite_value < 0 AND NEW.itemsite_costmethod = 'A') THEN
-    RAISE EXCEPTION 'This transaction results in a negative itemsite value.  Itemsite (%) is set to use average costing and is not allowed to have a negative value.', 'ID: ' || NEW.itemsite_id || ', Item: ' || _r.item_number;  END IF;
+    RAISE EXCEPTION 'This transaction results in a negative itemsite value.  Itemsite (%) is set to use average costing and is not allowed to have a negative value. [xtuple: _itemsiteTrigger, -2, %]', 'ID: ' || NEW.itemsite_id || ', Item: ' || _r.item_number, 'ID: ' || NEW.itemsite_id || ', Item: ' || _r.item_number;  END IF;
 
 --  Handle the ChangeLog
   IF (fetchMetricBool('ItemSiteChangeLog')) THEN
@@ -193,9 +193,9 @@ BEGIN
      OR (OLD.itemsite_autoreg           != NEW.itemsite_autoreg)
      OR (OLD.itemsite_lsseq_id          != NEW.itemsite_lsseq_id) ) THEN
       IF (OLD.itemsite_item_id != NEW.itemsite_item_id) THEN
-        RAISE EXCEPTION 'The item number on an itemsite may not be changed.';
+        RAISE EXCEPTION 'The item number on an itemsite may not be changed. [xtuple: _itemsiteAfterTrigger, -1]';
       ELSIF (OLD.itemsite_warehous_id != NEW.itemsite_warehous_id) THEN
-        RAISE EXCEPTION 'The warehouse code on an itemsite may not be changed.';
+        RAISE EXCEPTION 'The warehouse code on an itemsite may not be changed. [xtuple: _itemsiteAfterTrigger, -2]';
       END IF;
       _maint := TRUE;
     END IF;
@@ -206,7 +206,7 @@ BEGIN
   IF (_maint) THEN -- Begin Maintenance
 -- Privilege Checks
     IF ( NOT checkPrivilege('MaintainItemSites') ) THEN
-       RAISE EXCEPTION 'You do not have privileges to maintain Item Sites.';
+       RAISE EXCEPTION 'You do not have privileges to maintain Item Sites. [xtuple: _itemsiteAfterTrigger, -3]';
     END IF;
 
 -- Override values to avoid invalid data combinations
@@ -252,7 +252,7 @@ BEGIN
     -- Both insert and update
     IF ( (NEW.itemsite_controlmethod IN ('S', 'L')) AND
          (NEW.itemsite_location_dist OR NEW.itemsite_recvlocation_dist OR NEW.itemsite_issuelocation_dist) ) THEN
-      RAISE EXCEPTION 'You cannot auto-distribute Lot/Serial controlled Item Sites.';
+      RAISE EXCEPTION 'You cannot auto-distribute Lot/Serial controlled Item Sites. [xtuple: _itemsiteAfterTrigger, -4]';
     END IF;
 
     IF (TG_OP = 'INSERT') THEN
@@ -268,7 +268,7 @@ BEGIN
                                   WHERE (locitem_item_id=NEW.itemsite_item_id) ) ) ) ))) THEN
           RAISE EXCEPTION 'You must first create at least one valid
 	    		  Location for this Item Site before it may be
-	   	          multiply located.';
+	   	          multiply located. [xtuple: _itemsiteAfterTrigger, -5]';
         END IF;
       END IF;
     END IF;
@@ -287,7 +287,7 @@ BEGIN
                                 WHERE (locitem_item_id=NEW.itemsite_item_id) ) ) ) ))) THEN
            RAISE EXCEPTION 'You must first create at least one valid
 			  Location for this Item Site before it may be
-		          multiply located.';
+		          multiply located. [xtuple: _itemsiteAfterTrigger, -6]';
         END IF;
       END IF;
 
@@ -325,7 +325,7 @@ BEGIN
         IF (SELECT COUNT(*) > 0
             FROM itemloc JOIN reserve ON (reserve_supply_id=itemloc_id AND reserve_supply_type='I')
             WHERE (itemloc_itemsite_id=OLD.itemsite_id)) THEN
-          RAISE EXCEPTION 'Sales Order Reservations by Location exist for this Item Site';
+          RAISE EXCEPTION 'Sales Order Reservations by Location exist for this Item Site [xtuple: _itemsiteAfterTrigger, -7]';
         END IF;
       END IF;
 
@@ -363,7 +363,7 @@ BEGIN
                                     WHERE (locitem_item_id=NEW.itemsite_item_id) ) ) ) ))) THEN
            PERFORM initialDistribution(NEW.itemsite_id, NEW.itemsite_location_id);
           ELSE
-            RAISE EXCEPTION 'A valid default location must be selected to distribute existing inventory to.';
+            RAISE EXCEPTION 'A valid default location must be selected to distribute existing inventory to. [xtuple: _itemsiteAfterTrigger, -8]';
           END IF;
         END IF;
 

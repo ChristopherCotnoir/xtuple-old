@@ -19,14 +19,14 @@ CREATE OR REPLACE FUNCTION _metasqlalterTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF (NOT (isDBA() OR checkPrivilege('MaintainMetaSQL'))) THEN
-    RAISE EXCEPTION '% does not have privileges to maintain MetaSQL statements in %.%',
-                getEffectiveXtUser(), TG_TABLE_SCHEMA, TG_TABLE_NAME;
+    RAISE EXCEPTION '% does not have privileges to maintain MetaSQL statements in %.% [xtuple: _metasqlalterTrigger, -1, %, %, %]',
+                getEffectiveXtUser(), TG_TABLE_SCHEMA, TG_TABLE_NAME, getEffectiveXtUser(), TG_TABLE_SCHEMA, TG_TABLE_NAME;
   END IF;
 
   IF ((TG_OP = 'UPDATE' OR TG_OP = 'DELETE')
       AND NEW.metasql_grade <= 0
       AND NOT isDBA()) THEN
-    RAISE EXCEPTION 'You may not alter grade 0 metasql queries except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter grade 0 metasql queries except using the xTuple Updater utility [xtuple: _metasqlalterTrigger, -2]';
   END IF;
 
   IF (TG_OP = 'DELETE') THEN

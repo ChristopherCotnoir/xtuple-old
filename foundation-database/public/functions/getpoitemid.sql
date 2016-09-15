@@ -17,7 +17,7 @@ BEGIN
   AND (poitem_linenumber=pLineNumber));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Purchase Order % not found.'', pSalesOrderNumber;
+	RAISE EXCEPTION ''Purchase Order % not found. [xtuple: getPoitemId, -1, %]'', pSalesOrderNumber, pSalesOrderNumber;
   END IF;
 
   RETURN _returnVal;

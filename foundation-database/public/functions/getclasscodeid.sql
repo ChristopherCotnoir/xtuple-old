@@ -14,7 +14,7 @@ BEGIN
   WHERE (classcode_code=pClassCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Class Code % not found.'', pClassCode;
+	RAISE EXCEPTION ''Class Code % not found. [xtuple: getClassCodeId, -1, %]'', pClassCode, pClassCode;
   END IF;
 
   RETURN _returnVal;

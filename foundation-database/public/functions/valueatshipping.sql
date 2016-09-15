@@ -16,7 +16,7 @@ DECLARE
 BEGIN
 
   IF (pordertype NOT IN ('SO', 'TO')) THEN
-    RAISE EXCEPTION '% is not a valid order type', pordertype;
+    RAISE EXCEPTION '% is not a valid order type [xtuple: valueAtShipping, -1, %]', pordertype, pordertype;
   END IF;
 
   SELECT COALESCE(SUM(shipitem_value), 0.0) INTO _value

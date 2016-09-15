@@ -18,7 +18,7 @@ BEGIN
     IF (NEW.priv_name != OLD.priv_name) THEN
       SELECT priv_id INTO _privid FROM priv WHERE priv_name=NEW.priv_name;
       IF (FOUND) THEN
-        RAISE EXCEPTION 'Cannot change privilege name % because another privilege with that name already exists.', NEW.priv_name;
+        RAISE EXCEPTION 'Cannot change privilege name % because another privilege with that name already exists. [xtuple: _pkgprivbeforetrigger, -1, %]', NEW.priv_name, NEW.priv_name;
       END IF;
     END IF;
 
@@ -28,7 +28,7 @@ BEGIN
     END IF;
     SELECT priv_id INTO _privid FROM priv WHERE priv_name=NEW.priv_name;
     IF (FOUND) THEN
-      RAISE EXCEPTION 'Cannot create new privilege % because another privilege with that name already exists.', NEW.priv_name;
+      RAISE EXCEPTION 'Cannot create new privilege % because another privilege with that name already exists. [xtuple: _pkgprivbeforetrigger, -2, %]', NEW.priv_name, NEW.priv_name;
     END IF;
 
   ELSIF (TG_OP = 'DELETE') THEN
@@ -56,13 +56,13 @@ BEGIN
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
-    RAISE EXCEPTION 'You may not create privileges in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not create privileges in packages except using the xTuple Updater utility [xtuple: _pkgprivaltertrigger, -1]';
 
   ELSIF (TG_OP = 'UPDATE') THEN
-    RAISE EXCEPTION 'You may not alter privileges in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter privileges in packages except using the xTuple Updater utility [xtuple: _pkgprivaltertrigger, -2]';
 
   ELSIF (TG_OP = 'DELETE') THEN
-    RAISE EXCEPTION 'You may not delete privileges from packages. Try deleting or disabling the package.';
+    RAISE EXCEPTION 'You may not delete privileges from packages. Try deleting or disabling the package. [xtuple: _pkgprivaltertrigger, -3]';
 
   END IF;
 

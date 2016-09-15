@@ -26,7 +26,7 @@ BEGIN
     AND ((pPosted IS NULL) OR (cmhead_posted=pPosted));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Credit Memo % not found.'', pCreditMemoNumber;
+	RAISE EXCEPTION ''Credit Memo % not found. [xtuple: getCmheadId, -1, %]'', pCreditMemoNumber, pCreditMemoNumber;
   END IF;
 
   RETURN _returnVal;

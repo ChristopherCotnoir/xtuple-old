@@ -14,7 +14,7 @@ BEGIN
   WHERE (costcat_code=pCostCat);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Cost Category Code % not found.'', pCostCat;
+	RAISE EXCEPTION ''Cost Category Code % not found. [xtuple: getCostCatId, -1, %]'', pCostCat, pCostCat;
   END IF;
 
   RETURN _returnVal;

@@ -5,7 +5,7 @@ BEGIN
 
 -- Privilege Checks
   IF (NOT checkPrivilege(''MaintainBOMs'')) THEN
-    RAISE EXCEPTION ''You do not have privileges to maintain Bills of Material.'';
+    RAISE EXCEPTION ''You do not have privileges to maintain Bills of Material. [xtuple: _bomitemsubTrigger, -1]'';
   END IF;
 
   IF (TG_OP = ''DELETE'') THEN

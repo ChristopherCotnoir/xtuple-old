@@ -5,7 +5,7 @@ BEGIN
 
 -- Privilege Checks
    IF (NOT checkPrivilege(''MaintainItemSources'')) THEN
-     RAISE EXCEPTION ''You do not have privileges to maintain Item Sources.'';
+     RAISE EXCEPTION ''You do not have privileges to maintain Item Sources. [xtuple: _itemsrcTrigger, -1]'';
    END IF;
 
 -- Set defaults
@@ -30,7 +30,7 @@ BEGIN
 
 -- Privilege Checks
   IF (NOT checkPrivilege(''MaintainItemSources'')) THEN
-    RAISE EXCEPTION ''You do not have privileges to maintain Item Sources.'';
+    RAISE EXCEPTION ''You do not have privileges to maintain Item Sources. [xtuple: _itemsrcAfterTrigger, -1]'';
   END IF;
 
 -- Set default to false for other item sources of this item

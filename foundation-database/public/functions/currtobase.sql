@@ -30,7 +30,7 @@ BEGIN
      WHERE curr_id = pId
        AND _date BETWEEN curr_effective AND curr_expires;
     IF (_output IS NULL OR NOT FOUND) THEN
-      RAISE EXCEPTION 'No exchange rate for % on %', pId, _date;
+      RAISE EXCEPTION 'No exchange rate for % on % [xtuple: currToBase, -1, %, %]', pId, _date, pId, _date;
     END IF;
   END IF;
   RETURN _output;

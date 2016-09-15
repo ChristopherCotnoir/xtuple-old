@@ -16,7 +16,7 @@ BEGIN
   LIMIT 1;
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Location % not found in Warehouse %.', pLocation, pWarehouse;
+	RAISE EXCEPTION 'Location % not found in Warehouse %. [xtuple: getLocationId, -1, %, %]', pLocation, pWarehouse, pLocation, pWarehouse;
   END IF;
 
   RETURN _returnVal;

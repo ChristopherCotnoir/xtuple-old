@@ -12,12 +12,12 @@ BEGIN
   IF (TG_OP = 'INSERT') THEN
     SELECT checkPrivilege('MaintainLocations') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to add new Locations.';
+      RAISE EXCEPTION 'You do not have privileges to add new Locations. [xtuple: _locationTrigger, -1]';
     END IF;
   ELSE
     SELECT checkPrivilege('MaintainLocations') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to alter a Location.';
+      RAISE EXCEPTION 'You do not have privileges to alter a Location. [xtuple: _locationTrigger, -2]';
     END IF;
   END IF;
 
@@ -26,12 +26,12 @@ BEGIN
        (LENGTH(COALESCE(NEW.location_aisle,''))=0) AND
        (LENGTH(COALESCE(NEW.location_rack,''))=0) AND
        (LENGTH(COALESCE(NEW.location_bin,''))=0) ) THEN
-    RAISE EXCEPTION 'You must supply a valid Location Identifier.';
+    RAISE EXCEPTION 'You must supply a valid Location Identifier. [xtuple: _locationTrigger, -3]';
   END IF;
   
   -- Site is required
   IF (NEW.location_warehous_id IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a valid Site.';
+    RAISE EXCEPTION 'You must supply a valid Site. [xtuple: _locationTrigger, -4]';
   END IF;
 
   -- Location Identifier must be unique
@@ -44,7 +44,7 @@ BEGIN
     AND   (location_warehous_id=NEW.location_warehous_id)
     AND   (location_id<>NEW.location_id) );
   IF (FOUND) THEN
-    RAISE EXCEPTION 'You must supply a unique Location Identifier for this Site.';
+    RAISE EXCEPTION 'You must supply a unique Location Identifier for this Site. [xtuple: _locationTrigger, -5]';
   END IF;
 
   -- Populate formatted name

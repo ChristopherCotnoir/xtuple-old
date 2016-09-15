@@ -30,7 +30,7 @@ BEGIN
 
     _pk := primaryKeyFields(pSchema, pTable);
     IF (ARRAY_UPPER(_pk, 1) > 1) THEN
-       RAISE EXCEPTION 'Cannot change pseudo-foreign key references in %.% because it has a composite primary key. Try setting the purge option. [xtuple: changepseudofkeypointers, -1, %.%',
+       RAISE EXCEPTION 'Cannot change pseudo-foreign key references in %.% because it has a composite primary key. Try setting the purge option. [xtuple: changepseudofkeypointers, -1, %, %]',
                         pSchema, pTable, pSchema, pTable;
     END IF;
 

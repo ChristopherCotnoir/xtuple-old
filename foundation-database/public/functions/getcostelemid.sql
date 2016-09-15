@@ -14,7 +14,7 @@ BEGIN
   WHERE (costelem_type=pCostElemType);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Cost Element % not found.'', pCostElemType;
+	RAISE EXCEPTION ''Cost Element % not found. [xtuple: getCostElemId, -1, %]'', pCostElemType, pCostElemType;
   END IF;
 
   RETURN _returnVal;

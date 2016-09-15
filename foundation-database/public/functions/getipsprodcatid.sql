@@ -18,8 +18,8 @@ BEGIN
   AND (ipsitem_qtybreak=pQtyBreak));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Pricing Schedule Product Category for Schedule %, Product Category %,Qt Break % not found.', 
-	pIpsName, pProdCat, pQtyBreak;
+	RAISE EXCEPTION 'Pricing Schedule Product Category for Schedule %, Product Category %,Qt Break % not found. [xtuple: getIpsProdcatId, -1, %, %, %]', 
+	pIpsName, pProdCat, pQtyBreak, pIpsName, pProdCat, pQtyBreak;
   END IF;
 
   RETURN _returnVal;

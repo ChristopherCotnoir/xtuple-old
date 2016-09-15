@@ -14,7 +14,7 @@ BEGIN
   WHERE (terms_code=pTermsCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Terms Code % not found.'', pTermsCode;
+	RAISE EXCEPTION ''Terms Code % not found. [xtuple: getTermsId, -1, %]'', pTermsCode, pTermsCode;
   END IF;
 
   RETURN _returnVal;

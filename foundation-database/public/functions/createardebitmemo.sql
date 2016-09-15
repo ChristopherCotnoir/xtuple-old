@@ -141,7 +141,7 @@ BEGIN
   IF (_test < 0) THEN
     DELETE FROM aropen WHERE (aropen_id=_aropenid);
     PERFORM deleteGLSeries(_glSequence);
-    RAISE EXCEPTION 'postGLSeries commit failed with %', _test;
+    RAISE EXCEPTION 'postGLSeries commit failed with % [xtuple: createARDebitMemo, -1, %]', _test, _test;
   END IF;
 
   --  Record Sales History

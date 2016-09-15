@@ -59,7 +59,7 @@ BEGIN
   AND (coitem_subnumber=pSubNumber));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Sales Line Item %-%not found.', pSalesOrderNumber,pLineNumber;
+	RAISE EXCEPTION 'Sales Line Item %-%not found. [xtuple: getSalesLineItemId, -1, %, %]', pSalesOrderNumber,pLineNumber,pSalesOrderNumber,pLineNumber;
   END IF;
 
   RETURN _returnVal;

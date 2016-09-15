@@ -36,13 +36,13 @@ BEGIN
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
-    RAISE EXCEPTION 'You may not create scripts in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not create scripts in packages except using the xTuple Updater utility [xtuple: _pkgscriptalterTrigger, -1]';
 
   ELSIF (TG_OP = 'UPDATE') THEN
-    RAISE EXCEPTION 'You may not alter scripts in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter scripts in packages except using the xTuple Updater utility [xtuple: _pkgscriptalterTrigger, -2]';
 
   ELSIF (TG_OP = 'DELETE') THEN
-    RAISE EXCEPTION 'You may not delete scripts from packages. Try deleting or disabling the package.';
+    RAISE EXCEPTION 'You may not delete scripts from packages. Try deleting or disabling the package. [xtuple: _pkgscriptalterTrigger, -3]';
 
   END IF;
 

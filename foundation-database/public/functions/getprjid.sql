@@ -13,7 +13,7 @@ BEGIN
   WHERE (prj_number=pPrjNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Project Number % not found.', pPrjNumber;
+	RAISE EXCEPTION 'Project Number % not found. [xtuple: getPrjId, -1, %]', pPrjNumber, pPrjNumber;
   END IF;
 
   RETURN _returnVal;

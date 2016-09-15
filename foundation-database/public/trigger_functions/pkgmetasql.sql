@@ -10,8 +10,8 @@ DECLARE
 BEGIN
 
   IF (NOT (isDba() OR checkPrivilege('MaintainMetaSQL'))) THEN
-    RAISE EXCEPTION '% does not have privileges to maintain MetaSQL statements in %.% (DBA=%)',
-                getEffectiveXtUser(), TG_TABLE_SCHEMA, TG_TABLE_NAME, isDba();
+    RAISE EXCEPTION '% does not have privileges to maintain MetaSQL statements in %.% (DBA=%) [xtuple: _pkgmetasqlbeforetrigger, -1, %, %, %, %]',
+                getEffectiveXtUser(), TG_TABLE_SCHEMA, TG_TABLE_NAME, isDba(), getEffectiveXtUser(), TG_TABLE_SCHEMA, TG_TABLE_NAME, isDba();
   END IF;
 
   IF (TG_OP = 'UPDATE') THEN
@@ -24,7 +24,7 @@ BEGIN
       FROM metasql
       WHERE metasql_name=NEW.metasql_name AND metasql_group=NEW.metasql_group AND metasql_grade=NEW.metasql_grade;
       IF (FOUND) THEN
-        RAISE EXCEPTION 'Cannot change the MetaSQL statement named %-%-% because another MetaSQL statement with that group, name and grade already exists.', NEW.metasql_group, NEW.metasql_name, NEW.metasql_grade;
+        RAISE EXCEPTION 'Cannot change the MetaSQL statement named %-%-% because another MetaSQL statement with that group, name and grade already exists. [xtuple: _pkgmetasqlbeforetrigger, -2, %, %, %]', NEW.metasql_group, NEW.metasql_name, NEW.metasql_grade, NEW.metasql_group, NEW.metasql_name, NEW.metasql_grade;
       END IF;
     END IF;
 
@@ -35,8 +35,8 @@ BEGIN
     FROM metasql
     WHERE metasql_name=NEW.metasql_name AND metasql_group=NEW.metasql_group AND metasql_grade=NEW.metasql_grade;
     IF (FOUND) THEN
-      RAISE EXCEPTION 'The new MetaSQL statement %-% % conflicts with an existing statement.',
-                      NEW.metasql_group, NEW.metasql_name, NEW.metasql_grade;
+      RAISE EXCEPTION 'The new MetaSQL statement %-% % conflicts with an existing statement. [xtuple: _pkgmetasqlbeforetrigger, -3, %, %, %]',
+                      NEW.metasql_group, NEW.metasql_name, NEW.metasql_grade, NEW.metasql_group, NEW.metasql_name, NEW.metasql_grade;
     END IF;
 
   ELSIF (TG_OP = 'DELETE') THEN
@@ -62,17 +62,17 @@ BEGIN
   -- cannot combine IF's because plpgsql does not always evaluate left-to-right
   IF (TG_OP = 'INSERT') THEN
     IF (NEW.metasql_grade <= 0 AND NOT isDba()) THEN
-      RAISE EXCEPTION 'You may not create grade 0 MetaSQL statements in packages except using the xTuple Updater utility';
+      RAISE EXCEPTION 'You may not create grade 0 MetaSQL statements in packages except using the xTuple Updater utility [xtuple: _pkgmetasqlalterTrigger, -1]';
     END IF;
 
   ELSIF (TG_OP = 'UPDATE') THEN
     IF (NEW.metasql_grade <= 0 AND NOT isDba()) THEN
-      RAISE EXCEPTION 'You may not alter grade 0 MetaSQL statements in packages except using the xTuple Updater utility';
+      RAISE EXCEPTION 'You may not alter grade 0 MetaSQL statements in packages except using the xTuple Updater utility [xtuple: _pkgmetasqlaltertrigger, -2]';
     END IF;
 
   ELSIF (TG_OP = 'DELETE') THEN
     IF (OLD.metasql_grade <= 0 AND NOT isDba()) THEN
-      RAISE EXCEPTION 'You may not delete grade 0 MetaSQL statements from packages. Try deleting or disabling the package.';
+      RAISE EXCEPTION 'You may not delete grade 0 MetaSQL statements from packages. Try deleting or disabling the package. [xtuple: _pkgmetasqlaltertrigger, -3]';
     ELSE
       RETURN OLD;
     END IF;

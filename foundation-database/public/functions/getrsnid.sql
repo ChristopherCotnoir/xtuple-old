@@ -14,7 +14,7 @@ BEGIN
   WHERE (rsncode_code=pRsnCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Reason Code % not found.'', pRsnCode;
+	RAISE EXCEPTION ''Reason Code % not found. [xtuple: getRsnId, -1, %]'', pRsnCode, pRsnCode;
   END IF;
 
   RETURN _returnVal;

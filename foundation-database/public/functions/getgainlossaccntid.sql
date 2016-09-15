@@ -20,7 +20,7 @@ BEGIN
   END IF;
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Currency Gain/Loss Account not found for %', formatGlAccountLong(pAccntId);
+    RAISE EXCEPTION 'Currency Gain/Loss Account not found for % [xtuple: getGainLossAccntId, -1, %]', formatGlAccountLong(pAccntId), formatGlAccountLong(pAccntId);
   END IF;
 
   RETURN _returnVal;

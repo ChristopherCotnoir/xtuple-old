@@ -14,7 +14,7 @@ BEGIN
 
   -- Privilege Checks
   IF (NOT checkPrivilege('MaintainBOMs')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Bills of Material.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Bills of Material. [xtuple: _bomitemBeforeTrigger, -1]';
   END IF;
 
   -- Cache Parent Item
@@ -25,7 +25,7 @@ BEGIN
   IF (TG_OP = 'INSERT') THEN
     --  Make sure that the parent and component are not the same
     IF (NEW.bomitem_parent_item_id = NEW.bomitem_item_id) THEN
-      RAISE EXCEPTION 'BOM Item Parent and Component Item cannot be the same. [xtuple: createBOMItem, -1]';
+      RAISE EXCEPTION 'BOM Item Parent and Component Item cannot be the same. [xtuple: _bomitemBeforeTrigger, -2]';
     END IF;
 
     --  Make sure that the parent is not used in the component at some level
@@ -37,7 +37,7 @@ BEGIN
     LIMIT 1;
     IF (FOUND) THEN
       PERFORM deleteBOMWorkset(_bomworksetid);
-      RAISE EXCEPTION 'BOM Item Parent is used by Component, BOM is recursive. [xtuple: createBOMItem, -2]';
+      RAISE EXCEPTION 'BOM Item Parent is used by Component, BOM is recursive. [xtuple: _bomitemBeforeTrigger, -3]';
     END IF;
 
     PERFORM deleteBOMWorkset(_bomworksetid);
@@ -72,16 +72,16 @@ BEGIN
   IF (TG_OP = 'UPDATE') THEN
     -- Disallow changes that would compromise revision control integrity
     IF (NEW.bomitem_parent_item_id != OLD.bomitem_parent_item_id) THEN
-      RAISE EXCEPTION 'Parent Item ID may not be changed.';
+      RAISE EXCEPTION 'Parent Item ID may not be changed. [xtuple: _bomitemBeforeTrigger, -4]';
     END IF;
 
     IF (NEW.bomitem_item_id != OLD.bomitem_item_id) THEN
-      RAISE EXCEPTION 'Item ID may not be changed.';
+      RAISE EXCEPTION 'Item ID may not be changed. [xtuple: _bomitemBeforeTrigger, -5]';
     END IF;
 
     IF ((fetchMetricBool('RevControl')) AND (OLD.bomitem_rev_id > -1)) THEN
       IF (SELECT (rev_status = 'I') FROM rev WHERE (rev_id=OLD.bomitem_rev_id)) THEN
-        RAISE EXCEPTION 'Bill of material is Inactive and may not be modified';
+        RAISE EXCEPTION 'Bill of material is Inactive and may not be modified [xtuple: _bomitemBeforeTrigger, -5]';
       END IF;
     END IF;
   END IF; -- end Update specific
@@ -113,13 +113,13 @@ BEGIN
                  AND (uomtype_id=itemuom_uomtype_id) 
                  AND (uomtype_name='MaterialIssue'))) AS data
         WHERE (uom_id=NEW.bomitem_uom_id)) THEN
-    RAISE EXCEPTION 'Unit of Measure Invalid for Material Issue.';
+    RAISE EXCEPTION 'Unit of Measure Invalid for Material Issue. [xtuple: _bomitemBeforeTrigger, -6]';
   END IF;
 
 -- Disallow configuration parameters if parent is not a job item
    IF (NEW.bomitem_char_id IS NOT NULL) THEN
      IF (NOT _parentItem.item_config) THEN
-       RAISE EXCEPTION 'Configuration characteristics may only be defined for Configured Items';
+       RAISE EXCEPTION 'Configuration characteristics may only be defined for Configured Items [xtuple: _bomitemBeforeTrigger, -7]';
      END IF;
    END IF;
 
@@ -130,7 +130,7 @@ BEGIN
          WHERE ((item_id=NEW.bomitem_item_id)
            AND (item_sold)
            AND (item_type != 'K'))) THEN
-       RAISE EXCEPTION 'Bill of Material Items for kits must be sold and not kits themselves';
+       RAISE EXCEPTION 'Bill of Material Items for kits must be sold and not kits themselves [xtuple: _bomitemBeforeTrigger, -8]';
      END IF;
    END IF;
 

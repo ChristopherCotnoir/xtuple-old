@@ -32,10 +32,10 @@ BEGIN
       FROM prospect
       WHERE (UPPER(prospect_number)=UPPER(pCustNumber));
       IF (_returnVal IS NULL) THEN
-        RAISE EXCEPTION 'Neither Customer nor Prospect Number % found.', pCustNumber;
+        RAISE EXCEPTION 'Neither Customer nor Prospect Number % found. [xtuple: getCustId, -1, %]', pCustNumber, pCustNumber;
       END IF;
     ELSE
-      RAISE EXCEPTION 'Customer Number % not found.', pCustNumber;
+      RAISE EXCEPTION 'Customer Number % not found. [xtuple: getCustId, -1, %]', pCustNumber, pCustNumber;
     END IF;
   END IF;
 

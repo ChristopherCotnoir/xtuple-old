@@ -11,12 +11,12 @@ BEGIN
   IF (TG_OP = 'INSERT') THEN
     SELECT checkPrivilege('MaintainCashReceipts') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to add a new Cash Receipt Application.';
+      RAISE EXCEPTION 'You do not have privileges to add a new Cash Receipt Application. [xtuple: _cashrcptitemtrigger, -1]';
     END IF;
   ELSE
     SELECT checkPrivilege('MaintainCashReceipts') INTO _check;
     IF NOT (_check) THEN
-      RAISE EXCEPTION 'You do not have privileges to alter a Cash Receipt Application.';
+      RAISE EXCEPTION 'You do not have privileges to alter a Cash Receipt Application. [xtuple: _cashrcptitemtrigger, -2]';
     END IF;
   END IF;
 
@@ -34,7 +34,7 @@ BEGIN
   WHERE ( (aropen_id=NEW.cashrcptitem_aropen_id)
     AND   (cashrcpt_id=NEW.cashrcptitem_cashrcpt_id) );
   IF (NEW.cashrcptitem_amount > _openAmount) THEN
-    RAISE EXCEPTION 'You may not apply more than the balance of this item.';
+    RAISE EXCEPTION 'You may not apply more than the balance of this item. [xtuple: _cashrcptitemtrigger, -3]';
   END IF;
 
 -- Add Customer number to the Cash Receipt Item  

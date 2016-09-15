@@ -14,7 +14,7 @@ BEGIN
   WHERE (custtype_code=pCustTypeCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Customer Type % not found.'', pCustTypeCode;
+	RAISE EXCEPTION ''Customer Type % not found. [xtuple: getCustTypeId, -1, %]'', pCustTypeCode, pCustTypeCode;
   END IF;
 
   RETURN _returnVal;

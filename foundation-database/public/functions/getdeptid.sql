@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(dept_number)=UPPER(pDeptNumber));
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION ''Department % not found.'', pDeptNumber;
+    RAISE EXCEPTION ''Department % not found. [xtuple: getDeptId, -1, %]'', pDeptNumber, pDeptNumber;
   END IF;
 
   RETURN _returnVal;

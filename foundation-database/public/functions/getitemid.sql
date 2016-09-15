@@ -14,7 +14,7 @@ BEGIN
   WHERE (item_number=UPPER(pItemNumber));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Item % not found.'', pItemNumber;
+	RAISE EXCEPTION ''Item % not found. [xtuple: getItemId, -1, %]'', pItemNumber, pItemNumber;
   END IF;
 
   RETURN _returnVal;

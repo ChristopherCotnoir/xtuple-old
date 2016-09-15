@@ -14,7 +14,7 @@ BEGIN
   WHERE (shipchrg_name=pShipChrgName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Ship Charge % not found.'', pShipChrgName;
+	RAISE EXCEPTION ''Ship Charge % not found. [xtuple: getShipChrgId, -1, %]'', pShipChrgName, pShipChrgName;
   END IF;
 
   RETURN _returnVal;

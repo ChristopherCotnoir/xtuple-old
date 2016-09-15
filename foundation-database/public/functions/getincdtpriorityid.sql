@@ -13,7 +13,7 @@ BEGIN
   WHERE (incdtpriority_name=pIncdtPriorityName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Incident Priority Name % not found.', pIncdtPriorityName;
+	RAISE EXCEPTION 'Incident Priority Name % not found. [xtuple: getIncdtPriorityId, -1, %]', pIncdtPriorityName, pIncdtPriorityName;
   END IF;
 
   RETURN _returnVal;

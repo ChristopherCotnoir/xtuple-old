@@ -26,17 +26,17 @@ BEGIN
 
   -- Description is required
   IF (LENGTH(COALESCE(NEW.incdt_summary,''))=0) THEN
-    RAISE EXCEPTION 'You must supply a valid Incident Description.';
+    RAISE EXCEPTION 'You must supply a valid Incident Description. [xtuple: _incdtBeforeTrigger, -1]';
   END IF;
 
   -- CRM Account is required
   IF (NEW.incdt_crmacct_id IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a valid CRM Account.';
+    RAISE EXCEPTION 'You must supply a valid CRM Account. [xtuple: _incdtBeforeTrigger, -2]';
   END IF;
 
   -- Contact is required
   IF (NEW.incdt_cntct_id IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a valid Contact.';
+    RAISE EXCEPTION 'You must supply a valid Contact. [xtuple: _incdtBeforeTrigger, -3]';
   END IF;
 
   NEW.incdt_updated := now();

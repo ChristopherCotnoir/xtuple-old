@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION _charoptTrigger () RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF (NOT checkPrivilege('MaintainCharacteristics')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Characteristic options.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Characteristic options. [xtuple: _charoptTrigger, -1]';
   END IF;
 
   IF (TG_OP = 'UPDATE') THEN
@@ -18,7 +18,7 @@ BEGIN
         FROM charass
         WHERE ((charass_char_id=OLD.charopt_char_id)
          AND (charass_value=OLD.charopt_value))) THEN
-       RAISE EXCEPTION 'This characteristic option value is in use and can not be deleted.';
+       RAISE EXCEPTION 'This characteristic option value is in use and can not be deleted. [xtuple: _charoptTrigger, -2]';
     END IF;
   END IF;
   

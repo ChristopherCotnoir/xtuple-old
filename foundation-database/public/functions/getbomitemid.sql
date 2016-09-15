@@ -17,7 +17,7 @@ BEGIN
   WHERE (bomitem_seqnumber=pSeqNumber);
     
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION ''Sequence % on Bill of Material % Revision % not found.'', pSeqNumber, pItemNumber, pRevision;
+    RAISE EXCEPTION ''Sequence % on Bill of Material % Revision % not found. [xtuple: getBomitemId, -1, %, %, %]'', pSeqNumber, pItemNumber, pRevision, pSeqNumber, pItemNumber, pRevision;
   END IF;
 
   RETURN _returnVal;

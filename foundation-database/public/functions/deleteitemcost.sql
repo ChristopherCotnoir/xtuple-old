@@ -14,7 +14,7 @@ BEGIN
   WHERE ( (itemcost_item_id = pItemId) AND (itemcost_costelem_id = pCostElemId) );
 
   IF (NOT FOUND) THEN
-	RAISE EXCEPTION 'itemcost % not found for. ', pItemId || ' & ' || pCostElemId;
+	RAISE EXCEPTION 'itemcost % not found for. [xtuple: deleteItemCost, -1, %]', pItemId || ' & ' || pCostElemId, pItemId || ' & ' || pCostElemId;
   END IF;
 
   SELECT itemcost_stdcost INTO _std_cost

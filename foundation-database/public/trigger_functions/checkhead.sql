@@ -17,7 +17,7 @@ BEGIN
     IF (FOUND) THEN
       NEW.checkhead_curr_rate := _currrate;
     ELSE
-      RAISE EXCEPTION 'Currency exchange rate not found';
+      RAISE EXCEPTION 'Currency exchange rate not found [xtuple: _checkheadBeforeTrigger, -1]';
     END IF;
   END IF;
 
@@ -26,9 +26,11 @@ BEGIN
 		    FROM checkrecip
 		    WHERE ((checkrecip_type=NEW.checkhead_recip_type)
 		      AND  (checkrecip_id=NEW.checkhead_recip_id)) )) THEN
-      RAISE EXCEPTION 'Cannot verify recipient for check % (type %  id %)',
+      RAISE EXCEPTION 'Cannot verify recipient for check % (type %  id %) [xtuple: _checkheadBeforeTrigger, -2, %, %, %]',
 		      NEW.checkhead_number, NEW.checkhead_recip_type,
-		      NEW.checkhead_recip_id;
+		      NEW.checkhead_recip_id,
+                      NEW.checkhead_number, NEW.checkhead_recip_type,
+                      NEW.checkhead_recip_id;
     END IF;
 
     IF (NEW.checkhead_journalnumber IS NOT NULL
@@ -36,8 +38,8 @@ BEGIN
 			FROM jrnluse
 			WHERE (jrnluse_number=NEW.checkhead_journalnumber))
 	) THEN
-      RAISE EXCEPTION 'Journal Number % does not exist and cannot be used for check %.',
-		      NEW.checkhead_journalnumber, NEW.checkhead_number;
+      RAISE EXCEPTION 'Journal Number % does not exist and cannot be used for check %. [xtuple: _checkheadBeforeTrigger, -3, %, %]',
+		      NEW.checkhead_journalnumber, NEW.checkhead_number, NEW.checkhead_journalnumber, NEW.checkhead_number;
     END IF;
   END IF;
 

@@ -15,7 +15,7 @@ BEGIN
   WHERE (formatglaccount(accnt_id)=pGlAccnt);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Account Number % not found.', pGlAccnt;
+	RAISE EXCEPTION 'Account Number % not found. [xtuple: getGlAccntId, -1, %]', pGlAccnt, pGlAccnt;
   END IF;
 
   RETURN _returnVal;
@@ -61,7 +61,7 @@ BEGIN
   WHERE (formatglaccount(accnt_id)=_account);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Account Number % not found.', _account;
+	RAISE EXCEPTION 'Account Number % not found. [xtuple: getglaccntid, -1, %]', _account, _account;
   END IF;
 
   RETURN _returnVal;

@@ -13,7 +13,7 @@ BEGIN
   WHERE (saletype_code=UPPER(pSaleType));
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Sale Type % not found.', pSaleType;
+    RAISE EXCEPTION 'Sale Type % not found. [xtuple: getSaleTypeId, -1, %]', pSaleType, pSaleType;
   END IF;
 
   RETURN _returnVal;

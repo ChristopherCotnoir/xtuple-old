@@ -12,7 +12,7 @@ BEGIN
   IF (TG_OP = 'DELETE') THEN
     IF (OLD.vohead_posted) THEN
       -- Cannot delete a posted voucher
-      RAISE EXCEPTION 'Cannot delete a posted voucher';
+      RAISE EXCEPTION 'Cannot delete a posted voucher [xtuple: _voheadBeforeTrigger, -1]';
     END IF;
 
     /* TODO: is setting recv_invoiced and poreject_invoiced to FALSE correct?

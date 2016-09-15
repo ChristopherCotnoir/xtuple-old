@@ -14,7 +14,7 @@ BEGIN
   WHERE (taxtype_name=pTaxType);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Tax Type % not found.'', pTaxType;
+	RAISE EXCEPTION ''Tax Type % not found. [xtuple: getTaxTypeId, -1, %]'', pTaxType, pTaxType;
   END IF;
 
   RETURN _returnVal;

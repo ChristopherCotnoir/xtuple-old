@@ -15,7 +15,7 @@ BEGIN
   AND (itemsrc_vend_id=getVendId(pVendNumber)));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Item Source Item % Vendor % not found.', pItemNumber,pVendNumber;
+	RAISE EXCEPTION 'Item Source Item % Vendor % not found. [xtuple: getItemSrcId, -2, %, %]', pItemNumber,pVendNumber,pItemNumber,pVendNumber;
   END IF;
 
   RETURN _returnVal;
@@ -44,8 +44,8 @@ BEGIN
   AND (itemsrc_expires=pExpires));
 
   IF (_returnVal IS NULL) THEN
-        RAISE EXCEPTION 'Item Source Item % Vendor % Effective % Expires % not found. [xtuple: getItemSrcId, -1]',
-          pItemNumber,pVendNumber,pEffective,pExpires;
+        RAISE EXCEPTION 'Item Source Item % Vendor % Effective % Expires % not found. [xtuple: getItemSrcId, -1, %, %, %, %]',
+          pItemNumber,pVendNumber,pEffective,pExpires,pItemNumber,pVendNumber,pEffective,pExpires;
   END IF;
 
   RETURN _returnVal;
@@ -72,8 +72,8 @@ BEGIN
   AND (itemsrc_vend_item_number=pVendItemNumber));
 
   IF (_returnVal IS NULL) THEN
-        RAISE EXCEPTION 'Item Source Item % Vendor % Vend Item % not found. [xtuple: getItemSrcId, -1]',
-          pItemNumber,pVendNumber,pVendItemNumber;
+        RAISE EXCEPTION 'Item Source Item % Vendor % Vend Item % not found. [xtuple: getItemSrcId, -1, %, %, %]',
+          pItemNumber,pVendNumber,pVendItemNumber,pItemNumber,pVendNumber,pVendItemNumber;
   END IF;
 
   RETURN _returnVal;
@@ -112,8 +112,8 @@ BEGIN
   AND (itemsrc_expires=pExpires));
 
   IF (_returnVal IS NULL) THEN
-        RAISE EXCEPTION 'Item Source Item % Vendor % Vend Item % Effective % Expires % not found. [xtuple: getItemSrcId, -1]',
-          pItemNumber,pVendNumber,pVendItemNumber,pEffective,pExpires;
+        RAISE EXCEPTION 'Item Source Item % Vendor % Vend Item % Effective % Expires % not found. [xtuple: getItemSrcId, -1, %, %, %, %, %]',
+          pItemNumber,pVendNumber,pVendItemNumber,pEffective,pExpires,pItemNumber,pVendNumber,pItemNumber,pEffective,pExpires;
   END IF;
 
   RETURN _returnVal;

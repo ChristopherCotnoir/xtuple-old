@@ -14,7 +14,7 @@ BEGIN
   WHERE (taxzone_code=pTaxZone);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Tax Zone % not found.'', pTaxZone;
+	RAISE EXCEPTION ''Tax Zone % not found. [xtuple: getTaxZoneId, -1, %]'', pTaxZone, pTaxZone;
   END IF;
 
   RETURN _returnVal;

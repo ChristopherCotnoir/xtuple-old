@@ -3,11 +3,11 @@ CREATE OR REPLACE FUNCTION _taxauthBeforeTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF (NOT checkPrivilege('MaintainTaxAuthorities')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Tax Authorities.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Tax Authorities. [xtuple: _taxauthBeforeTrigger, -1]';
   END IF;
 
   IF (NEW.taxauth_code IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a Tax Authority Code.';
+    RAISE EXCEPTION 'You must supply a Tax Authority Code. [xtuple: _taxauthBeforeTrigger, -2]';
   END IF;
 
   IF (TG_OP = 'INSERT' AND
@@ -124,7 +124,7 @@ CREATE OR REPLACE FUNCTION _taxauthBeforeDeleteTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF (NOT checkPrivilege('MaintainTaxAuthorities')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Tax Authorities.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Tax Authorities. [xtuple: _taxauthBeforeDeleteTrigger, -1]';
   END IF;
 
   UPDATE crmacct SET crmacct_taxauth_id = NULL

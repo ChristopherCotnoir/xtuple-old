@@ -5,16 +5,16 @@ BEGIN
 
 -- Privilege Checks
    IF (NEW.charass_target_type = 'I' AND NOT checkPrivilege('MaintainItemMasters')) THEN
-     RAISE EXCEPTION 'You do not have privileges to maintain Items.';
+     RAISE EXCEPTION 'You do not have privileges to maintain Items. [xtuple: _charassTrigger, -1]';
    END IF;
 
    IF (NEW.charass_target_type = 'C' AND NOT checkPrivilege('MaintainCustomerMasters')) THEN
-     RAISE EXCEPTION 'You do not have privileges to maintain Customers.';
+     RAISE EXCEPTION 'You do not have privileges to maintain Customers. [xtuple: _charassTrigger, -2]';
    END IF;
 
 -- Data check
   IF (NEW.charass_char_id IS NULL) THEN
-	RAISE EXCEPTION 'You must supply a valid Characteristic ID.';
+	RAISE EXCEPTION 'You must supply a valid Characteristic ID. [xtuple: _charassTrigger, -3]';
   END IF;
 
 -- Default Logic
@@ -109,7 +109,7 @@ BEGIN
                             AND (charass_target_id=NEW.charass_target_id)
                             AND (charass_target_type=NEW.charass_target_type))) AND
                             (SELECT char_unique FROM char where char_id=NEW.charass_char_id) THEN
-      RAISE EXCEPTION 'This characteristic has been defined as unique.  You cannot use this characteristic more than once in this context. [xtuple: charassUniqueTrigger, -1]';
+      RAISE EXCEPTION 'This characteristic has been defined as unique.  You cannot use this characteristic more than once in this context. [xtuple: _charassuniquetrigger, -1]';
     END IF;
   END IF;  
   RETURN NEW;

@@ -13,7 +13,7 @@ BEGIN
   WHERE (shipzone_name=pShipZoneName);
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Ship Zone % not found.', pShipZoneName;
+    RAISE EXCEPTION 'Ship Zone % not found. [xtuple: getShipZoneId, -1, %]', pShipZoneName, pShipZoneName;
   END IF;
 
   RETURN _returnVal;

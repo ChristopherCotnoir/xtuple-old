@@ -4,16 +4,16 @@ CREATE OR REPLACE FUNCTION _salesrepBeforeTrigger () RETURNS TRIGGER AS $$
 BEGIN
 
   IF NOT (checkPrivilege('MaintainSalesReps')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Sales Reps.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Sales Reps. [xtuple: _salesrepBeforeTrigger, -1]';
   END IF;
 
   IF (TG_OP IN ('INSERT', 'UPDATE')) THEN
     IF (NEW.salesrep_number IS NULL) THEN
-      RAISE EXCEPTION 'You must supply a valid Sales Rep Number.';
+      RAISE EXCEPTION 'You must supply a valid Sales Rep Number. [xtuple: _salesrepBeforeTrigger, -2]';
     END IF;
 
     IF (NEW.salesrep_commission IS NULL) THEN
-      RAISE EXCEPTION 'You must supply a Commission Rate for this Sales Rep.';
+      RAISE EXCEPTION 'You must supply a Commission Rate for this Sales Rep. [xtuple: _salesrepBeforeTrigger, -3]';
     END IF;
 
     IF (TG_OP = 'INSERT' AND fetchMetricText('CRMAccountNumberGeneration') IN ('A','O') AND isNumeric(NEW.salesrep_number)) THEN

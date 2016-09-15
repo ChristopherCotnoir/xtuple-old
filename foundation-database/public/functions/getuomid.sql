@@ -14,7 +14,7 @@ BEGIN
   WHERE (uom_name=pUom);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Unit of Measure % not found.'', pUom;
+	RAISE EXCEPTION ''Unit of Measure % not found. [xtuple: getUomId, -1, %]'', pUom, pUom;
   END IF;
 
   RETURN _returnVal;

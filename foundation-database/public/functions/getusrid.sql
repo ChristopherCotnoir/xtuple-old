@@ -9,7 +9,7 @@ BEGIN
   WHERE (usr_username=COALESCE(pUsr, getEffectiveXtUser()));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'User % not found.', pUsr;
+	RAISE EXCEPTION 'User % not found. [xtuple: getUsrId, -1, %]', pUsr, pUsr;
   END IF;
 
   RETURN _returnVal;

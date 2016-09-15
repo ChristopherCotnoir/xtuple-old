@@ -50,7 +50,7 @@ BEGIN
        _sense = -1;
      END IF;  
    ELSE
-     RAISE EXCEPTION 'Invalid memo type %', pDocSource;
+     RAISE EXCEPTION 'Invalid memo type %, [xtuple: updatememotax, -1, %]', pDocSource, pDocSource;
    END IF;
 
    EXECUTE format(_delSql, _table, pMemoid);   

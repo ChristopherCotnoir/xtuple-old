@@ -45,7 +45,9 @@ BEGIN
                  END;
 
     IF (_interval IS NULL OR COALESCE(_r.recur_freq, 0) <= 0) THEN
-      RAISE EXCEPTION 'Unknown recurrence frequency % % ON % %',
+      RAISE EXCEPTION 'Unknown recurrence frequency % % ON % % [xtuple: createRecurringItems, -9, %, %, %, %]',
+                      _r.recur_freq,        _r.recur_period,
+                      _r.recur_parent_type, _r.recur_parent_id
                       _r.recur_freq,        _r.recur_period,
                       _r.recur_parent_type, _r.recur_parent_id;
     END IF;

@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(emp_code)=UPPER(pEmpCode));
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION ''Employee % not found.'', pEmpCode;
+    RAISE EXCEPTION ''Employee % not found. [xtuple: getEmpId, -1, %]'', pEmpCode, pEmpCode;
   END IF;
 
   RETURN _returnVal;

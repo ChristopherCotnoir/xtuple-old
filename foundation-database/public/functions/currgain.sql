@@ -34,8 +34,8 @@ BEGIN
 
   _gain := currToBase(pId, pValue, _start) - currToBase(pId, pValue, _end);
   IF (_gain IS NULL) THEN
-    RAISE EXCEPTION 'Missing exchange rate for curr_id % on % or %',
-                    pId, _start, _end;
+    RAISE EXCEPTION 'Missing exchange rate for curr_id % on % or % [xtuple: currGain, -1, %, %, %]',
+                    pId, _start, _end, pId, _start, _end;
   END IF;
 
   RETURN _gain * _multiplier;

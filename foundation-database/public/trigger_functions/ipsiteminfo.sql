@@ -3,7 +3,7 @@ BEGIN
 
   --  Checks
   IF NOT (checkPrivilege('MaintainPricingSchedules')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Price Schedules.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Price Schedules. [xtuple: _ipsitemintoBeforeTrigger, -1]';
   END IF;
   
   IF (TG_OP IN ('INSERT','UPDATE')) THEN

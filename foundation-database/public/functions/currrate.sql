@@ -28,7 +28,7 @@ BEGIN
     AND (pDate BETWEEN curr_effective AND curr_expires) );
 
     IF ( NOT FOUND) THEN
-      RAISE EXCEPTION 'Currency exchange rate for currency % not found on %', pFromCurr, formatDate(pDate);
+      RAISE EXCEPTION 'Currency exchange rate for currency % not found on % [xtuple: currRate, -1, %, %]', pFromCurr, formatDate(pDate), pFromCurr, formatDate(pDate);
     END IF;
   END IF;
 
@@ -39,7 +39,7 @@ BEGIN
     AND (pDate BETWEEN curr_effective AND curr_expires) );
 
     IF ( NOT FOUND) THEN
-      RAISE EXCEPTION 'Currency exchange rate for currency % not found on %', pToCurr, formatDate(pDate);
+      RAISE EXCEPTION 'Currency exchange rate for currency % not found on % [xtuple: currRate, -1, %, %]', pToCurr, formatDate(pDate), pToCurr, formatDate(pDate);
     END IF;
   END IF;
 

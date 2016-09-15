@@ -55,7 +55,7 @@ BEGIN
       _flag := COALESCE(pFlag,''CHECK'');
     END IF;
   ELSE
-	RAISE EXCEPTION ''Invalid Flag (%). Valid flags are CHECK, CHANGEONE or CHANGEALL'', pFlag;
+	RAISE EXCEPTION ''Invalid Flag (%). Valid flags are CHECK, CHANGEONE or CHANGEALL [xtuple: saveAlarm, -9, %]'', pFlag, pFlag;
   END IF;
   
   --If there is nothing here get out

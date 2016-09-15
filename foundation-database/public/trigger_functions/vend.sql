@@ -4,23 +4,23 @@ CREATE OR REPLACE FUNCTION _vendTrigger () RETURNS TRIGGER AS $$
 BEGIN
 
   IF NOT (checkPrivilege('MaintainVendors')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Vendors.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Vendors. [xtuple: _vendTrigger, -1]';
   END IF;
 
   IF (LENGTH(COALESCE(NEW.vend_number, ''))=0) THEN
-    RAISE EXCEPTION 'You must supply a valid Vendor Number.';
+    RAISE EXCEPTION 'You must supply a valid Vendor Number. [xtuple: _vendTrigger, -2]';
   END IF;
 
   IF (LENGTH(COALESCE(NEW.vend_name, ''))=0) THEN
-    RAISE EXCEPTION 'You must supply a valid Vendor Name.';
+    RAISE EXCEPTION 'You must supply a valid Vendor Name. [xtuple: _vendTrigger, -3]';
   END IF;
 
   IF (NEW.vend_vendtype_id IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a valid Vendor Type ID.';
+    RAISE EXCEPTION 'You must supply a valid Vendor Type ID. [xtuple: _vendTrigger, -4]';
   END IF;
 
   IF (NEW.vend_terms_id IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a valid Terms Code ID.';
+    RAISE EXCEPTION 'You must supply a valid Terms Code ID. [xtuple: _vendTrigger, -5]';
   END IF;
 
   IF (TG_OP = 'INSERT' AND fetchMetricText('CRMAccountNumberGeneration') IN ('A','O')) THEN
@@ -130,7 +130,7 @@ CREATE OR REPLACE FUNCTION _vendinfoBeforeDeleteTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF NOT (checkPrivilege('MaintainVendors')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Vendors.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Vendors. [xtuple: _vendinfoBeforeDeleteTrigger, -1]';
   END IF;
 
   DELETE FROM itemsrcp

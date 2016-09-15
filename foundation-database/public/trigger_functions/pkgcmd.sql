@@ -18,7 +18,7 @@ BEGIN
       IF (NEW.cmd_name != OLD.cmd_name) THEN
         SELECT cmd_id INTO _cmdid FROM cmd WHERE cmd_name=NEW.cmd_name;
         IF (FOUND) THEN
-          RAISE EXCEPTION 'Cannot change command name % because another command with that name already exists.', NEW.cmd_name;
+          RAISE EXCEPTION 'Cannot change command name % because another command with that name already exists. [xtuple: _pkgcmdbeforetrigger, -1, %]', NEW.cmd_name, NEW.cmd_name;
         END IF;
       END IF;
 
@@ -28,7 +28,7 @@ BEGIN
       END IF;
       SELECT cmd_id INTO _cmdid FROM cmd WHERE cmd_name=NEW.cmd_name;
       IF (FOUND) THEN
-        RAISE EXCEPTION 'Cannot create new command % because another command with that name already exists.', NEW.cmd_name;
+        RAISE EXCEPTION 'Cannot create new command % because another command with that name already exists. [xtuple: _pkgcmdbeforetrigger, -2, %]', NEW.cmd_name, NEW.cmd_name;
       END IF;
 
     ELSIF (TG_OP = 'DELETE') THEN
@@ -54,13 +54,13 @@ BEGIN
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
-    RAISE EXCEPTION 'You may not create custom commands in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not create custom commands in packages except using the xTuple Updater utility [xtuple: _pkgcmdalterTrigger, -1]';
 
   ELSIF (TG_OP = 'UPDATE') THEN
-    RAISE EXCEPTION 'You may not alter custom commands in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter custom commands in packages except using the xTuple Updater utility [xtuple: _pkgcmdalterTrigger, -2]';
 
   ELSIF (TG_OP = 'DELETE') THEN
-    RAISE EXCEPTION 'You may not delete custom commands from packages. Try deleting or disabling the package.';
+    RAISE EXCEPTION 'You may not delete custom commands from packages. Try deleting or disabling the package. [xtuple: _pkgcmdalterTrigger, -3]';
 
   END IF;
 

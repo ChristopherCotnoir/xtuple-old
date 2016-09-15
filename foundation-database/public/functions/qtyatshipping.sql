@@ -30,11 +30,11 @@ BEGIN
 --         B=both unshipped and shipped
 
   IF (pordertype NOT IN ('SO', 'TO')) THEN
-    RAISE EXCEPTION '% is not a valid order type', pordertype;
+    RAISE EXCEPTION '% is not a valid order type [xtuple: qtyAtShipping, -1, %]', pordertype, pordertype;
   END IF;
 
   IF (pstatus NOT IN ('U', 'S', 'B')) THEN
-    RAISE EXCEPTION '% is not a valid status', pstatus;
+    RAISE EXCEPTION '% is not a valid status [xtuple: qtyAtShipping, -1, %]', pstatus, pstatus;
   END IF;
 
   SELECT COALESCE(SUM(shipitem_qty), 0.0) INTO _qty

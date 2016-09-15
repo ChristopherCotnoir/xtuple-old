@@ -16,10 +16,10 @@ BEGIN
        (NOT checkPrivilege('ChangePurchaseOrderQty')) AND
        (NOT checkPrivilege('EnterReceipts')) AND
        (NOT checkPrivilege('PostVouchers')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order. [xtuple: _poitemTrigger, -1]';
   END IF;
   IF ( (TG_OP = 'INSERT') AND (NOT checkPrivilege('MaintainPurchaseOrders')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order. [xtuple: _poitemTrigger, -2]';
   END IF;
 
   IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
@@ -35,11 +35,11 @@ BEGIN
     END IF;
 
     IF (NEW.poitem_itemsite_id IS NOT NULL AND NEW.poitem_expcat_id IS NOT NULL) THEN
-      RAISE EXCEPTION 'A purchase order line may not include both an inventory and non-inventory item';
+      RAISE EXCEPTION 'A purchase order line may not include both an inventory and non-inventory item [xtuple: _poitemTrigger, -3]';
     ELSIF (NEW.poitem_itemsite_id IS NULL AND NEW.poitem_expcat_id IS NULL) THEN
-      RAISE EXCEPTION 'A purchase order line must specify either an inventory item or a non-inventory expense category';
+      RAISE EXCEPTION 'A purchase order line must specify either an inventory item or a non-inventory expense category [xtuple: _poitemTrigger, -4]';
     ELSIF (NEW.poitem_qty_ordered IS NULL) THEN
-      RAISE EXCEPTION 'A purchase order line must specify a quantity';
+      RAISE EXCEPTION 'A purchase order line must specify a quantity [xtuple: _poitemTrigger, -5]';
     ELSIF (COALESCE(NEW.poitem_itemsite_id,-1) != -1) THEN
       SELECT (COUNT(item_id)=1) INTO _check
       FROM itemsite, item
@@ -47,14 +47,14 @@ BEGIN
       AND (itemsite_item_id=item_id)
       AND (item_type IN ('P','O','M','T')));
       IF NOT (_check) THEN
-        RAISE EXCEPTION 'The item is not a purchasable item type';
+        RAISE EXCEPTION 'The item is not a purchasable item type [xtuple: _poitemTrigger, -6]';
       END IF;
     END IF;
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
     IF (_status='C') THEN
-      RAISE EXCEPTION 'New lines may not be inserted into a closed purchase order';
+      RAISE EXCEPTION 'New lines may not be inserted into a closed purchase order [xtuple: _poitemTrigger, -7]';
     END IF;
 
     --Fetch and apply default item source data if applicable
@@ -110,7 +110,7 @@ BEGIN
     END IF;
 
     IF (NEW.poitem_duedate IS NULL) THEN
-      RAISE EXCEPTION  'A due date is required';
+      RAISE EXCEPTION  'A due date is required [xtuple: _poitemTrigger, -8]';
     END IF;
 
     -- PO Item Quick Entry does not populate Tax Type
@@ -160,9 +160,9 @@ BEGIN
 
   IF (TG_OP = 'UPDATE') THEN
     IF (NEW.poitem_itemsite_id != OLD.poitem_itemsite_id) THEN
-      RAISE EXCEPTION 'You may not change the item site for a line item.';
+      RAISE EXCEPTION 'You may not change the item site for a line item. [xtuple: _poitemTrigger, -9]';
     ELSIF (NEW.poitem_expcat_id != OLD.poitem_expcat_id) THEN
-      RAISE EXCEPTION 'You may not change the expense category for a line item.';
+      RAISE EXCEPTION 'You may not change the expense category for a line item. [xtuple: _poitemTrigger, -10]';
     END IF;
   END IF;
 
@@ -270,7 +270,7 @@ DECLARE
 BEGIN
 
   IF (NOT checkPrivilege('MaintainPurchaseOrders')) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order. [xtuple: _poitemDeleteTrigger, -1]';
   END IF;
 
   IF (EXISTS(SELECT recv_id
@@ -278,7 +278,7 @@ BEGIN
              WHERE ((recv_order_type='PO')
                 AND (recv_orderitem_id=OLD.poitem_id)
                 AND (recv_qty>0)))) THEN
-    RAISE EXCEPTION 'Cannot delete an P/O Item which has been received';
+    RAISE EXCEPTION 'Cannot delete an P/O Item which has been received [xtuple: _poitemDeleteTrigger, -2]';
   END IF;
 
   DELETE FROM comment

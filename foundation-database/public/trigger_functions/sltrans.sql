@@ -10,7 +10,7 @@ BEGIN
   FROM company JOIN accnt ON (company_number=accnt_company)
   WHERE (accnt_id=NEW.sltrans_accnt_id);
   IF (_externalCompany) THEN
-    RAISE EXCEPTION 'Transactions are not allowed for G/L Accounts with External Company segments.';
+    RAISE EXCEPTION 'Transactions are not allowed for G/L Accounts with External Company segments. [xtuple: _sltransInsertTrigger, -1]';
   END IF;
   
   RETURN NEW;
@@ -28,7 +28,7 @@ DECLARE
   _updated BOOLEAN := false;
 BEGIN
   IF(TG_OP='DELETE') THEN
-    RAISE EXCEPTION 'You may not delete Journal Transactions once they have been created.';
+    RAISE EXCEPTION 'You may not delete Journal Transactions once they have been created. [xtuple: _sltransAlterTrigger, -1]';
   ELSIF (TG_OP = 'UPDATE') THEN	
     IF(OLD.sltrans_id != NEW.sltrans_id) THEN
       _updated := true;
@@ -63,10 +63,10 @@ BEGIN
     END IF;
 
     IF(_updated) THEN
-      RAISE EXCEPTION 'You may not alter some Journal Transaction fields once they have been created.';
+      RAISE EXCEPTION 'You may not alter some Journal Transaction fields once they have been created. [xtuple: _sltransAlterTrigger, -2]';
     END IF;
   ELSE
-    RAISE EXCEPTION 'trigger for sltrans table called in unexpected state.';
+    RAISE EXCEPTION 'trigger for sltrans table called in unexpected state. [xtuple: _sltransAlterTrigger, -3]';
   END IF;
   RETURN NEW;
 END;

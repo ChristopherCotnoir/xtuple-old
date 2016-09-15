@@ -29,7 +29,7 @@ BEGIN
   AND (coitem_subnumber=_subnumber));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Sales Order % not found.'', pSalesOrderNumber;
+	RAISE EXCEPTION ''Sales Order % not found. [xtuple: getCoItemId, -1, %]'', pSalesOrderNumber, pSalesOrderNumber;
   END IF;
 
   RETURN _returnVal;

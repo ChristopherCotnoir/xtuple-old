@@ -14,7 +14,7 @@ BEGIN
   WHERE (freightclass_code=pFreightClassCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Freight Class % not found.'', pFreightClassCode;
+	RAISE EXCEPTION ''Freight Class % not found. [xtuple: getFreightClassId, -1, %]'', pFreightClassCode, pFreightClassCode;
   END IF;
 
   RETURN _returnVal;

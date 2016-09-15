@@ -201,8 +201,8 @@ BEGIN
               AND (recv_orderitem_id=poitem_id)
               AND (itemsite_id=recv_itemsite_id) );
            IF (NOT FOUND) THEN
-             RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id %',
-             _r.itemsite_id;
+             RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id % [xtuple: correctReceipt, -13, %]',
+             _r.itemsite_id, _r.itemsite_id;
            ELSIF (_tmp < 0 AND _tmp != -3) THEN -- error but not 0-value transaction
              RETURN _tmp;
            ELSE

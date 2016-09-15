@@ -17,7 +17,7 @@ BEGIN
     IF (NEW.image_name != OLD.image_name) THEN
       SELECT image_id INTO _imageid FROM image WHERE image_name=NEW.image_name;
       IF (FOUND) THEN
-        RAISE EXCEPTION 'Cannot change image named % because another image with that name already exists.', NEW.image_name;
+        RAISE EXCEPTION 'Cannot change image named % because another image with that name already exists. [xtuple: _pkgimagebeforetrigger, -1, %]', NEW.image_name, NEW.image_name;
       END IF;
     END IF;
 
@@ -27,7 +27,7 @@ BEGIN
     END IF;
     SELECT image_id INTO _imageid FROM image WHERE image_name=NEW.image_name;
     IF (FOUND) THEN
-      RAISE EXCEPTION 'Cannot create new image % because another image with that name already exists.', NEW.image_name;
+      RAISE EXCEPTION 'Cannot create new image % because another image with that name already exists. [xtuple: _pkgimagebeforetrigger, -2, %]', NEW.image_name, NEW.image_name;
     END IF;
 
   ELSIF (TG_OP = 'DELETE') THEN
@@ -52,13 +52,13 @@ BEGIN
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
-    RAISE EXCEPTION 'You may not create images in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not create images in packages except using the xTuple Updater utility [xtuple: _pkgimagealterTrigger, -1]';
 
   ELSIF (TG_OP = 'UPDATE') THEN
-    RAISE EXCEPTION 'You may not alter images in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter images in packages except using the xTuple Updater utility [xtuple: _pkgimagealterTrigger, -2]';
 
   ELSIF (TG_OP = 'DELETE') THEN
-    RAISE EXCEPTION 'You may not delete images from packages. Try deleting or disabling the package.';
+    RAISE EXCEPTION 'You may not delete images from packages. Try deleting or disabling the package. [xtuple: _pkgimagealterTrigger, -3]';
 
   END IF;
 

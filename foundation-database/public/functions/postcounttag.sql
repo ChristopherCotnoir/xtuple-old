@@ -234,7 +234,7 @@ BEGIN
         WHERE ((metric_name = 'EnableAsOfQOH')
         AND (metric_value = 't'))) THEN
       IF (NOT postIntoInvBalance(_invhistid)) THEN
-        RAISE EXCEPTION 'Post into Inventory Balance for invhist_id=% was unsuccessful',_invhistid;
+        RAISE EXCEPTION 'Post into Inventory Balance for invhist_id=% was unsuccessful [xtuple: postCountTag, -1, %]',_invhistid,_invhistid;
       END IF;
     END IF;
 

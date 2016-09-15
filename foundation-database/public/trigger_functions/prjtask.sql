@@ -6,14 +6,14 @@ BEGIN
   --  Checks
   IF (NEW.prjtask_owner_username=getEffectiveXtUser()) THEN
     IF (NOT checkPrivilege('MaintainAllProjects') AND NOT checkPrivilege('MaintainPersonalProjects')) THEN
-      RAISE EXCEPTION 'You do not have privileges to maintain Projects.';
+      RAISE EXCEPTION 'You do not have privileges to maintain Projects. [xtuple: _prjtaskTrigger, -1]';
     END IF;
   ELSIF (NOT checkPrivilege('MaintainAllProjects')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Projects.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Projects. [xtuple: _prjtaskTrigger, -2]';
   ELSIF (LENGTH(COALESCE(NEW.prjtask_number,'')) = 0) THEN
-    RAISE EXCEPTION 'You must enter a valid number.';
+    RAISE EXCEPTION 'You must enter a valid number. [xtuple: _prjtaskTrigger, -3]';
   ELSIF (LENGTH(COALESCE(NEW.prjtask_name,'')) = 0) THEN
-    RAISE EXCEPTION 'You must enter a valid name.';
+    RAISE EXCEPTION 'You must enter a valid name. [xtuple: _prjtaskTrigger, -4]';
   END IF;
 
   -- Timestamps

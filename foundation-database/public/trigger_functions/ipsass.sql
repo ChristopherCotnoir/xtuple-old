@@ -5,7 +5,7 @@ BEGIN
 
   --  Checks
   IF NOT (checkPrivilege(''MaintainPricingSchedules'')) THEN
-    RAISE EXCEPTION ''You do not have privileges to maintain Price Schedules.'';
+    RAISE EXCEPTION ''You do not have privileges to maintain Price Schedules. [xtuple: _ipsassBeforeTrigger, -1]'';
   END IF;
 
   -- Business logic, disallow invalid combinations

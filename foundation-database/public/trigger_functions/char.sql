@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION _charBeforeTrigger () RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF (NOT checkPrivilege('MaintainCharacteristics')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Characteristics.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Characteristics. [xtuple: _charBeforeTrigger, -1]';
   END IF;
 
   RETURN NEW;

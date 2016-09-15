@@ -14,7 +14,7 @@ BEGIN
   WHERE (shipform_name=pShipFormName) LIMIT 1;
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Ship Form % not found.'', pShipFormName;
+	RAISE EXCEPTION ''Ship Form % not found. [xtuple: getShipFormId, -1, %]'', pShipFormName, pShipFormName;
   END IF;
 
   RETURN _returnVal;

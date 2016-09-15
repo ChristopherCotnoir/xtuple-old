@@ -49,14 +49,14 @@ CREATE OR REPLACE FUNCTION _itemAfterTrigger () RETURNS TRIGGER AS $$
 BEGIN
 -- Privilege Checks
    IF (NOT checkPrivilege('MaintainItemMasters')) THEN
-     RAISE EXCEPTION 'You do not have privileges to maintain Items.';
+     RAISE EXCEPTION 'You do not have privileges to maintain Items. [xtuple: _itemAfterTrigger, -1]';
    END IF;
 
 -- Integrity checks
   IF (TG_OP = 'UPDATE') THEN
     IF ((OLD.item_type <> NEW.item_type) AND (NEW.item_type = 'L')) THEN
       IF (SELECT COUNT(*) != 0 FROM bomitem WHERE (bomitem_item_id = OLD.item_id)) THEN
-        RAISE EXCEPTION 'This item is part of one or more Bills of Materials and cannot be a Planning Item.';
+        RAISE EXCEPTION 'This item is part of one or more Bills of Materials and cannot be a Planning Item. [xtuple: _itemAfterTrigger, -2]';
       END IF;
     END IF;
 
@@ -67,7 +67,7 @@ BEGIN
         WHERE ((itemsite_item_id=OLD.item_id)
         AND (itemsite_qtyonhand + qtyallocated(itemsite_id,startoftime(),endoftime()) +
 	   qtyordered(itemsite_id,startoftime(),endoftime()) > 0 ))) THEN
-          RAISE EXCEPTION 'Item type not allowed when there are itemsites with quantities with on hand quantities or pending inventory activity for this item.';
+          RAISE EXCEPTION 'Item type not allowed when there are itemsites with quantities with on hand quantities or pending inventory activity for this item. [xtuple: _itemAfterTrigger, -3]';
       END IF;
     END IF;
 -- If type changed remove costs and deactivate item sites
@@ -271,7 +271,7 @@ BEGIN
           AND item_id = NEW.item_id;
       EXCEPTION
         WHEN SQLSTATE 'P0001' THEN
-          RAISE EXCEPTION 'An invalid UOM was set on this item. Please verify that the Unit Price UOM has a conversion to the Inventory UOM.';
+          RAISE EXCEPTION 'An invalid UOM was set on this item. Please verify that the Unit Price UOM has a conversion to the Inventory UOM. [xtuple: _itemAfterDeleteTrigger, -1]';
       END;
     END IF;
 

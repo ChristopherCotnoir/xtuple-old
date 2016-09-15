@@ -3,11 +3,11 @@ CREATE OR REPLACE FUNCTION _prospectTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF (NOT checkPrivilege('MaintainProspectMasters')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Prospects.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Prospects. [xtuple: _prospectTrigger, -1]';
   END IF;
 
   IF (NEW.prospect_number IS NULL) THEN
-    RAISE EXCEPTION 'You must supply a valid Prospect Number.';
+    RAISE EXCEPTION 'You must supply a valid Prospect Number. [xtuple: _prospectTrigger, -2]';
   END IF;
 
   NEW.prospect_number := UPPER(NEW.prospect_number);
@@ -149,7 +149,7 @@ CREATE OR REPLACE FUNCTION _prospectBeforeDeleteTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF (NOT checkPrivilege('MaintainProspectMasters')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Prospects.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Prospects. [xtuple: _prospectBeforeDeleteTrigger, -1]';
   END IF;
 
   UPDATE crmacct SET crmacct_prospect_id = NULL

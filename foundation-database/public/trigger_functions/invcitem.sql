@@ -17,7 +17,7 @@ BEGIN
         FROM invchead
         WHERE ((invchead_id=OLD.invcitem_invchead_id)
           AND (invchead_posted))) THEN
-      RAISE EXCEPTION 'Edit not allowed on Posted Invoices.';
+      RAISE EXCEPTION 'Edit not allowed on Posted Invoices. [xtuple: _invcitemBeforeTrigger, -1]';
     END IF;
   END IF;
 
@@ -26,10 +26,10 @@ BEGIN
     SELECT itemuomfractionalbyuom(NEW.invcitem_item_id, NEW.invcitem_qty_uom_id) INTO _itemfractional;
     IF (NOT _itemfractional) THEN
       IF (TRUNC(NEW.invcitem_ordered) <> NEW.invcitem_ordered) THEN
-        RAISE EXCEPTION 'Item does not support fractional quantities';
+        RAISE EXCEPTION 'Item does not support fractional quantities [xtuple: _invcitemBeforeTrigger, -2]';
       END IF;
       IF (TRUNC(NEW.invcitem_billed) <> NEW.invcitem_billed) THEN
-        RAISE EXCEPTION 'Item does not support fractional quantities';
+        RAISE EXCEPTION 'Item does not support fractional quantities [xtuple: _invcitemBeforeTrigger, -3]';
       END IF;
     END IF;
   END IF;
@@ -61,7 +61,7 @@ BEGIN
   FROM invchead
   WHERE (invchead_id=NEW.invcitem_invchead_id);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION ''Invoice head not found'';
+    RAISE EXCEPTION ''Invoice head not found [xtuple: _invcitemTrigger, -1]'';
   END IF;
 
 -- Insert new row

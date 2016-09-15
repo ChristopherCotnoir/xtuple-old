@@ -14,7 +14,7 @@ BEGIN
   WHERE (plancode_code=pPlanCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Plan Code % not found.'', pPlanCode;
+	RAISE EXCEPTION ''Plan Code % not found. [xtuple: getPlanCodeId, -1, %]'', pPlanCode, pPlanCode;
   END IF;
 
   RETURN _returnVal;

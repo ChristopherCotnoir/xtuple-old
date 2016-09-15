@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(uomtype_name)=UPPER(pUomType));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Unit of Measuer Type % not found.'', pUomType;
+	RAISE EXCEPTION ''Unit of Measuer Type % not found. [xtuple: getUomTypeId, -1, %]'', pUomType, pUomType;
   END IF;
 
   RETURN _returnVal;
@@ -41,7 +41,7 @@ BEGIN
     WHERE (UPPER(uomtype_name)=UPPER(pUomTypes[_i]));
 
     IF (_val IS NULL) THEN
-	RAISE EXCEPTION ''Unit of Measure Type % not found.'', pUomTypes[_i];
+	RAISE EXCEPTION ''Unit of Measure Type % not found. [xtuple: getUomTypeId, -2, %]'', pUomTypes[_i], pUomTypes[_i];
     ELSE
       _returnVal[_i] := _val;
     END IF;

@@ -7,7 +7,7 @@ DECLARE
 BEGIN
   IF (TG_OP='DELETE') THEN
     IF (SELECT period_closed FROM period WHERE period_id=OLD.trialbal_period_id) THEN
-      RAISE EXCEPTION 'You may not delete Trial Balance Transactions in closed periods.';
+      RAISE EXCEPTION 'You may not delete Trial Balance Transactions in closed periods. [xtuple: _trialbalaltertrigger, -1]';
     END IF;
 
     RETURN OLD;
@@ -27,7 +27,7 @@ BEGIN
     --  Dont check new accounts, accounts that have not changed value, or Retained Earnings account 
     ELSE
       IF (SELECT period_closed FROM period WHERE period_id=NEW.trialbal_period_id) THEN
-        RAISE EXCEPTION 'You may not alter Trial Balance records in a closed Period.';
+        RAISE EXCEPTION 'You may not alter Trial Balance records in a closed Period. [xtuple: _trialbalaltertrigger, -2]';
       END IF;
     END IF;
   

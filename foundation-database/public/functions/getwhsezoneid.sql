@@ -16,7 +16,7 @@ BEGIN
       AND (UPPER(whsezone_name)=UPPER(pWhseZoneName)) );
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Whsezone % not found.'', pWhseZoneName;
+	RAISE EXCEPTION ''Whsezone % not found. [xtuple: getWhseZoneId, -1, %]'', pWhseZoneName, pWhseZoneName;
   END IF;
 
   RETURN _returnVal;

@@ -14,7 +14,7 @@ BEGIN
   WHERE (expcat_code=UPPER(pExpcatCode));
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION ''Expense Category % not found.'', pExpcatCode;
+    RAISE EXCEPTION ''Expense Category % not found. [xtuple: getExpcatId, -1, %]'', pExpcatCode, pExpcatCode;
   END IF;
 
   RETURN _returnVal;

@@ -55,8 +55,8 @@ BEGIN
   IF (_rows < 1) THEN
     RAISE EXCEPTION '[xtuple: moveUiform, -3]';
   ELSIF (_rows > 1) THEN
-    RAISE EXCEPTION 'Tried to delete % uiforms with the id % when there should be exactly 1',
-                    _rows, puiformid;
+    RAISE EXCEPTION 'Tried to delete % uiforms with the id % when there should be exactly 1 [xtuple: moveUiform, -5, %, %]',
+                    _rows, puiformid, _rows, puiformid;
   END IF;
 
   _insertstr := 'INSERT INTO ' || _destination ||
@@ -75,8 +75,8 @@ BEGIN
   IF (_rows < 1) THEN
     RAISE EXCEPTION '[xtuple: moveUiform, -4]';
   ELSIF (_rows > 1) THEN
-    RAISE EXCEPTION 'Tried to insert % uiforms with the id % when there should be exactly 1',
-                    _rows, puiformid;
+    RAISE EXCEPTION 'Tried to insert % uiforms with the id % when there should be exactly 1 [xtuple: moveUiform, -6, %, %]',
+                    _rows, puiformid, _rows, puiformid;
   END IF;
 
   RETURN puiformid;

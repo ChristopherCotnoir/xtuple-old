@@ -16,7 +16,7 @@ BEGIN
   AND (UPPER(ls_number)=UPPER(pLotSerialNumber)));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''LotSerial % not found.'', pLotSerialNumber;
+	RAISE EXCEPTION ''LotSerial % not found. [xtuple: getLotSerialId, -1, %]'', pLotSerialNumber, pLotSerialNumber;
   END IF;
 
   RETURN _returnVal;

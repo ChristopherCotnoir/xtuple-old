@@ -15,7 +15,7 @@ BEGIN
   WHERE (budghead_name=(pBudghead));
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Budget % not found.', pBudghead;
+    RAISE EXCEPTION 'Budget % not found. [xtuple: getBudgheadId, -1, %]', pBudghead, pBudghead;
   END IF;
 
   RETURN _returnVal;

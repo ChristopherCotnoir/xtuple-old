@@ -13,7 +13,7 @@ BEGIN
     FROM prospect
    WHERE(UPPER(prospect_number)=UPPER(pProspectNumber));
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Prospect Number % found.', pProspectNumber;
+    RAISE EXCEPTION 'Prospect Number % found. [xtuple: getProspectId, -1, %]', pProspectNumber, pProspectNumber;
   END IF;
 
   RETURN _returnVal;

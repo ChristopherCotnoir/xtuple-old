@@ -14,7 +14,7 @@ BEGIN
   WHERE (sitetype_name=pSiteType);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Site Type % not found.'', pSiteType;
+	RAISE EXCEPTION ''Site Type % not found. [xtuple: getSiteTypeId, -1, %]'', pSiteType, pSiteType;
   END IF;
 
   RETURN _returnVal;

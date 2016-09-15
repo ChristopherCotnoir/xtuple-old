@@ -25,7 +25,7 @@ BEGIN
     FROM orderseq
     WHERE (orderseq_name=psequence);
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'Invalid orderseq_name %', psequence;
+      RAISE EXCEPTION 'Invalid orderseq_name % [xtuple: releaseNumber, -1, %]', psequence, psequence;
     END IF;
 
     -- check if an order exists with the given order number

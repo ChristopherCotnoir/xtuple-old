@@ -16,7 +16,7 @@ BEGIN
     IF (FOUND) THEN
       NEW.apopen_curr_rate := _currrate;
     ELSE
-      RAISE EXCEPTION 'Currency exchange rate not found';
+      RAISE EXCEPTION 'Currency exchange rate not found [xtuple: _apopenTrigger, -1]';
     END IF;
   END IF;
 

@@ -13,7 +13,7 @@ BEGIN
   -- Check
   SELECT checkPrivilege('MaintainSalesOrders') OR checkPrivilege('ShipOrders') OR checkPrivilege('IssueStockToShipping') INTO _check;
   IF NOT (_check) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Sales Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Sales Order. [xtuple: _soitemTrigger, -1]';
   END IF;
 
   IF (fetchMetricBool('SalesOrderChangeLog')) THEN
@@ -25,7 +25,7 @@ BEGIN
       IF (fetchmetricbool('AllowASAPShipSchedules')) THEN
         NEW.coitem_scheddate := current_date;
       ELSE
-        RAISE EXCEPTION 'A schedule date is required.';
+        RAISE EXCEPTION 'A schedule date is required. [xtuple: _soitemTrigger, -2]';
       END IF;
     END IF;
   END IF;
@@ -59,7 +59,7 @@ BEGIN
     IF ((OLD.coitem_status <> 'C') AND (NEW.coitem_status = 'C')) THEN
       SELECT qtyAtShipping(NEW.coitem_id) INTO _atShipping;
       IF (_atShipping > 0) THEN
-        RAISE EXCEPTION 'Line % cannot be Closed at this time as there is inventory at shipping.',NEW.coitem_linenumber;
+        RAISE EXCEPTION 'Line % cannot be Closed at this time as there is inventory at shipping. [xtuple: _soitemTrigger, -3, %]',NEW.coitem_linenumber,NEW.coitem_linenumber;
       END IF;
     END IF;
   END IF;
@@ -103,7 +103,7 @@ BEGIN
     IF (NEW.coitem_qtyord <> OLD.coitem_qtyord) THEN
       IF(_kit) THEN
         IF(_shipped) THEN
-          RAISE EXCEPTION 'You can not change the qty ordered for a Kit item when one or more of its components have shipped inventory.';
+          RAISE EXCEPTION 'You can not change the qty ordered for a Kit item when one or more of its components have shipped inventory. [xtuple: _charassTrigger, -4]';
         END IF;
       END IF;
       PERFORM postEvent('SoitemQtyChanged', 'S', NEW.coitem_id,
@@ -376,7 +376,7 @@ BEGIN
             _r.raitem_price_uom_id <> NEW.coitem_price_uom_id OR
             _r.raitem_price_invuomratio <> NEW.coitem_price_invuomratio)
             AND NOT (NEW.coitem_status = 'X' AND _r.raitem_qtyauthorized = 0)) THEN
-          RAISE EXCEPTION 'Quantities for line item % may only be changed on the Return Authorization that created it.',NEW.coitem_linenumber;
+          RAISE EXCEPTION 'Quantities for line item % may only be changed on the Return Authorization that created it. [xtuple: _soitemBeforeTrigger, -1, %]',NEW.coitem_linenumber,NEW.coitem_linenumber;
         END IF;
         IF (OLD.coitem_warranty <> NEW.coitem_warranty) THEN
           UPDATE raitem SET raitem_warranty = NEW.coitem_warranty
@@ -499,7 +499,7 @@ BEGIN
         LOOP
           SELECT deleteSoItem(_coitemid) INTO _result;
           IF (_result < 0) THEN
-             RAISE EXCEPTION 'Error deleting kit components: deleteSoItem(integer) Error:%', _result;
+             RAISE EXCEPTION 'Error deleting kit components: deleteSoItem(integer) Error:% [xtuple: _soitemAfterTrigger, -1, %]', _result, _result;
           END IF;
         END LOOP;
         --20160211:rks added NEW.coitem_memo
@@ -547,7 +547,7 @@ BEGIN
           UPDATE coitem SET coitem_order_id=_orderid
           WHERE (coitem_id=NEW.coitem_id);
         ELSE
-          RAISE EXCEPTION 'CreatePR failed, result=%', _orderid;
+          RAISE EXCEPTION 'CreatePR failed, result=% [xtuple: _soitemAfterTrigger, -2, %]', _orderid, _orderid;
         END IF;
       END IF;
     END IF;
@@ -571,7 +571,7 @@ BEGIN
           UPDATE coitem SET coitem_order_id=_orderid
           WHERE (coitem_id=NEW.coitem_id);
         ELSE
-          RAISE EXCEPTION 'CreatePurchaseToSale failed, result=%', _orderid;
+          RAISE EXCEPTION 'CreatePurchaseToSale failed, result=% [xtuple: _soitemAfterTrigger, -3, %]', _orderid, _orderid;
         END IF;
       END IF;
     END IF;
@@ -713,7 +713,7 @@ BEGIN
 
   -- Check Priv
   IF NOT (checkPrivilege('MaintainSalesOrders')) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Sales Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Sales Order. [xtuple: _soitemBeforeDeleteTrigger, -1]';
   END IF;
 
   -- Cache some information
@@ -741,7 +741,7 @@ BEGIN
   END IF;
 
   IF(_kit AND _shipped) THEN
-    RAISE EXCEPTION 'You can not delete this Sales Order Line as it has several sub components that have already been shipped.';
+    RAISE EXCEPTION 'You can not delete this Sales Order Line as it has several sub components that have already been shipped. [xtuple: _soitemBeforeDeleteTrigger, -2]';
   END IF;
 
   DELETE FROM comment
@@ -764,7 +764,7 @@ BEGIN
       SELECT deleteSoItem(_coitemid) INTO _result;
       IF (_result < 0) THEN
         IF NOT (_r.itemsite_createsopo AND (_result = -10 OR _result = -20)) THEN
-          RAISE EXCEPTION 'Error deleting kit components: deleteSoItem(integer) Error:%', _result;
+          RAISE EXCEPTION 'Error deleting kit components: deleteSoItem(integer) Error:% [xtuple: _soitemBeforeDeleteTrigger, -3, %]', _result, _result;
         END IF;
       END IF;
     END LOOP;

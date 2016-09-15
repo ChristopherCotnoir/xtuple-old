@@ -14,7 +14,7 @@ BEGIN
   WHERE (shipvia_code=pShipViaCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''ShipVia Code % not found.'', pShipViaCode;
+	RAISE EXCEPTION ''ShipVia Code % not found. [xtuple: getShipViaId, -1, %]'', pShipViaCode, pShipViaCode;
   END IF;
 
   RETURN _returnVal;

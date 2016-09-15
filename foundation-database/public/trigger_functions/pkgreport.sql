@@ -21,7 +21,7 @@ BEGIN
       WHERE ((report_name=NEW.report_name)
         AND  (report_grade=NEW.report_grade));
       IF (FOUND) THEN
-        RAISE EXCEPTION 'Cannot change report % % because another report with that name and grade already exists.', NEW.report_name, NEW.report_grade;
+        RAISE EXCEPTION 'Cannot change report % % because another report with that name and grade already exists. [xtuple: _pkgreportbeforetrigger, -1, %, %]', NEW.report_name, NEW.report_grade, NEW.report_name, NEW.report_grade;
       END IF;
     END IF;
 
@@ -34,7 +34,7 @@ BEGIN
     WHERE ((report_name=NEW.report_name)
       AND  (report_grade=NEW.report_grade));
     IF (FOUND) THEN
-      RAISE EXCEPTION 'Cannot create new report % % because another report with that name and grade already exists.', NEW.report_name, NEW.report_grade;
+      RAISE EXCEPTION 'Cannot create new report % % because another report with that name and grade already exists. [xtuple: _pkgreportbeforetrigger, -2, %, %]', NEW.report_name, NEW.report_grade, NEW.report_name, NEW.report_grade;
     END IF;
 
   ELSIF (TG_OP = 'DELETE') THEN
@@ -59,13 +59,13 @@ BEGIN
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
-    RAISE EXCEPTION 'You may not create report definitions in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not create report definitions in packages except using the xTuple Updater utility [xtuple: _pkgreportalterTrigger, -1]';
 
   ELSIF (TG_OP = 'UPDATE') THEN
-    RAISE EXCEPTION 'You may not alter report definitions in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter report definitions in packages except using the xTuple Updater utility [xtuple: _pkgreportalterTrigger, -2]';
 
   ELSIF (TG_OP = 'DELETE') THEN
-    RAISE EXCEPTION 'You may not delete report definitions from packages. Try deleting or disabling the package.';
+    RAISE EXCEPTION 'You may not delete report definitions from packages. Try deleting or disabling the package. [xtuple: _pkgreportalterTrigger, -3]';
 
   END IF;
 

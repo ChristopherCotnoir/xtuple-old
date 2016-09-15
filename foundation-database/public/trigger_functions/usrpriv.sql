@@ -3,8 +3,8 @@ CREATE OR REPLACE FUNCTION _usrprivTrigger() RETURNS TRIGGER AS $$
 -- See www.xtuple.com/CPAL for the full text of the software license.
 BEGIN
   IF NOT checkPrivilege('MaintainUsers') THEN
-    RAISE EXCEPTION '% does not have privileges to modify user privileges.',
-                    getEffectiveXtUser();
+    RAISE EXCEPTION '% does not have privileges to modify user privileges. [xtuple: _usrprivTrigger, -1, %]',
+                    getEffectiveXtUser(), getEffectiveXtUser();
   END IF;
 
   -- This looks like a candidate for a foreign key but isn't.
@@ -14,8 +14,8 @@ BEGIN
       (NOT EXISTS(SELECT priv_id
                   FROM priv
                   WHERE (priv_id=NEW.usrpriv_priv_id)))) THEN
-    RAISE EXCEPTION 'Privilege id % does not exist or is part of a disabled package.',
-                NEW.usrpriv_priv_id;
+    RAISE EXCEPTION 'Privilege id % does not exist or is part of a disabled package. [xtuple: _usrprivTrigger, -2, %]',
+                NEW.usrpriv_priv_id, NEW.usrpriv_priv_id;
     RETURN OLD;
 
   ELSIF (TG_OP = 'DELETE') THEN

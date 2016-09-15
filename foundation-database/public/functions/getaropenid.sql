@@ -18,7 +18,7 @@ BEGIN
     AND  (UPPER(aropen_docnumber)=UPPER(pDocNumber)));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''AR Open Item % not found.'', pDocNumber;
+	RAISE EXCEPTION ''AR Open Item % not found. [xtuple: getAropenId, -1, %]'', pDocNumber, pDocNumber;
   END IF;
 
   RETURN _returnVal;

@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(vendtype_code)=UPPER(pVendTypeCode));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Vendor Type % not found.'', pVendTypeCode;
+	RAISE EXCEPTION ''Vendor Type % not found. [xtuple: getVendTypeId, -1, %]'', pVendTypeCode, pVendTypeCode;
   END IF;
 
   RETURN _returnVal;

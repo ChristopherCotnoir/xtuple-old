@@ -17,7 +17,7 @@ BEGIN
   WHERE (item_upccode=UPPER(pItemUPC));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Item % not found.', pItemUPC;
+	RAISE EXCEPTION 'Item % not found. [xtuple: getitemidfromupc, -1, %]', pItemUPC, pItemUPC;
   END IF;
 
   RETURN _returnVal;

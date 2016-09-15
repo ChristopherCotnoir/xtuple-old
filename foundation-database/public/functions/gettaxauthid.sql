@@ -14,7 +14,7 @@ BEGIN
   WHERE (taxauth_code=pTaxAuthCode);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Tax Authority % not found.'', pTaxAuthCode;
+	RAISE EXCEPTION ''Tax Authority % not found. [xtuple: getTaxAuthId, -1, %]'', pTaxAuthCode, pTaxAuthCode;
   END IF;
 
   RETURN _returnVal;

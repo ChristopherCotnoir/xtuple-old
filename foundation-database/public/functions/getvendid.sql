@@ -14,7 +14,7 @@ BEGIN
    WHERE (vend_number=pVendNumber);
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Vendor Number % not found.', pVendNumber;
+    RAISE EXCEPTION 'Vendor Number % not found. [xtuple: getVendId, -1, %]', pVendNumber, pVendNumber;
   END IF;
 
   RETURN _returnVal;

@@ -20,11 +20,11 @@ BEGIN
                     AND (NOT checkPrivilege('PostPurchaseOrders'))
                     AND (NOT checkPrivilege('PrintPurchaseOrders'))
                     AND (NOT checkPrivilege('PostVouchers')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order. [xtuple: _poheadTrigger, -1]';
   END IF;
 
   IF ( _maint AND (NOT checkPrivilege('MaintainPurchaseOrders')) ) THEN
-    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order.';
+    RAISE EXCEPTION 'You do not have privileges to alter a Purchase Order. [xtuple: _poheadTrigger, -2]';
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
@@ -34,7 +34,7 @@ BEGIN
 
   IF TG_OP IN ('INSERT', 'UPDATE') THEN
     IF (NOT ISNUMERIC(NEW.pohead_number) AND NEW.pohead_saved) THEN
-      RAISE EXCEPTION 'Purchase Order Number must be numeric.';
+      RAISE EXCEPTION 'Purchase Order Number must be numeric. [xtuple: _poheadTrigger, -3]';
     END IF;
 
     NEW.pohead_shiptoaddress1 := COALESCE(NEW.pohead_shiptoaddress1, '');

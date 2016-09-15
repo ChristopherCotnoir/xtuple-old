@@ -14,7 +14,7 @@ BEGIN
   WHERE (prodcat_code=pProdCat);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Product Category % not found.'', pProdCat;
+	RAISE EXCEPTION ''Product Category % not found. [xtuple: getProdCatId, -1, %]'', pProdCat, pProdCat;
   END IF;
 
   RETURN _returnVal;

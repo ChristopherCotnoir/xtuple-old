@@ -21,7 +21,7 @@ BEGIN
   END IF;
     
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION ''Boo Sequence % for Item % not found.'', pSeqNumber, pItemNumber;
+    RAISE EXCEPTION ''Boo Sequence % for Item % not found. [xtuple: getBooitemSeqId, -1, %, %]'', pSeqNumber, pItemNumber, pSeqNumber, pItemNumber;
   END IF;
 
   RETURN _returnVal;

@@ -18,7 +18,7 @@ BEGIN
   --  Checks
   SELECT checkPrivilege('MaintainQuotes') INTO _check;
   IF NOT (_check) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Quotes.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Quotes. [xtuple: _quheadtrigger, -1]';
   END IF;
 
   -- If this is imported, check the quote number
@@ -26,10 +26,10 @@ BEGIN
     IF (NEW.quhead_imported) THEN
       SELECT fetchMetricText('QUNumberGeneration') INTO _numGen;
       IF ((NEW.quhead_number IS NULL) AND (_numGen='M')) THEN
-        RAISE EXCEPTION 'You must supply a Quote Number.';
+        RAISE EXCEPTION 'You must supply a Quote Number. [xtuple: _quheadtrigger, -2]';
       ELSE
         IF ((NEW.quhead_number IS NOT NULL) AND (_numGen='A')) THEN
-          RAISE EXCEPTION 'You may not supply a new Quote Number xTuple will generate the number.';
+          RAISE EXCEPTION 'You may not supply a new Quote Number xTuple will generate the number. [xtuple: _quheadtrigger, -3]';
         ELSE
           IF ((NEW.quhead_number IS NULL) AND (_numGen='S')) THEN
             SELECT fetchsonumber() INTO NEW.quhead_number;
@@ -53,7 +53,7 @@ BEGIN
   ELSE
     IF (TG_OP = 'UPDATE') THEN
        IF (NEW.quhead_number <> OLD.quhead_number) THEN
-         RAISE EXCEPTION 'The order number may not be changed.';
+         RAISE EXCEPTION 'The order number may not be changed. [xtuple: _quheadtrigger, -4]';
        END IF;
     END IF;
   END IF;
@@ -264,7 +264,7 @@ BEGIN
               NEW.quhead_shiptocountry := COALESCE(_a.addr_country,'');
             ELSE
               -- If no shipto data and free form not allowed, this won't work
-              RAISE EXCEPTION 'Free form Shipto is not allowed on this Customer. You must supply a valid Shipto ID.';
+              RAISE EXCEPTION 'Free form Shipto is not allowed on this Customer. You must supply a valid Shipto ID. [xtuple: _quheadtrigger, -5]';
             END IF;
           END IF;
         END IF;

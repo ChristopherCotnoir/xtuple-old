@@ -13,7 +13,7 @@ BEGIN
   WHERE (contrct_number=pContrctNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Contract Number % not found.', pContrctNumber;
+	RAISE EXCEPTION 'Contract Number % not found. [xtuple: getContrctExpires, -1, %]', pContrctNumber, pContrctNumber;
   END IF;
 
   RETURN _returnVal;

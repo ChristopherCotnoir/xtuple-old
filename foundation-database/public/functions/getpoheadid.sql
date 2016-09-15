@@ -14,7 +14,7 @@ BEGIN
   WHERE (pohead_number=pPurchaseOrderNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Purchase Order % not found.'', pPurchaseOrderNumber;
+	RAISE EXCEPTION ''Purchase Order % not found. [xtuple: getPoheadId, -1, %]'', pPurchaseOrderNumber, pPurchaseOrderNumber;
   END IF;
 
   RETURN _returnVal;

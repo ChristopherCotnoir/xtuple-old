@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(crmacct_number)=UPPER(pAcctNumber));
   
   IF (_returnVal IS NULL) THEN
-      RAISE EXCEPTION 'CRM Account Number % not found.', pAcctNumber;
+      RAISE EXCEPTION 'CRM Account Number % not found. [xtuple: getCrmAcctId, -1, %]', pAcctNumber, pAcctNumber;
   END IF;
 
   RETURN _returnVal;

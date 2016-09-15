@@ -14,7 +14,7 @@ BEGIN
   WHERE (shiphead_number=pShipmentNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Shipment % not found.'', pShipmentNumber;
+	RAISE EXCEPTION ''Shipment % not found. [xtuple: getShipheadId, -1, %]'', pShipmentNumber, pShipmentNumber;
   END IF;
 
   RETURN _returnVal;

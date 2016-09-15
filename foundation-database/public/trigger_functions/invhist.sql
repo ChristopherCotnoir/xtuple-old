@@ -7,7 +7,7 @@ BEGIN
 --  Check at itemsite after all of the transactions have been thawed will ensure
 --  that final Qty On Hand is positive. 
 --  IF (NEW.invhist_qoh_after < 0 AND NEW.invhist_costmethod = 'A') THEN
---    RAISE EXCEPTION 'Invhist (%) is recording with average costing and is not allowed to have a negative quantity on hand.', NEW.invhist_id;
+--    RAISE EXCEPTION 'Invhist (%) is recording with average costing and is not allowed to have a negative quantity on hand. [xtuple: _invhistTrig, -1, %]', NEW.invhist_id, NEW.invhist_id;
 --  END IF;
 
 -- #19160 Exclude frozen check when "Edit Transaction" ABC analyze flag is amended
@@ -26,7 +26,7 @@ BEGIN
   ELSE
     -- Always need a series id for distribution posting
     IF (NEW.invhist_series IS NULL) THEN
-      RAISE EXCEPTION 'Column invhist_series may not be null.';
+      RAISE EXCEPTION 'Column invhist_series may not be null. [xtuple: _invhistTrig, -2]';
     END IF;
   END IF;
 

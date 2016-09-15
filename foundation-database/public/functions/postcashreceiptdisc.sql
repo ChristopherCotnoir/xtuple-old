@@ -112,7 +112,7 @@ BEGIN
  
       SELECT postARCreditMemoApplication(_ardiscountid, _r.cashrcpt_applydate) INTO _check;
       IF (_check < 0) THEN
-        RAISE EXCEPTION 'Error posting discount credit memo application. Code %', _check;
+        RAISE EXCEPTION 'Error posting discount credit memo application. Code % [xtuple: postcashreceiptdisc, -1, %]', _check, _check;
       END IF;
         
    END IF; -- End handle Discount

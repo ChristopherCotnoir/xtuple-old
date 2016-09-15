@@ -18,7 +18,7 @@ BEGIN
     AND  (UPPER(cashrcpt_docnumber)=UPPER(pDocNumber)));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Cash Receipt % not found.'', pDocNumber;
+	RAISE EXCEPTION ''Cash Receipt % not found. [xtuple: getCashrcptId, -1, %]'', pDocNumber, pDocNumber;
   END IF;
 
   RETURN _returnVal;

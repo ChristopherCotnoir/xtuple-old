@@ -10,7 +10,7 @@ BEGIN
 
 -- Validate Interval
    IF pInterval <> 'M' AND pInterval <> 'Q' AND pInterval <> 'Y' THEN
-     RAISE EXCEPTION 'Invalid Interval --> %', pInterval;
+     RAISE EXCEPTION 'Invalid Interval --> % [xtuple: getperiodid, -1, %]', pInterval, pInterval;
    END IF;
 
    IF pInterval='M' THEN
@@ -59,7 +59,7 @@ BEGIN
   WHERE ((pPeriodDate) between period_start AND period_end);
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Period for % not found.', pPeriodDate;
+    RAISE EXCEPTION 'Period for % not found. [xtuple: getperiodid, -2, %]', pPeriodDate, pPeriodDate;
   END IF;
 
   RETURN _returnVal;

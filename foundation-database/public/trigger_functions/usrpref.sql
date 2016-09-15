@@ -18,11 +18,11 @@ BEGIN
     -- 2 IFs because plpgsql doesn't always evaluate boolean exprs left-to-right
     IF (TG_OP = 'DELETE') THEN
       IF NOT (OLD.usrpref_name LIKE '%/checked' OR OLD.usrpref_name LIKE '%/columnsShown') THEN
-        RAISE EXCEPTION 'You do not have privileges to change this User Preference.';
+        RAISE EXCEPTION 'You do not have privileges to change this User Preference. [xtuple: _usrprefBeforeTrigger, -1]';
       END IF;
     ELSIF (NEW.usrpref_username = getEffectiveXtUser()) THEN
       IF NOT (NEW.usrpref_name LIKE '%/checked' OR NEW.usrpref_name LIKE '%/columnsShown') THEN
-        RAISE EXCEPTION 'You do not have privileges to change this User Preference.';
+        RAISE EXCEPTION 'You do not have privileges to change this User Preference. [xtuple: _usrprefBeforeTrigger, -2]';
       END IF;
     END IF;
   END IF;
@@ -32,12 +32,12 @@ BEGIN
       IF NOT EXISTS(SELECT locale_id
                       FROM locale
                      WHERE locale_id = NEW.usrpref_value::INTEGER) THEN
-        RAISE EXCEPTION 'You must supply a valid Locale.';
+        RAISE EXCEPTION 'You must supply a valid Locale. [xtuple: _usrprefBeforeTrigger, -3]';
       END IF;
 
     ELSIF (NEW.usrpref_name IN ('agent', 'active')) THEN
       IF (NEW.usrpref_value NOT IN ('t', 'f')) THEN
-        RAISE EXCEPTION '% must be either "t" or "f"', NEW.usrpref_name;
+        RAISE EXCEPTION '% must be either "t" or "f" [xtuple: _usrprefBeforeTrigger, -4, %]', NEW.usrpref_name, NEW.usrpref_name;
       END IF;
     END IF;
 

@@ -27,7 +27,7 @@ BEGIN
   END IF;
  
   IF UPPER(pType) NOT IN ('ALL','ACTIVE','SOLD') THEN
-    RAISE EXCEPTION 'Invalid Type %. Valid Itemsite types are ALL and SOLD', pType;
+    RAISE EXCEPTION 'Invalid Type %. Valid Itemsite types are ALL and SOLD [xtuple: getItemsiteId, -1, %]', pType, pType;
   END IF;
 
   SELECT item_id,     item_active,     item_sold,
@@ -37,19 +37,19 @@ BEGIN
     AND item_number = UPPER(pItemNumber);
 
   IF NOT (FOUND) THEN
-    RAISE EXCEPTION 'Item % not found in Warehouse %', pItemNumber, pWarehouseCode;
+    RAISE EXCEPTION 'Item % not found in Warehouse % [xtuple: getItemsiteId, -2, %, %]', pItemNumber, pWarehouseCode, pItemNumber, pWarehouseCode;
   ELSIF ((UPPER(pType)='ACTIVE') OR (UPPER(pType)='SOLD')) THEN
     IF NOT (_p.item_active) THEN
-      RAISE EXCEPTION 'Item % is inactive.', pItemNumber;
+      RAISE EXCEPTION 'Item % is inactive. [xtuple: getItemsiteId, -3, %]', pItemNumber, pItemNumber;
     ELSE
       IF NOT (_p.itemsite_active) THEN
-        RAISE EXCEPTION 'Item % is inactive in Warehouse %', pItemNumber, pWarehouseCode;
+        RAISE EXCEPTION 'Item % is inactive in Warehouse % [xtuple: getItemsiteId, -4, %, %]', pItemNumber, pWarehouseCode, pItemNumber, pWarehouseCode;
       ELSE
         IF ((UPPER(pType)='SOLD') AND NOT _p.item_sold) THEN
-          RAISE EXCEPTION 'Item % is not sold', pItemNumber;
+          RAISE EXCEPTION 'Item % is not sold [xtuple: getItemsiteId, -5, %]', pItemNumber, pItemNumber;
         ELSE
           IF ((UPPER(pType)='SOLD') AND NOT _p.itemsite_sold) THEN
-            RAISE EXCEPTION 'Item % is not sold from Warehouse %', pItemNumber, pWarehouseCode;
+            RAISE EXCEPTION 'Item % is not sold from Warehouse % [xtuple: getItemsiteId, -6, %, %]', pItemNumber, pWarehouseCode, pItemNumber, pWarehouseCode;
           END IF;
         END IF;
       END IF;

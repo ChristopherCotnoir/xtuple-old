@@ -14,7 +14,7 @@ BEGIN
   WHERE (salescat_name=pSalesCatName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Sales Category % not found.'', pSalesCatName;
+	RAISE EXCEPTION ''Sales Category % not found. [xtuple: getSalesCatId, -1, %]'', pSalesCatName, pSalesCatName;
   END IF;
 
   RETURN _returnVal;

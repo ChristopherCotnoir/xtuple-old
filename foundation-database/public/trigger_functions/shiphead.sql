@@ -14,8 +14,8 @@ BEGIN
 
     END IF;
 
-    RAISE EXCEPTION ''% with id % does not exist'',
-		    NEW.shiphead_order_type, NEW.shiphead_order_id;
+    RAISE EXCEPTION ''% with id % does not exist [xtuple: _shipheadBeforeTrigger, -1, %, %]'',
+		    NEW.shiphead_order_type, NEW.shiphead_order_id, NEW.shiphead_order_type, NEW.shiphead_order_id;
     RETURN OLD;
 
   END IF;

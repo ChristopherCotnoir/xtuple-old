@@ -5,7 +5,7 @@ BEGIN
 
 -- Privilege Checks
    IF (NOT checkPrivilege(''MaintainItemMasters'')) THEN
-     RAISE EXCEPTION ''You do not have privileges to maintain Items.'';
+     RAISE EXCEPTION ''You do not have privileges to maintain Items. [xtuple: _itemuomconvTrigger, -1]'';
    END IF;
 
   RETURN NEW;

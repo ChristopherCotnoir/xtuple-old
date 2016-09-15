@@ -12,8 +12,8 @@ BEGIN
 			       FROM shiphead
 			       WHERE (shiphead_order_id=NEW.pack_head_id)
 				 AND (shiphead_order_type=NEW.pack_head_type))) THEN
-      RAISE EXCEPTION 'Shipment does not exist for % id %',
-		      NEW.pack_head_type, NEW.pack_head_id;
+      RAISE EXCEPTION 'Shipment does not exist for % id % [xtuple: _packBeforeTrigger, -1, %, %]',
+		      NEW.pack_head_type, NEW.pack_head_id, NEW.pack_head_type, NEW.pack_head_id;
       RETURN OLD;
     END IF;
 
@@ -23,14 +23,14 @@ BEGIN
 
     ELSEIF (NEW.pack_head_type = 'TO') THEN
       IF (NOT fetchMetricBool('MultiWhs')) THEN
-	RAISE EXCEPTION 'Transfer Orders are not supported by this version of the application';
+	RAISE EXCEPTION 'Transfer Orders are not supported by this version of the application [xtuple: _packBeforeTrigger, -2]';
       ELSEIF (NEW.pack_head_id IN (SELECT tohead_id FROM tohead)) THEN
 	RETURN NEW;
       END IF;
     END IF;
 
-    RAISE EXCEPTION '% with id % does not exist',
-		    NEW.pack_head_type, NEW.pack_head_id;
+    RAISE EXCEPTION '% with id % does not exist [xtuple: _packBeforeTrigger, -3, %, %]',
+		    NEW.pack_head_type, NEW.pack_head_id, NEW.pack_head_type, NEW.pack_head_id;
     RETURN OLD;
 
   END IF;

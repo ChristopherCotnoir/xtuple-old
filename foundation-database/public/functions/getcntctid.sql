@@ -26,7 +26,7 @@ BEGIN
   WHERE (cntct_number=pContactNumber);
 
   IF (_returnVal IS NULL AND pNotFoundErr) THEN
-    RAISE EXCEPTION 'Contact Number % not found.', pContactNumber;
+    RAISE EXCEPTION 'Contact Number % not found. [xtuple: getCntctId, -1, %]', pContactNumber, pContactNumber;
   ELSIF (_returnVal IS NULL) THEN
     RETURN NULL;
   END IF;

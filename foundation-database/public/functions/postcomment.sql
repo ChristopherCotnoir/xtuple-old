@@ -16,7 +16,7 @@ BEGIN
   FROM cmnttype
   WHERE (cmnttype_name=pCmnttypename);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Comment type % not found.', pCmnttypename;
+    RAISE EXCEPTION 'Comment type % not found. [xtuple: postComment, -1, %]', pCmnttypename, pCmnttypename;
   END IF;
 
   _text := (pColumn || ' changed from "' || pFrom || '" to "' || pTo || '"');
@@ -39,7 +39,7 @@ BEGIN
   FROM cmnttype
   WHERE (cmnttype_name=pCmnttypename);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Comment type % not found.', pCmnttypename;
+    RAISE EXCEPTION 'Comment type % not found. [xtuple: postComment, -1, %]', pCmnttypename, pCmnttypename;
   END IF;
 
   RETURN postComment(_cmnttypeid, pSource, pSourceid, pText, NULL);

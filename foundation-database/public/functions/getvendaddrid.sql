@@ -17,8 +17,8 @@ BEGIN
     AND   (vend_number=pVendNumber) );
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Vendor Number % Address % not found.',
-    pVendNumber, pVendAddrCode;
+    RAISE EXCEPTION 'Vendor Number % Address % not found. [xtuple: getVendAddrId, -1, %, %]',
+    pVendNumber, pVendAddrCode, pVendNumber, pVendAddrCode;
   END IF;
 
   RETURN _returnVal;

@@ -11,7 +11,7 @@ BEGIN
   IF (TG_OP IN ('INSERT','UPDATE')) THEN
 
     IF (LENGTH(COALESCE(NEW.custtype_code, ''))=0) THEN
-      RAISE EXCEPTION 'You must supply a valid Customer Type Code.';
+      RAISE EXCEPTION 'You must supply a valid Customer Type Code. [xtuple: _custtypeTrigger, -1]';
     END IF;
 
     SELECT custtype_code INTO _code
@@ -19,7 +19,7 @@ BEGIN
     WHERE ( (UPPER(custtype_code)=UPPER(NEW.custtype_code))
       AND (custtype_id<>NEW.custtype_id) );
     IF (FOUND) THEN
-      RAISE EXCEPTION 'The Customer Type Code entered cannot be used as it is in use.';
+      RAISE EXCEPTION 'The Customer Type Code entered cannot be used as it is in use. [xtuple: _custtypeTrigger, -2]';
     END IF;
 
   END IF;

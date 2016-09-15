@@ -5,7 +5,7 @@ BEGIN
 
   --  Checks
   IF NOT (checkPrivilege('MaintainPricingSchedules')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Price Schedules.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Price Schedules. [xtuple: _ipsitemcharBeforeTrigger, -1]';
   END IF;
   
   IF (TG_OP IN ('INSERT','UPDATE')) THEN
@@ -13,14 +13,14 @@ BEGIN
         FROM ipsiteminfo JOIN item ON (item_id=ipsitem_item_id) 
         WHERE ((ipsitem_id=NEW.ipsitemchar_ipsitem_id)
         AND (item_config))) THEN
-      RAISE EXCEPTION 'Characteristic prices may only be set on configured items.';
+      RAISE EXCEPTION 'Characteristic prices may only be set on configured items. [xtuple: _ipsitemcharBeforeTrigger, -2]';
     ELSIF (SELECT (COUNT(item_id)=0)
         FROM ipsiteminfo JOIN item ON (item_id=ipsitem_item_id)
                          JOIN charass ON (charass_target_id=item_id AND charass_target_type='I') 
         WHERE ((ipsitem_id=NEW.ipsitemchar_ipsitem_id)
         AND (charass_char_id=NEW.ipsitemchar_char_id)
         AND (charass_value=NEW.ipsitemchar_value))) THEN
-      RAISE EXCEPTION 'No characteristic with matching value exists for this item.';
+      RAISE EXCEPTION 'No characteristic with matching value exists for this item. [xtuple: _ipsitemcharBeforeTrigger, -3]';
     END IF;
     RETURN NEW;
   ELSE

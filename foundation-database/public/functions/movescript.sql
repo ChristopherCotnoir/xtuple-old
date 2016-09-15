@@ -55,8 +55,8 @@ BEGIN
   IF (_rows < 1) THEN
     RAISE EXCEPTION '[xtuple: moveScript, -3]';
   ELSIF (_rows > 1) THEN
-    RAISE EXCEPTION 'Tried to delete % scripts with the id % when there should be exactly 1',
-                    _rows, pscriptid;
+    RAISE EXCEPTION 'Tried to delete % scripts with the id % when there should be exactly 1 [xtuple: moveScript, -5, %, %]',
+                    _rows, pscriptid, _rows, pscriptid;
   END IF;
 
   _insertstr := 'INSERT INTO ' || _destination ||
@@ -75,8 +75,8 @@ BEGIN
   IF (_rows < 1) THEN
     RAISE EXCEPTION '[xtuple: moveScript, -4]';
   ELSIF (_rows > 1) THEN
-    RAISE EXCEPTION 'Tried to insert % scripts with the id % when there should be exactly 1',
-                    _rows, pscriptid;
+    RAISE EXCEPTION 'Tried to insert % scripts with the id % when there should be exactly 1 [xtuple: moveScript, -6, %, %]',
+                    _rows, pscriptid, _rows, pscriptid;
   END IF;
 
   RETURN pscriptid;

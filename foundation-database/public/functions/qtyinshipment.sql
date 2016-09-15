@@ -25,8 +25,8 @@ BEGIN
       AND (shiphead_id=pshipheadid));
 
   IF (NOT FOUND) THEN
-    RAISE WARNING ''Quantity of % item % is 0 because shipment % does not exist.'',
-                  pordertype, plineitemid, pshipheadid;
+    RAISE WARNING ''Quantity of % item % is 0 because shipment % does not exist. [xtuple: qtyInShipment, -1, %, %, %]'',
+                  pordertype, plineitemid, pshipheadid, pordertype, plineitemid, pshipheadid;
   END IF;
 
   RETURN _qty;

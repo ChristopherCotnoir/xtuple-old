@@ -51,7 +51,7 @@ BEGIN
           ELSIF (_headcount > 1) THEN
             -- Trap for potential workflow problem.  Can only infer shiphead from sales order number 
             -- if shipping one at a time
-            RAISE EXCEPTION 'Multiple shipments exist for this order.  Please provide a specific a shipment number.';
+            RAISE EXCEPTION 'Multiple shipments exist for this order.  Please provide a specific a shipment number. [xtuple: _shipdatatrigger, -1]';
           END IF;
         END IF;
       END IF;

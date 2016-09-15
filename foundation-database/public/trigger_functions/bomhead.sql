@@ -7,7 +7,7 @@ CREATE OR REPLACE FUNCTION _bomheadBeforeTrigger() RETURNS TRIGGER AS $$
 BEGIN
 -- Privilege Checks
   IF (NOT checkPrivilege('MaintainBOMs')) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Bills of Material.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Bills of Material. [xtuple: _bomheadBeforeTrigger, -1]';
   END IF;
 
   -- Timestamps

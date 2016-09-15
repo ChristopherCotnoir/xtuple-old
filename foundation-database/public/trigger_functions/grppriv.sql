@@ -12,8 +12,8 @@ BEGIN
       (NOT EXISTS(SELECT priv_id
                   FROM priv
                   WHERE (priv_id=NEW.grppriv_priv_id)))) THEN
-    RAISE EXCEPTION 'Privilege id % does not exist or is part of a disabled package.',
-                NEW.grppriv_priv_id;
+    RAISE EXCEPTION 'Privilege id % does not exist or is part of a disabled package. [xtuple: _grpprivTrigger, -1, %]',
+                NEW.grppriv_priv_id, NEW.grppriv_priv_id;
     RETURN OLD;
 
   ELSIF (TG_OP = 'DELETE') THEN

@@ -31,7 +31,7 @@ BEGIN
   FROM vohead
   WHERE (vohead_id=NEW.vodist_vohead_id);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Voucher head not found';
+    RAISE EXCEPTION 'Voucher head not found [xtuple: _vodistAfterTrigger, -1]';
   END IF;
 
   IF (NEW.vodist_tax_id <> -1) THEN

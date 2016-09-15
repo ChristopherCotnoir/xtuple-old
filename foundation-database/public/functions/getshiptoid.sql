@@ -16,7 +16,7 @@ BEGIN
   AND (UPPER(shipto_num)=UPPER(pShiptoNumber)));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Shipto % not found.'', pShiptoNumber;
+	RAISE EXCEPTION ''Shipto % not found. [xtuple: getShiptoId, -1, %]'', pShiptoNumber, pShiptoNumber;
   END IF;
 
   RETURN _returnVal;

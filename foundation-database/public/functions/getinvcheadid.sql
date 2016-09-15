@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(invchead_invcnumber)=UPPER(pInvcNumber));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Invoice % not found.'', pInvcNumber;
+	RAISE EXCEPTION ''Invoice % not found. [xtuple: getInvcheadId, -1, %]'', pInvcNumber, pInvcNumber;
   END IF;
 
   RETURN _returnVal;

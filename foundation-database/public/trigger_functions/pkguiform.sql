@@ -36,13 +36,13 @@ BEGIN
   END IF;
 
   IF (TG_OP = 'INSERT') THEN
-    RAISE EXCEPTION 'You may not create forms in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not create forms in packages except using the xTuple Updater utility [xtuple: _pkguiformalterTrigger, -1]';
 
   ELSIF (TG_OP = 'UPDATE') THEN
-    RAISE EXCEPTION 'You may not alter forms in packages except using the xTuple Updater utility';
+    RAISE EXCEPTION 'You may not alter forms in packages except using the xTuple Updater utility [xtuple: _pkguiformalterTrigger, -2]';
 
   ELSIF (TG_OP = 'DELETE') THEN
-    RAISE EXCEPTION 'You may not delete forms from packages. Try deleting or disabling the package.';
+    RAISE EXCEPTION 'You may not delete forms from packages. Try deleting or disabling the package. [xtuple: _pkguiformalterTrigger, -3]';
 
   END IF;
 

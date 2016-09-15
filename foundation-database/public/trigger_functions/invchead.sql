@@ -19,7 +19,7 @@ BEGIN
         OR (OLD.invchead_misc_accnt_id != NEW.invchead_misc_accnt_id)
         OR (OLD.invchead_misc_amount != NEW.invchead_misc_amount)
         OR (OLD.invchead_freight != NEW.invchead_freight))) THEN
-      RAISE EXCEPTION 'Edit not allow on Posted Invoice.';
+      RAISE EXCEPTION 'Edit not allow on Posted Invoice. [xtuple: _invcheadBeforeTrigger, -1]';
     END IF;
   END IF;
 

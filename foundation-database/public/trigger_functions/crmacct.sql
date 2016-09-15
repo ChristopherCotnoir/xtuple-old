@@ -35,8 +35,8 @@ BEGIN
       IF (NEW.crmacct_number != UPPER(OLD.crmacct_number) AND
           NEW.crmacct_usr_username IS NOT NULL            AND
           UPPER(NEW.crmacct_usr_username) != NEW.crmacct_number) THEN
-        RAISE EXCEPTION 'The CRM Account % is associated with a system User so the number cannot be changed.',
-                        NEW.crmacct_number;
+        RAISE EXCEPTION 'The CRM Account % is associated with a system User so the number cannot be changed. [xtuple: _crmacctBeforeTrigger, -1, %]',
+                        NEW.crmacct_number, NEW.crmacct_number;
       END IF;
 
       -- It appears possible to remove a user account without cleaning up the CRM account (#25291)
@@ -169,14 +169,14 @@ BEGIN
       IF (NOT EXISTS(SELECT usr_username
                        FROM usr
                       WHERE usr_username=NEW.crmacct_usr_username)) THEN
-        RAISE EXCEPTION 'User % does not exist so this CRM Account Number is invalid.',
-                        NEW.crmacct_usr_username;
+        RAISE EXCEPTION 'User % does not exist so this CRM Account Number is invalid. [xtuple: _crmacctBeforeTrigger, -2, %]',
+                        NEW.crmacct_usr_username, NEW.crmacct_usr_username;
       END IF;
       IF (TG_OP = 'UPDATE') THEN
         -- reminder: this evaluates to false if either is NULL
         IF (NEW.crmacct_usr_username != OLD.crmacct_usr_username) THEN
-          RAISE EXCEPTION 'Cannot change the user name for %',
-                          OLD.crmacct_usr_username;
+          RAISE EXCEPTION 'Cannot change the user name for % [xtuple: _crmacctBeforeTrigger, -3, %]',
+                          OLD.crmacct_usr_username, OLD.crmacct_usr_username;
         END IF;
       END IF;
       UPDATE usrpref SET usrpref_value = NEW.crmacct_name
@@ -187,34 +187,34 @@ BEGIN
 
   ELSIF (TG_OP = 'DELETE') THEN
     IF (OLD.crmacct_cust_id IS NOT NULL) THEN
-      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Customer [xtuple: deleteCrmAccount, -1]';
+      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Customer [xtuple: _crmacctBeforeTrigger, -4]';
     END IF;
 
     IF (OLD.crmacct_emp_id IS NOT NULL) THEN
-      RAISE EXCEPTION 'Cannot delete CRM Account because it is an Employee [xtuple: deleteCrmAccount, -7]';
+      RAISE EXCEPTION 'Cannot delete CRM Account because it is an Employee [xtuple: _crmacctBeforeTrigger, -5]';
     END IF;
 
     IF (OLD.crmacct_prospect_id IS NOT NULL) THEN
-      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Prospect [xtuple: deleteCrmAccount, -3]';
+      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Prospect [xtuple: _crmacctBeforeTrigger, -6]';
     END IF;
 
     DELETE FROM salesrep WHERE salesrep_id  = OLD.crmacct_salesrep_id;
     IF (OLD.crmacct_salesrep_id IS NOT NULL) THEN
-      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Sales Rep [xtuple: deleteCrmAccount, -6]';
+      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Sales Rep [xtuple: _crmacctBeforeTrigger, -7]';
     END IF;
 
     IF (OLD.crmacct_taxauth_id IS NOT NULL) THEN
-      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Tax Authority [xtuple: deleteCrmAccount, -5]';
+      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Tax Authority [xtuple: _crmacctBeforeTrigger, -8]';
     END IF;
 
     IF (EXISTS(SELECT usename
                  FROM pg_user
                 WHERE usename=OLD.crmacct_usr_username)) THEN
-      RAISE EXCEPTION 'Cannot delete CRM Account because it is a User [xtuple: deleteCrmAccount, -8]';
+      RAISE EXCEPTION 'Cannot delete CRM Account because it is a User [xtuple: _crmacctBeforeTrigger, -9]';
     END IF;
 
     IF (OLD.crmacct_vend_id IS NOT NULL) THEN
-      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Vendor [xtuple: deleteCrmAccount, -2]';
+      RAISE EXCEPTION 'Cannot delete CRM Account because it is a Vendor [xtuple: _crmacctBeforeTrigger, -10]';
     END IF;
 
     DELETE FROM imageass

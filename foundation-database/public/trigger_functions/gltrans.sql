@@ -8,14 +8,14 @@ BEGIN
   -- Checks
   -- Start with privileges
   IF ((NEW.gltrans_doctype='JE') AND (NOT checkPrivilege('PostJournalEntries'))) THEN
-      RAISE EXCEPTION 'You do not have privileges to create a Journal Entry.';
+      RAISE EXCEPTION 'You do not have privileges to create a Journal Entry. [xtuple: _gltransInsertTrigger, -1]';
   END IF;
 
   SELECT company_external INTO _externalCompany
   FROM company JOIN accnt ON (company_number=accnt_company)
   WHERE (accnt_id=NEW.gltrans_accnt_id);
   IF (_externalCompany) THEN
-    RAISE EXCEPTION 'Transactions are not allowed for G/L Accounts with External Company segments.';
+    RAISE EXCEPTION 'Transactions are not allowed for G/L Accounts with External Company segments. [xtuple: _gltransInsertTrigger, -2]';
   END IF;
   -- RAISE NOTICE '_gltransInsertTrigger(): company_external = %', _externalCompany;
 
@@ -27,7 +27,7 @@ BEGIN
     _reqNotes := false;
   END IF;
   IF ((NEW.gltrans_doctype='JE') AND _reqNotes AND (TRIM(BOTH FROM COALESCE(NEW.gltrans_notes,''))='')) THEN
-      RAISE EXCEPTION 'Notes are required for Journal Entries.';
+      RAISE EXCEPTION 'Notes are required for Journal Entries. [xtuple: _gltransInsertTrigger, -3]';
   END IF;
   
   RETURN NEW;
@@ -45,13 +45,13 @@ DECLARE
   _updated BOOLEAN := false;
 BEGIN
   IF(TG_OP='DELETE') THEN
-    RAISE EXCEPTION 'You may not delete G/L Transactions once they have been created.';
+    RAISE EXCEPTION 'You may not delete G/L Transactions once they have been created. [xtuple: _gltransAlterTrigger, -1]';
   ELSIF (TG_OP = 'UPDATE') THEN
     SELECT company_external INTO _externalCompany
     FROM company JOIN accnt ON (company_number=accnt_company)
     WHERE (accnt_id=NEW.gltrans_accnt_id);
     IF (_externalCompany) THEN
-      RAISE EXCEPTION 'Transactions are not allowed for G/L Accounts with External Company segments.';
+      RAISE EXCEPTION 'Transactions are not allowed for G/L Accounts with External Company segments. [xtuple: _gltransAlterTrigger, -2]';
     END IF;
 
     IF(OLD.gltrans_id != NEW.gltrans_id) THEN
@@ -87,10 +87,10 @@ BEGIN
     END IF;
 
     IF(_updated) THEN
-      RAISE EXCEPTION 'You may not alter some G/L Transaction fields once they have been created.';
+      RAISE EXCEPTION 'You may not alter some G/L Transaction fields once they have been created. [xtuple: _gltransAlterTrigger, -3]';
     END IF;
   ELSE
-    RAISE EXCEPTION 'trigger for gltrans table called in unexpected state.';
+    RAISE EXCEPTION 'trigger for gltrans table called in unexpected state. [xtuple: _gltransAlterTrigger, -4]';
   END IF;
   RETURN NEW;
 END;

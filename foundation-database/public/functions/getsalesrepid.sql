@@ -14,7 +14,7 @@ BEGIN
   WHERE (salesrep_number=pSalesRepNumber);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION ''Sales Rep Number % not found.'', pSalesRepNumber;
+	RAISE EXCEPTION ''Sales Rep Number % not found. [xtuple: getSalesRepId, -1, %]'', pSalesRepNumber, pSalesRepNumber;
   END IF;
 
   RETURN _returnVal;

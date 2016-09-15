@@ -45,7 +45,7 @@ BEGIN
              ];
   IF _debug THEN RAISE NOTICE '_part: % -> _result: %', _part, _result; END IF;
   IF _part[1] IS NULL OR _part[2] IS NULL THEN
-    RAISE EXCEPTION '% is not recognized as a valid version number', pVersion;
+    RAISE EXCEPTION '% is not recognized as a valid version number [xtuple: _normalizeVersion, -1, %]', pVersion, pVersion;
   END IF;
   RETURN _result;
 END;

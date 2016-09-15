@@ -278,8 +278,8 @@ BEGIN
 				      round(_p.checkhead_amount_base, 2),
 				    _p.checkhead_checkdate, _gltransNote, pcheckid );
       ELSE
-	RAISE EXCEPTION 'checkhead_id % does not balance (% - % <> %)', pcheckid,
-	      _amount_base, _exchGain, _p.checkhead_amount_base;
+	RAISE EXCEPTION 'checkhead_id % does not balance (% - % <> %) [xtuple: postcheck, -14]', pcheckid,
+	      _amount_base, _exchGain, _p.checkhead_amount_base, pcheckid, _amount_base, _exchGain, _p.checkhead_amount_base;
       END IF;
     END IF;
   END IF;

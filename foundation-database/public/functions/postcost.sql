@@ -16,8 +16,8 @@ BEGIN
     AND  (itemcost_id=pItemcostid));
 
   IF (_p.newcost IS NULL) THEN
-      RAISE EXCEPTION ''There is no valid Exchange Rate for this currency. (%, %)'',
-                  _p.itemcost_curr_id, _p.effective;
+      RAISE EXCEPTION ''There is no valid Exchange Rate for this currency. (%, %) [xtuple: postCost, -1, %, %]'',
+                  _p.itemcost_curr_id, _p.effective, _p.itemcist_curr_id, _p.effective;
       RETURN FALSE;
   END IF;
 

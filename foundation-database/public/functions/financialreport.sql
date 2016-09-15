@@ -50,7 +50,7 @@ BEGIN
 
 -- Validate Interval
    IF pInterval <> 'M' AND pInterval <> 'Q' AND pInterval <> 'Y' THEN
-     RAISE EXCEPTION 'Invalid Interval --> %', pInterval;
+     RAISE EXCEPTION 'Invalid Interval --> % [xtuple: financialreport, -1, %]', pInterval, pInterval;
    END IF;
 
   CREATE TEMPORARY TABLE IF NOT EXISTS flrpt

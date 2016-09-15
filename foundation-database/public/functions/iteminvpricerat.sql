@@ -18,7 +18,7 @@ BEGIN
    WHERE(item_id=pItemid);
 
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION ''No item record found for item_id %'', pItemid;
+    RAISE EXCEPTION ''No item record found for item_id % [xtuple: itemInvPriceRat, -1, %]'', pItemid, pItemid;
   END IF;
 
   IF(_fromUomid = _toUomid) THEN
@@ -36,7 +36,7 @@ BEGIN
      AND (itemuomconv_item_id=pItemid));
 
   IF(NOT FOUND) THEN
-    RAISE EXCEPTION ''No itemuomconv record found for item_id % to item_price_uomid %'', pItemid, _toUomid;
+    RAISE EXCEPTION ''No itemuomconv record found for item_id % to item_price_uomid % [xtuple: itemInvPriceRat, -2, %, %]'', pItemid, _toUomid, pItemid, _toUomid;
   END IF;
   
   RETURN _ratio;

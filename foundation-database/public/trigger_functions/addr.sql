@@ -18,13 +18,13 @@ CREATE OR REPLACE FUNCTION _addrtrigger() RETURNS "trigger" AS $$
 
     IF (TG_OP = 'UPDATE') THEN
       IF (OLD.addr_active AND NOT NEW.addr_active AND _uses > 0) THEN
-	RAISE EXCEPTION 'Cannot inactivate Address with Active Contacts (%)',
-			_uses;
+	RAISE EXCEPTION 'Cannot inactivate Address with Active Contacts (%) [xtuple: _addrtrigger, -1, %]',
+			_uses, _uses;
       END IF;
     ELSIF (TG_OP = 'DELETE') THEN
       IF (_uses > 0) THEN
-	RAISE EXCEPTION 'Cannot Delete Address with Active Contacts (%)',
-			_uses;
+	RAISE EXCEPTION 'Cannot Delete Address with Active Contacts (%) [xtuple: _addrtrigger, -2, %]',
+			_uses, _uses;
       END IF;
 
       UPDATE cntct SET cntct_addr_id = NULL

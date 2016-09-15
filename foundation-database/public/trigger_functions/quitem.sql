@@ -8,7 +8,7 @@ BEGIN
   --  Checks
   SELECT checkPrivilege('MaintainQuotes') INTO _check;
   IF NOT (_check) THEN
-    RAISE EXCEPTION 'You do not have privileges to maintain Quotes.';
+    RAISE EXCEPTION 'You do not have privileges to maintain Quotes. [xtuple: _quitemtrigger, -1]';
   END IF;
 
   IF (fetchMetricBool('SalesOrderChangeLog')) THEN
@@ -63,7 +63,7 @@ DECLARE
 BEGIN
   -- Check
   IF (NEW.quitem_scheddate IS NULL) THEN
-  	RAISE EXCEPTION 'A schedule date is required.';
+  	RAISE EXCEPTION 'A schedule date is required. [xtuple: _quitemtrigger, -2]';
   END IF;
 
   -- If this is imported, go ahead and insert default characteristics

@@ -20,7 +20,7 @@ BEGIN
   WHERE (orderseq_name=psequence) FOR UPDATE;
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Invalid orderseq_name %', psequence;
+    RAISE EXCEPTION 'Invalid orderseq_name % [xtuple: fetchNextNumber, -1, %]', psequence, psequence;
   END IF;
   
   LOOP

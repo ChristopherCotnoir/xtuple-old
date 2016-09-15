@@ -14,7 +14,7 @@ BEGIN
   WHERE (incdtcat_name=pIncdtCatName);
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Incident Category Name % not found.', pIncdtCatName;
+	RAISE EXCEPTION 'Incident Category Name % not found. [xtuple: getIncdtCatId, -1, %]', pIncdtCatName, pIncdtCatName;
   END IF;
 
   RETURN _returnVal;

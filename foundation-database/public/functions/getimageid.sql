@@ -13,7 +13,7 @@ BEGIN
   WHERE (image_name=pImageName);
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION 'Image % not found.', pImageName;
+    RAISE EXCEPTION 'Image % not found. [xtuple: getImageId, -1], %', pImageName, pImageName;
   END IF;
 
   RETURN _returnVal;

@@ -14,7 +14,7 @@ BEGIN
   WHERE (UPPER(shift_number)=UPPER(pShiftNumber));
 
   IF (_returnVal IS NULL) THEN
-    RAISE EXCEPTION ''Shift % not found.'', pShiftNumber;
+    RAISE EXCEPTION ''Shift % not found. [xtuple: getShiftId, -1, %]'', pShiftNumber, pShiftNumber;
   END IF;
 
   RETURN _returnVal;

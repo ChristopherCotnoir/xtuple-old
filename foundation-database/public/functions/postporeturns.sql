@@ -114,8 +114,8 @@ BEGIN
            WHERE ((itemsite_costcat_id=costcat_id)
               AND (itemsite_id=poitem_itemsite_id) );
            IF (NOT FOUND) THEN
-             RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id %',
-             _p.itemsiteid;
+             RAISE EXCEPTION 'Could not insert G/L transaction: no cost category found for itemsite_id % [xtuple: postPoReturns, -1, %]',
+             _p.itemsiteid, _p.itemsiteid;
            ELSIF (_tmp < 0 AND _tmp != -3) THEN -- error but not 0-value transaction
              RETURN _tmp;
            ELSE

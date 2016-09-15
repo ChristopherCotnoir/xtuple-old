@@ -16,7 +16,7 @@ BEGIN
   AND (prjtask_number=pTaskNumber));
 
   IF (_returnVal IS NULL) THEN
-	RAISE EXCEPTION 'Project Task Number %-% not found.', pPrjNumber, pTaskNumber;
+	RAISE EXCEPTION 'Project Task Number %-% not found. [xtuple: getPrjTaskId, -1, %, %]', pPrjNumber, pTaskNumber, pPrjNumber, pTaskNumber;
   END IF;
 
   RETURN _returnVal;
