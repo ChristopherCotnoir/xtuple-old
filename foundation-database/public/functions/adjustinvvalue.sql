@@ -1,14 +1,13 @@
-CREATE OR REPLACE FUNCTION adjustInvValue(INTEGER, NUMERIC, INTEGER) RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION adjustInvValue(pItemsiteid   INTEGER, 
+                                          pNewValue     NUMERIC, 
+                                          pAccountid    INTEGER) 
+  RETURNS INTEGER AS $$
 -- Copyright (c) 1999-2014 by OpenMFG LLC, d/b/a xTuple. 
 -- See www.xtuple.com/CPAL for the full text of the software license.
 DECLARE
-  pItemsiteid     ALIAS FOR $1;
-  pNewValue       ALIAS FOR $2;
-  pAccountid      ALIAS FOR $3;
   _delta          NUMERIC;
   _glreturn       INTEGER;
   _invhistid      INTEGER;
-  _itemlocSeries  INTEGER;
 
 BEGIN
 
@@ -50,12 +49,13 @@ BEGIN
   FROM itemsite, item, uom
   WHERE ( (itemsite_item_id=item_id)
    AND (item_inv_uom_id=uom_id)
-   AND (itemsite_id=pItemsiteid) );
+   AND (itemsite_id=pItemsiteid) )
+  RETURNING invhist_id INTO _invhistid;
 
   UPDATE itemsite SET itemsite_value=pNewValue
   WHERE (itemsite_id=pItemsiteid);
 
-  RETURN 0;
+  RETURN _invhistid;
 
 END;
 $$ LANGUAGE 'plpgsql';

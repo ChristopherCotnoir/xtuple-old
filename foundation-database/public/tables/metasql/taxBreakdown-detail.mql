@@ -265,15 +265,20 @@
   WHERE (vodist_vohead_id=<? value("vohead_id") ?>) 
   AND (vodist_tax_id = -1)
   GROUP BY vohead_id, number, taxzone_id, curr_id, tax_curr_id, date, vohead_freight, adjTax) head, 
-  (SELECT SUM(voitemtax.taxhist_tax * -1) AS total_tax 
-   FROM voitemtax 
-    LEFT OUTER JOIN voitem ON (taxhist_parent_id = voitem_id) 
-   WHERE (voitem_vohead_id=<? value("vohead_id") ?>)
-     AND taxhist_taxtype_id <> getfreighttaxtypeid()) linetax,
+
+  (SELECT SUM(taxhist_tax * -1) AS total_tax  
+   FROM (SELECT SUM(taxhist_tax) AS taxhist_tax FROM voitemtax 
+         LEFT OUTER JOIN voitem ON (taxhist_parent_id = voitem_id) 
+         WHERE (voitem_vohead_id=<? value("vohead_id") ?>)
+          AND taxhist_taxtype_id <> getfreighttaxtypeid()
+         UNION SELECT SUM(taxhist_tax) FROM voheadtax
+         WHERE taxhist_parent_id=<? value("vohead_id") ?>
+          AND taxhist_taxtype_id <> getfreighttaxtypeid()) foo) linetax,
+
   (SELECT  SUM(taxhist_tax * -1) AS adjtaxamt 
    FROM vohead 
     LEFT OUTER JOIN voheadtax ON (taxhist_parent_id = vohead_id 
-                                AND taxhist_taxtype_id = getadjustmenttaxtypeid()) 
+                                AND taxhist_taxtype_id = getadjustmenttaxtypeid())
    WHERE vohead_id=<? value("vohead_id") ?>) adjtax
 <? elseif exists("voitem_id") ?>
   SELECT head.*, linetax.* 
