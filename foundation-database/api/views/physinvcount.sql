@@ -44,7 +44,7 @@ BEGIN
     FROM item
     WHERE (item_upccode=pNEW.item_number);
     IF (NOT FOUND OR _type IN ('F', 'R', 'L','J', 'K')) THEN
-      RAISE EXCEPTION 'Function insertPhysInvCount failed because Item % not found or invalid type', pNEW.item_number;
+      RAISE EXCEPTION 'Function insertPhysInvCount failed because Item % not found or invalid type [xtuple: insertPhysInvCount, -1, %]', pNEW.item_number, pNEW.item_number;
     END IF;
   END IF;
 
@@ -57,7 +57,7 @@ BEGIN
                                               AND (usrpref_name='PreferredWarehouse')
                                               AND (warehous_id=CAST(usrpref_value AS INTEGER)))));
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Function insertPhysInvCount failed because Site % not found', pNEW.site;
+    RAISE EXCEPTION 'Function insertPhysInvCount failed because Site % not found [xtuple: insertPhysInvCount, -2, %]', pNEW.site, pNEW.site;
   END IF;
 
   -- Check Itemsite
@@ -66,13 +66,13 @@ BEGIN
   WHERE (itemsite_item_id=_itemid)
     AND (itemsite_warehous_id=_siteid);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % not found', pNEW.site, pNEW.item_number;
+    RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % not found [xtuple: insertPhysInvCount, -3, %, %]', pNEW.site, pNEW.item_number, pNEW.site, pNEW.item_number;
   END IF;
   IF (_controlmethod = 'N') THEN
-    RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % not inventory control method', pNEW.site, pNEW.item_number;
+    RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % not inventory control method [xtuple: insertPhysInvCount, -4, %, %]', pNEW.site, pNEW.item_number, pNEW.site, pNEW.item_number;
   END IF;
   IF (_controlmethod IN ('L', 'S') AND COALESCE(pNEW.lotserial, '') = '') THEN
-    RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % lot/serial controlled and lotserial not provided', pNEW.site, pNEW.item_number;
+    RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % lot/serial controlled and lotserial not provided [xtuple: insertPhysInvCount, -5, %, %]', pNEW.site, pNEW.item_number, pNEW.site, pNEW.item_number;
   END IF;
   IF (_controlmethod = 'S') THEN
     -- Check for unique serial id
@@ -80,19 +80,19 @@ BEGIN
     FROM ls
     WHERE (ls_number=pNEW.lotserial);
     IF (FOUND) THEN
-      RAISE EXCEPTION 'Function insertPhysInvCount failed because Serial %, %, % not unique', pNEW.site, pNEW.item_number, pNEW.lotserial;
+      RAISE EXCEPTION 'Function insertPhysInvCount failed because Serial %, %, % not unique [xtuple: insertPhysInvCount, -6, %, %, %]', pNEW.site, pNEW.item_number, pNEW.lotserial, pNEW.site, pNEW.item_number, pNEW.lotserial;
     END IF;
   END IF;
   IF (_loccntrl) THEN
     IF (pNEW.location IS NULL) THEN
-      RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % multi location and location not provided', pNEW.site, pNEW.item_number;
+      RAISE EXCEPTION 'Function insertPhysInvCount failed because Itemsite %, % multi location and location not provided [xtuple: insertPhysInvCount, -7, %, %]', pNEW.site, pNEW.item_number, pNEW.site, pNEW.item_number;
     ELSE
       -- Check Location
       SELECT location_id INTO _locationid
       FROM location
       WHERE (location_id=getLocationId(pNEW.site, pNEW.location));
       IF (NOT FOUND) THEN
-        RAISE EXCEPTION 'Function insertPhysInvCount failed because Location %, % not found', pNEW.site, pNEW.location;
+        RAISE EXCEPTION 'Function insertPhysInvCount failed because Location %, % not found [xtuple: insertPhysInvCount, -8, %, %]', pNEW.site, pNEW.location, pNEW.site, pNEW.location;
       END IF;
     END IF;
   END IF;
@@ -100,7 +100,7 @@ BEGIN
   -- Create Count Tag
   SELECT CreateCountTag(_itemsiteid, pNEW.comment, FALSE, FALSE) INTO _invcntid;
   IF (_invcntid <= 0) THEN
-    RAISE EXCEPTION 'Function insertPhysInvCount failed because CreateCountTag failed for Itemsite %, %', pNEW.site, pNEW.item_number;
+    RAISE EXCEPTION 'Function insertPhysInvCount failed because CreateCountTag failed for Itemsite %, % [xtuple: insertPhysInvCount, -9, %, %]', pNEW.site, pNEW.item_number, pNEW.site, pNEW.item_number;
   END IF;
 
   -- Create Count Slip
@@ -125,7 +125,7 @@ BEGIN
   -- Post Count Slip
   SELECT postCountSlip(_cntslipid) INTO _result;
   IF (_result < 0) THEN
-    RAISE EXCEPTION 'Function insertPhysInvCount failed because postCountSlip failed for Itemsite %, %, %', pNEW.site, pNEW.item_number, _result;
+    RAISE EXCEPTION 'Function insertPhysInvCount failed because postCountSlip failed for Itemsite %, %, % [xtuple: insertPhysInvCount, -10, %, %, %]', pNEW.site, pNEW.item_number, _result, pNEW.site, pNEW.item_number, _result;
   END IF;
 
   RETURN TRUE;

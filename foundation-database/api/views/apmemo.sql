@@ -47,7 +47,7 @@ BEGIN
                                pNew.due_date,
                                getTermsId(pNew.terms) ) INTO _result;
     IF (_result <= 0) THEN
-      RAISE EXCEPTION 'Function createAPCreditMemo failed with result = %', _result;
+      RAISE EXCEPTION 'Function createAPCreditMemo failed with result = % [xtuple: insertapmemo, -1, %]', _result, _result;
     END IF;
   ELSE
     IF (pNew.document_type = 'Debit Memo') THEN
@@ -63,10 +63,10 @@ BEGIN
                                 getTermsId(pNew.terms),
                                 COALESCE(getCurrId(pNew.currency), baseCurrId()) ) INTO _result;
       IF (_result <= 0) THEN
-        RAISE EXCEPTION 'Function createAPDebitMemo failed with result = %', _result;
+        RAISE EXCEPTION 'Function createAPDebitMemo failed with result = % [xtuple: insertapmemo, -2, %]', _result, _result;
       END IF;
     ELSE
-      RAISE EXCEPTION 'Function insertAPMemo failed, invalid Document Type';
+      RAISE EXCEPTION 'Function insertAPMemo failed, invalid Document Type [xtuple: insertapmemo, -3]';
     END IF;
   END IF;
 

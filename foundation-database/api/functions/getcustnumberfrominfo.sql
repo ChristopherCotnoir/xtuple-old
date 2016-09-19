@@ -59,13 +59,13 @@ BEGIN
   END IF;
 
   IF (_custcount > 1) THEN
-    RAISE EXCEPTION 'Found % possible Customers for % and % and %',
-		    _custcount, _email, _company, _fullname;
+    RAISE EXCEPTION 'Found % possible Customers for % and % and % [xtuple: getCustNumberFromInfo, -1, %, %, %, %]',
+		    _custcount, _email, _company, _fullname, _custcount, _email, _company, _fullname;
   END IF;
 
   IF (_custcount <= 0 AND _generate) THEN
     IF (_maxlength < _minlength) THEN
-      RAISE EXCEPTION 'Fix getCustNumberFromInfo: max length < min length';
+      RAISE EXCEPTION 'Fix getCustNumberFromInfo: max length < min length [xtuple: getCustNumberFromInfo, -2]';
     END IF;
 
     IF (_company != '') THEN
@@ -114,13 +114,13 @@ BEGIN
       END LOOP;
     END IF;
     IF (_custnumber IS NULL OR _custnumber = '') THEN
-      RAISE EXCEPTION 'Could not generate a new Customer Number';
+      RAISE EXCEPTION 'Could not generate a new Customer Number [xtuple: getCustNumberFromInfo, -3]';
     END IF;
   END IF;
 
   IF (_custnumber IS NULL OR _custnumber = '') THEN
-    RAISE EXCEPTION 'Could not find Customer Number for % and % and %',
-		    _email, _company, _fullname;
+    RAISE EXCEPTION 'Could not find Customer Number for % and % and % [xtuple: getCustNumberFromInfo, -4, %, %, %]',
+		    _email, _company, _fullname, _email, _company, _fullname;
   END IF;
 
   RETURN _custnumber;

@@ -8,11 +8,11 @@ DECLARE
 BEGIN
 
   IF (NOT EXISTS (SELECT cohead_id FROM cohead WHERE cohead_number=pNEW.order_number)) THEN
-    RAISE EXCEPTION 'Function insertSalesLine failed because Sales Order % not found', pNEW.order_number;
+    RAISE EXCEPTION 'Function insertSalesLine failed because Sales Order % not found, [xtuple: insertSalesLine, -1, %]', pNEW.order_number, pNEW.order_number;
   END IF;
 
   IF (NOT EXISTS (SELECT item_id FROM item WHERE item_number=pNEW.item_number)) THEN
-    RAISE EXCEPTION 'Function insertSalesLine failed because Item Number % not found', pNEW.item_number;
+    RAISE EXCEPTION 'Function insertSalesLine failed because Item Number % not found [xtuple: insertSalesLine, -2, %]', pNEW.item_number, pNEW.item_number;
   END IF;
 
   SELECT cohead_id, cohead_cust_id, cohead_shipto_id, cohead_curr_id,
@@ -32,7 +32,7 @@ BEGIN
   AND (warehous_id=COALESCE(getWarehousId(pNEW.sold_from_site,'ALL'),cohead_warehous_id,fetchprefwarehousid())));
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'Function insertSalesLine failed with unknown failure to retrieve Sales Order';
+    RAISE EXCEPTION 'Function insertSalesLine failed with unknown failure to retrieve Sales Order [xtuple: insertSalesLine, -3]';
   END IF;
 
   INSERT INTO coitem (

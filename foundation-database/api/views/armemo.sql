@@ -61,7 +61,7 @@ BEGIN
                                pNew.journal_number,
                                COALESCE(getCurrId(pNew.currency), baseCurrId()) ) INTO _result;
     IF (_result <= 0) THEN
-      RAISE EXCEPTION 'Function createARCreditMemo failed with result = %', _result;
+      RAISE EXCEPTION 'Function createARCreditMemo failed with result = % [xtuple: insertARMemo, -1, %]', _result, _result;
     END IF;
   ELSE
     IF (pNew.document_type = 'Debit Memo') THEN
@@ -81,10 +81,10 @@ BEGIN
                                 pNew.commission_due,
                                 COALESCE(getCurrId(pNew.currency), baseCurrId()) ) INTO _result;
       IF (_result <= 0) THEN
-        RAISE EXCEPTION 'Function createARDebitMemo failed with result = %', _result;
+        RAISE EXCEPTION 'Function createARDebitMemo failed with result = % [xtuple: insertARMemo, -2, %]', _result, _result;
       END IF;
     ELSE
-      RAISE EXCEPTION 'Function insertARMemo failed, invalid Document Type';
+      RAISE EXCEPTION 'Function insertARMemo failed, invalid Document Type [xtuple: insertARMemo, -3]';
     END IF;
   END IF;
 

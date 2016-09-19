@@ -60,7 +60,7 @@ BEGIN
   LIMIT 1;
 
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'MetaSQL Query %-% was not found.', pGroup, pName;
+    RAISE EXCEPTION 'MetaSQL Query %-% was not found. [xtuple: parsemetasql, -1, %, %]', pGroup, pName, pGroup, pName;
   END IF;
 
   RETURN xt.parsemetasql(qry, pOptions);
