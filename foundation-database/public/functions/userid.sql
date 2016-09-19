@@ -14,7 +14,7 @@ BEGIN
   IF (FOUND) THEN
     RETURN _userId;
   ELSE
-    RAISE EXCEPTION '[xtuple: userId, -1]';
+    RAISE EXCEPTION ''[xtuple: userId, -1]'';
   END IF;
 
 END;

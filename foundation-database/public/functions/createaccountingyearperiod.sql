@@ -18,7 +18,7 @@ BEGIN
   FROM yearperiod
   WHERE (pStartDate BETWEEN yearperiod_start AND yearperiod_end);
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The Year is closed. [xtuple: createAccountingYearPeriod, -1]';
+    RAISE EXCEPTION ''The Year is closed. [xtuple: createAccountingYearPeriod, -1]'';
   END IF;
 
 --  Make that the passed end date doesn''t fall into any existing yearperiod
@@ -26,7 +26,7 @@ BEGIN
   FROM yearperiod
   WHERE (pEndDate BETWEEN yearperiod_start AND yearperiod_end);
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Year dates may not overlap another year. [xtuple: createAccountingYearPeriod, -2]';
+    RAISE EXCEPTION ''Year dates may not overlap another year. [xtuple: createAccountingYearPeriod, -2]'';
   END IF;
 
 --  Make that the passed start and end dates don''t enclose an existing yearperiod
@@ -35,13 +35,13 @@ BEGIN
   WHERE ( (yearperiod_start >= pStartDate)
    AND (yearperiod_end <= pEndDate) );
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Year dates may not overlap another year. [xtuple: createAccountingYearPeriod, -3]';
+    RAISE EXCEPTION ''Year dates may not overlap another year. [xtuple: createAccountingYearPeriod, -3]'';
   END IF;
 
 --  Make sure that the passed start is prior to the end date
   SELECT (pStartDate > pEndDate) INTO _checkBool;
   IF (_checkBool) THEN
-    RAISE EXCEPTION 'The Start Date must be prior to the End Date [xtuple: createAccountingYearPeriod, -5]';
+    RAISE EXCEPTION ''The Start Date must be prior to the End Date [xtuple: createAccountingYearPeriod, -5]'';
   END IF;
 
 --  Determine if this is the initial accounting yearperiod

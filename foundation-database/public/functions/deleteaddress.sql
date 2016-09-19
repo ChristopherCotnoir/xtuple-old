@@ -11,7 +11,7 @@ BEGIN
     WHERE (cntct_active
       AND  (cntct_addr_id = paddrId));
   IF (_count > 0) THEN
-    RAISE EXCEPTION 'The selected Address cannot be deleted as it is used by an active Contact. [xtuple: deleteAddress, -1]';
+    RAISE EXCEPTION ''The selected Address cannot be deleted as it is used by an active Contact. [xtuple: deleteAddress, -1]'';
   END IF;
 
   SELECT count(*) INTO _count
@@ -19,7 +19,7 @@ BEGIN
     WHERE (vend_active
       AND  (vend_addr_id = paddrId));
   IF (_count > 0) THEN
-    RAISE EXCEPTION 'The selected Address cannot be deleted as it is used by an active Vendor. [xtuple: deleteAddress, -2]';
+    RAISE EXCEPTION ''The selected Address cannot be deleted as it is used by an active Vendor. [xtuple: deleteAddress, -2]'';
   END IF;
 
   SELECT count(*) INTO _count
@@ -27,14 +27,14 @@ BEGIN
     WHERE (shipto_active
       AND  (shipto_addr_id = paddrId));
   IF (_count > 0) THEN
-    RAISE EXCEPTION 'The selected Address cannot be deleted as it is used by an active Ship-To Address. [xtuple: deleteAddress, -3]';
+    RAISE EXCEPTION ''The selected Address cannot be deleted as it is used by an active Ship-To Address. [xtuple: deleteAddress, -3]'';
   END IF;
 
   SELECT count(*) INTO _count
     FROM vendaddrinfo
     WHERE (vendaddr_addr_id = paddrId);
   IF (_count > 0) THEN
-    RAISE EXCEPTION 'The selected Address cannot be deleted as it is used by an active Vendor Address. [xtuple: deleteAddress, -4]';
+    RAISE EXCEPTION ''The selected Address cannot be deleted as it is used by an active Vendor Address. [xtuple: deleteAddress, -4]'';
   END IF;
 
   SELECT count(*) INTO _count
@@ -42,7 +42,7 @@ BEGIN
     WHERE (warehous_active
       AND  (warehous_addr_id = paddrId));
   IF (_count > 0) THEN
-    RAISE EXCEPTION 'The selected Address cannot be deleted as it is used by an active Site. [xtuple: deleteAddress, -5]';
+    RAISE EXCEPTION ''The selected Address cannot be deleted as it is used by an active Site. [xtuple: deleteAddress, -5]'';
   END IF;
 
   UPDATE cntct SET cntct_addr_id = NULL WHERE (cntct_addr_id = paddrId);

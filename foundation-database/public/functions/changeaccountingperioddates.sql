@@ -15,7 +15,7 @@ BEGIN
   IF ( ( SELECT period_closed
          FROM period
          WHERE (period_id=pPeriodid) ) ) THEN
-    RAISE EXCEPTION '[xtuple: changeAccountingPeriodDates, -1]';
+    RAISE EXCEPTION ''[xtuple: changeAccountingPeriodDates, -1]'';
   END IF;
 
 --  Check to make sure that the passed start date does not fall
@@ -26,7 +26,7 @@ BEGIN
     AND (period_id <> pPeriodid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION '[xtuple: changeAccountingPeriodDates, -2]';
+    RAISE EXCEPTION ''[xtuple: changeAccountingPeriodDates, -2]'';
   END IF;
 
 --  Check to make sure that the passed end date does not fall
@@ -37,7 +37,7 @@ BEGIN
     AND (period_id <> pPeriodid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION '[xtuple: changeAccountingPeriodDates, -3]';
+    RAISE EXCEPTION ''[xtuple: changeAccountingPeriodDates, -3]'';
   END IF;
 
 --  Check to make sure that the new passed start and end dates do not
@@ -50,7 +50,7 @@ BEGIN
    AND (period_id=pPeriodid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION '[xtuple: changeAccountingPeriodDates, -4]';
+    RAISE EXCEPTION ''[xtuple: changeAccountingPeriodDates, -4]'';
   END IF;
 
 --  Alter the start and end dates of the pass period

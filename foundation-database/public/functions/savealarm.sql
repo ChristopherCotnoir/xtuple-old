@@ -89,7 +89,7 @@ BEGIN
       IF (EXISTS(SELECT alarm_id
                  FROM alarm
                  WHERE (alarm_id=pAlarmId))) THEN
-        RAISE EXCEPTION 'An alarm for this item already exists. [xtuple: saveAlarm, -10]';
+        RAISE EXCEPTION ''An alarm for this item already exists. [xtuple: saveAlarm, -10]'';
       ELSE
         _isNew := true;
         _alarmNumber := fetchNextNumber(''AlarmNumber'');

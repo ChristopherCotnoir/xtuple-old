@@ -12,7 +12,7 @@ BEGIN
   WHERE (asohist_shipto_id=pShiptoid)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Shipto cannot be deleted as there is still Archived Sales History assigned to it. You must delete all of the selected Customer's Ship-Tos before you may delete it. [xtuple: deleteShipto, -1]';
+    RAISE EXCEPTION ''The selected Shipto cannot be deleted as there is still Archived Sales History assigned to it. You must delete all of the selected Customer''''s Ship-Tos before you may delete it. [xtuple: deleteShipto, -1]'';
   END IF;
 
   PERFORM cohead_id
@@ -20,7 +20,7 @@ BEGIN
   WHERE (cohead_shipto_id=pShiptoid)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Shipto cannot be deleted as there has been Sales History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -2]';
+    RAISE EXCEPTION ''The selected Shipto cannot be deleted as there has been Sales History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -2]'';
   END IF;
 
   PERFORM cmhead_id
@@ -28,7 +28,7 @@ BEGIN
   WHERE (cmhead_shipto_id=pShiptoid)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Shipto cannot be deleted as there has been Returns recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -3]';
+    RAISE EXCEPTION ''The selected Shipto cannot be deleted as there has been Returns recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -3]'';
   END IF;
 
   PERFORM cohist_id
@@ -36,7 +36,7 @@ BEGIN
   WHERE (cohist_shipto_id=pShiptoid)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Shipto cannot be deleted as there has been Sales History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -4]';
+    RAISE EXCEPTION ''The selected Shipto cannot be deleted as there has been Sales History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -4]'';
   END IF;
 
   PERFORM quhead_id
@@ -44,7 +44,7 @@ BEGIN
   WHERE (quhead_shipto_id=pShiptoid)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Shipto cannot be deleted as there has been Quote History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -5]';
+    RAISE EXCEPTION ''The selected Shipto cannot be deleted as there has been Quote History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -5]'';
   END IF;
 
   PERFORM invchead_id
@@ -52,7 +52,7 @@ BEGIN
   WHERE (invchead_shipto_id=pShiptoid)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Shipto cannot be deleted as there has been Invoice History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -6]';
+    RAISE EXCEPTION ''The selected Shipto cannot be deleted as there has been Invoice History recorded for this Shipto. You may Edit the selected Shipto and set its status to inactive. [xtuple: deleteShipto, -6]'';
   END IF;
 
   DELETE FROM ipsass

@@ -16,7 +16,7 @@ BEGIN
    AND (subaccnttype_id=pSubAccntTypeid) )
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION '[xtuple: deleteSubaccountType, -1]';
+    RAISE EXCEPTION ''[xtuple: deleteSubaccountType, -1]'';
   END IF;
 
 --  Delete the Sub Account Type

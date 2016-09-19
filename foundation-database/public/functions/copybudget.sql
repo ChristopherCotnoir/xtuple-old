@@ -18,7 +18,7 @@ BEGIN
      AND  (nextPeriodByInterval(budgitem_period_id, pInterval)=-1))
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION '[xtuple: copyBudget, -1]';
+    RAISE EXCEPTION ''[xtuple: copyBudget, -1]'';
   END IF;
 
   SELECT nextval(''budghead_budghead_id_seq'') INTO _budgheadid;

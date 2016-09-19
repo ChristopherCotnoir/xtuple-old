@@ -15,7 +15,7 @@ BEGIN
     FROM flspec
    WHERE (flspec_id=pFlspecid);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION '[xtuple: moveFlSpecUp, -1]';
+    RAISE EXCEPTION ''[xtuple: moveFlSpecUp, -1]'';
   END IF;
 
   SELECT id, type, ord INTO _to

@@ -9,7 +9,7 @@ BEGIN
   IF ( ( SELECT cobmisc_posted
          FROM cobmisc
          WHERE (cobmisc_id=pCobmiscid) ) ) THEN
-    RAISE EXCEPTION '[xtuple: cancelBillingSelection, -1]';
+    RAISE EXCEPTION ''[xtuple: cancelBillingSelection, -1]'';
   END IF;
 
   DELETE FROM cobill

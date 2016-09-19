@@ -11,7 +11,7 @@ BEGIN
   IF ( ( SELECT period_freeze
          FROM period
          WHERE (period_id=pPeriodid) ) ) THEN
-    RAISE EXCEPTION 'Cannot freeze this Accounting Period because it is already frozen. [xtuple: freezeAccountingPeriod, -2]';
+    RAISE EXCEPTION ''Cannot freeze this Accounting Period because it is already frozen. [xtuple: freezeAccountingPeriod, -2]'';
   END IF;
 
 --  Set the period_freeze flag

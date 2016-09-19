@@ -10,7 +10,7 @@ BEGIN
   IF ( ( SELECT cobmisc_posted
          FROM cobmisc
          WHERE (cobmisc_id=pCobmiscid) ) ) THEN
-    RAISE EXCEPTION 'Cannot release this Billing Header because it has already been posted. [xtuple: releaseUnusedBillingHeader, -1]';
+    RAISE EXCEPTION ''Cannot release this Billing Header because it has already been posted. [xtuple: releaseUnusedBillingHeader, -1]'';
   END IF;
 
   SELECT cobill_id INTO _p
@@ -18,7 +18,7 @@ BEGIN
    WHERE (cobill_cobmisc_id=pCobmiscid)
    LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'Cannot release this Billing Header because it has Line Items. [xtuple: releaseUnusedBillingHeader, -2]';
+    RAISE EXCEPTION ''Cannot release this Billing Header because it has Line Items. [xtuple: releaseUnusedBillingHeader, -2]'';
   END IF;
 
   DELETE FROM cobmisc

@@ -12,7 +12,7 @@ BEGIN
    WHERE(todoitem_ophead_id=pOpheadid)
    LIMIT 1;
   IF(FOUND) THEN
-    RAISE EXCEPTION 'The selected Opportunity cannot be deleted because there are ToDo Items assigned to it.  You must delete or reassign these ToDo Items before you may delete it. [xtuple: deleteOpportunity, -1]';
+    RAISE EXCEPTION ''The selected Opportunity cannot be deleted because there are ToDo Items assigned to it.  You must delete or reassign these ToDo Items before you may delete it. [xtuple: deleteOpportunity, -1]'';
   END IF;
 
   SELECT quhead_id INTO _test
@@ -20,7 +20,7 @@ BEGIN
    WHERE(quhead_ophead_id=pOpheadid)
    LIMIT 1;
   IF(FOUND) THEN
-    RAISE EXCEPTION 'The selected Opportunity cannot be deleted because there are Quotes assigned to it.  You must delete or reassign these Quotes before you may delete it. [xtuple: deleteOpportunity, -2]';
+    RAISE EXCEPTION ''The selected Opportunity cannot be deleted because there are Quotes assigned to it.  You must delete or reassign these Quotes before you may delete it. [xtuple: deleteOpportunity, -2]'';
   END IF;
 
   SELECT cohead_id INTO _test
@@ -28,7 +28,7 @@ BEGIN
    WHERE(cohead_ophead_id=pOpheadid)
    LIMIT 1;
   IF(FOUND) THEN
-    RAISE EXCEPTION 'The selected Opportunity cannot be deleted because there are Sales Orders assigned to it.  You must delete or reassign these Sales Orders before you may delete it. [xtuple: deleteOpportunity, -3]';
+    RAISE EXCEPTION ''The selected Opportunity cannot be deleted because there are Sales Orders assigned to it.  You must delete or reassign these Sales Orders before you may delete it. [xtuple: deleteOpportunity, -3]'';
   END IF;
 
   DELETE

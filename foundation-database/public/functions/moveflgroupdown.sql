@@ -15,7 +15,7 @@ BEGIN
     FROM flgrp
    WHERE (flgrp_id=pFlgrpid);
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION '[xtuple: moveFlGroupDown, -1]';
+    RAISE EXCEPTION ''[xtuple: moveFlGroupDown, -1]'';
   END IF;
 
   SELECT id, type, ord INTO _to

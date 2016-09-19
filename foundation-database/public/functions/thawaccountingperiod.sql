@@ -12,14 +12,14 @@ BEGIN
   IF ( ( SELECT (NOT period_freeze)
          FROM period
          WHERE (period_id=pPeriodid) ) ) THEN
-    RAISE EXCEPTION 'Cannot thaw this Accounting Period because it is not frozen. [xtuple: thawAccountingPeriod, -2]';
+    RAISE EXCEPTION ''Cannot thaw this Accounting Period because it is not frozen. [xtuple: thawAccountingPeriod, -2]'';
   END IF;
 
 --  Check to make sure that the period is not closed
   IF ( ( SELECT (period_closed)
          FROM period
          WHERE (period_id=pPeriodid) ) ) THEN
-    RAISE EXCEPTION 'Cannot thaw this Accounting Period because it is closed. [xtuple: thawAccountingPeriod, -1]';
+    RAISE EXCEPTION ''Cannot thaw this Accounting Period because it is closed. [xtuple: thawAccountingPeriod, -1]'';
   END IF;
 
 --  Reset the period_freeze flag

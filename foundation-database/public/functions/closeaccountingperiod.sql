@@ -21,7 +21,7 @@ BEGIN
     IF ( ( SELECT period_closed
            FROM period
            WHERE (period_id=pPeriodid) ) ) THEN
-      RAISE EXCEPTION 'The selected Accounting Period cannot be closed because it is already closed. [xtuple: closeAccountingPeriod, -1]';
+      RAISE EXCEPTION ''The selected Accounting Period cannot be closed because it is already closed. [xtuple: closeAccountingPeriod, -1]'';
     END IF;
 
 --  Make sure that the day before this period belongs to another period
@@ -30,12 +30,12 @@ BEGIN
     WHERE ( (prev.period_end = (curr.period_start - 1))
      AND (curr.period_id=pPeriodid) );
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'The selected Accounting Period cannot be closed because there is a gap between the end of the previous Period and the start of this Period. You must edit either the previous Perod or this Period to eliminate the gap. [xtuple: closeAccountingPeriod, -2]';
+      RAISE EXCEPTION ''The selected Accounting Period cannot be closed because there is a gap between the end of the previous Period and the start of this Period. You must edit either the previous Perod or this Period to eliminate the gap. [xtuple: closeAccountingPeriod, -2]'';
     END IF;
 
 --  Make sure that the previous period is closed
     IF (NOT _r.closed) THEN
-      RAISE EXCEPTION 'The selected Accounting Period cannot be closed because the previous Period is not closed. You must close the previous Period before you may close this Period. [xtuple: closeAccountingPeriod, -3]';
+      RAISE EXCEPTION ''The selected Accounting Period cannot be closed because the previous Period is not closed. You must close the previous Period before you may close this Period. [xtuple: closeAccountingPeriod, -3]'';
     END IF;
 
   END IF;
@@ -46,14 +46,14 @@ BEGIN
   WHERE ( (next.period_start = (curr.period_end + 1))
    AND (curr.period_id=pPeriodid) );
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'The selected Accounting Period cannot be closed because there is a gap between the end of this Period and the start of the next Period. You must edit either this Period or the next Period to eliminate the gap. [xtuple: closeAccountingPeriod, -4]';
+    RAISE EXCEPTION ''The selected Accounting Period cannot be closed because there is a gap between the end of this Period and the start of the next Period. You must edit either this Period or the next Period to eliminate the gap. [xtuple: closeAccountingPeriod, -4]'';
   END IF;
 
 --  Make sure that the user is not trying to prematurely close the Period
   IF ( ( SELECT (period_end >= CURRENT_DATE)
          FROM period
          WHERE (period_id=pPeriodid) ) ) THEN
-    RAISE EXCEPTION 'The selected Accounting Period cannot be closed because it ends in the future. [xtuple: closeAccountingPeriod, -5]';
+    RAISE EXCEPTION ''The selected Accounting Period cannot be closed because it ends in the future. [xtuple: closeAccountingPeriod, -5]'';
   END IF;
 
   SELECT yearperiod_id INTO _currYear
@@ -69,7 +69,7 @@ BEGIN
    WHERE ((period_end BETWEEN yearperiod_start and yearperiod_end)
      AND  (period_id=_nextPeriodid));
   IF (NOT FOUND) THEN
-    RAISE EXCEPTION 'The selected Accounting Period cannot be closed because it is the last period in the Fiscal Year and the next Fiscal Year has not been defined yet. Create the next Fiscal Year before closing this Accounting Period. [xtuple: closeAccountingPeriod, -6]';
+    RAISE EXCEPTION ''The selected Accounting Period cannot be closed because it is the last period in the Fiscal Year and the next Fiscal Year has not been defined yet. Create the next Fiscal Year before closing this Accounting Period. [xtuple: closeAccountingPeriod, -6]'';
   END IF;
 
 --  Walk through the entire COA, calculating the ending balance and pushing
