@@ -76,7 +76,7 @@ BEGIN
      AND (COALESCE(cashrcptitem_cust_id, _custgrp.rcptcust) = _custgrp.rcptcust));
 
     IF (NOT FOUND) THEN
-      RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed, probably because the Customer's Prepaid Account was not found. [xtuple: reverseCashReceipt, -7]';
+      RAISE EXCEPTION 'The selected Cash Receipt cannot be reversed, probably because the Customer''s Prepaid Account was not found. [xtuple: reverseCashReceipt, -7]';
     END IF;
 
     IF (isPrePayFundsType(_p.cashrcpt_fundstype)) THEN

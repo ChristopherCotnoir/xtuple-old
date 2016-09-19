@@ -219,7 +219,7 @@ BEGIN
                                  _glDate, _p.cmhead_billtoname ) INTO _test;
       IF (_test < 0) THEN
         PERFORM deleteGLSeries(_sequence);
-        RAISE EXCEPTION 'Could not debit the sales account for the credit memo line item [xtuple: postcreditmemo, -13]',
+        RAISE EXCEPTION 'Could not debit the sales account for the credit memo line item [xtuple: postcreditmemo, -13, %, %]',
           _p.cmhead_number, _r.cmitem_itemsite_id;
       END IF;
 

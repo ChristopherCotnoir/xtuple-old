@@ -80,7 +80,7 @@ BEGIN
 	 WHERE cashrcpt_id = pCashrcptid
 	   AND COALESCE(cashrcptitem_cust_id, _cashcust.rcptcust) = _cashcust.rcptcust;
   IF (NOT FOUND OR COALESCE(_p.prepaid_accnt_id, -1) < 0) THEN
-    RAISE EXCEPTION 'The selected Cash Receipt cannot be posted, probably because the Customer's Prepaid Account was not found. [xtuple: postCashReceipt, -7]';
+    RAISE EXCEPTION 'The selected Cash Receipt cannot be posted, probably because the Customer''s Prepaid Account was not found. [xtuple: postCashReceipt, -7]';
   END IF;
 
   IF (COALESCE(_p.cashrcpt_distdate > _p.applydate, false)) THEN
@@ -332,7 +332,7 @@ BEGIN
 --  This is due to not being able to create customer documents as we cannot determine the customer id
     IF (_p.groupid > 0) THEN
       RAISE EXCEPTION 'Cannot post Receipt % as there is an outstanding amount of %. Please add a miscellanous distribution to assign this amount to a customer [xtuple: postCashReceipt, -11, %, %]',
-             _p.cashrcpt_docnumber, (round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2))_p.cashrcpt_docnumber, (round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2));
+             _p.cashrcpt_docnumber, (round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2)), _p.cashrcpt_docnumber, (round(_p.cashrcpt_amount_base, 2)-round(_posted_base, 2));
     END IF;
 
     _comment := ('Unapplied from ' || _p.cashrcpt_fundstype || '-' || _p.cashrcpt_docnumber);

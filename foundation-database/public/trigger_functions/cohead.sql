@@ -101,7 +101,7 @@ BEGIN
                                Customers on Credit Hold.  The selected
                                Customer must be taken off of Credit Hold
                                before you may create a new Sales Order
-                               for the Customer. [xtuple: _soheadTrigger, -5]',_p.cust_number,_p.cust_number;
+                               for the Customer. [xtuple: _soheadTrigger, -5, %]',_p.cust_number,_p.cust_number;
             ELSE
               NEW.cohead_holdtype='C';
             END IF;
@@ -115,7 +115,7 @@ BEGIN
                               Customers on Credit Warning.  The
                               selected Customer must be taken off of
                               Credit Warning before you may create a
-                              new Sales Order for the Customer. [xtuple: _soheadTrigger, -6]',_p.cust_number,_p.cust_number;
+                              new Sales Order for the Customer. [xtuple: _soheadTrigger, -6, %]',_p.cust_number,_p.cust_number;
             ELSE
               NEW.cohead_holdtype='C';
             END IF;

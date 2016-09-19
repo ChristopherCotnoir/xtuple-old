@@ -12,7 +12,7 @@ BEGIN
   WHERE (shipto_cust_id=pCustid)
   LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Customer cannot be deleted as there are still Ship-Tos assigned to it. You must delete all of the selected Customer's Ship-Tos before you may delete it. [xtuple: deleteCustomer, -1]';
+    RAISE EXCEPTION 'The selected Customer cannot be deleted as there are still Ship-Tos assigned to it. You must delete all of the selected Customer''s Ship-Tos before you may delete it. [xtuple: deleteCustomer, -1]';
   END IF;
 
   PERFORM cohead_id
@@ -61,7 +61,7 @@ BEGIN
     WHERE(invchead_cust_id=pCustid)
     LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Customer cannot be deleted as there are still Invoices assigned to it. You must delete all of the selected Customer's Invoices before you may delete it [xtuple: deleteCustomer, -7]';
+    RAISE EXCEPTION 'The selected Customer cannot be deleted as there are still Invoices assigned to it. You must delete all of the selected Customer''s Invoices before you may delete it [xtuple: deleteCustomer, -7]';
   END IF;
 
   PERFORM quhead_id
@@ -69,7 +69,7 @@ BEGIN
     WHERE(quhead_cust_id=pCustid)
     LIMIT 1;
   IF (FOUND) THEN
-    RAISE EXCEPTION 'The selected Customer cannot be deleted as there are still Quotes assigned to it. You must delete all of the selected Customer's Quotes before you may delete it [xtuple: deleteCustomer, -8]';
+    RAISE EXCEPTION 'The selected Customer cannot be deleted as there are still Quotes assigned to it. You must delete all of the selected Customer''s Quotes before you may delete it [xtuple: deleteCustomer, -8]';
   END IF;
 
   DELETE FROM taxreg

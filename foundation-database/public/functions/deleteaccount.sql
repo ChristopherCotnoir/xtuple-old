@@ -92,7 +92,7 @@ BEGIN
   IF EXISTS (SELECT 1
                FROM whsinfo
               WHERE (warehous_default_accnt_id=pAccntid)) THEN
-    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used as the default Account one or more Sites. You must reassign the default Account for these Sites before you may delete the selected Ledger Account. [xtuple: deleteAccount, -4];
+    RAISE EXCEPTION 'The selected Ledger Account cannot be deleted as it is currently used as the default Account one or more Sites. You must reassign the default Account for these Sites before you may delete the selected Ledger Account. [xtuple: deleteAccount, -4]';
   END IF;
 
 --  Check to see if the passed accnt is used in a Bank Account

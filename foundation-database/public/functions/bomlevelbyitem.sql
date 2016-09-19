@@ -56,7 +56,7 @@ BEGIN
     END IF;
   END LOOP;
   EXCEPTION WHEN statement_too_complex THEN
-      RAISE EXCEPTION 'potential recursive BOM found for item_id % [xtuple: bomLevelByItem, -1]', pItemid, pItemid;
+      RAISE EXCEPTION 'potential recursive BOM found for item_id % [xtuple: bomLevelByItem, -1, %]', pItemid, pItemid;
   END;
 
   return _cnt;
