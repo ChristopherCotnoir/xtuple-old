@@ -5,7 +5,7 @@
 -- See www.xtuple.com/CPAL for the full text of the software license.
 
 SELECT womatl.*, formatWONumber(wo_id) AS wonumber, item_number,
-       item_descrip1, item_descrip2,
+       item_descrip1, item_descrip2, (item_descrip1 || ' ' || item_descrip2) AS descrip,
 <? if exists("Manufacturing") ?>
        formatwooperseq(womatl_wooper_id) AS wooperseq,
 <? endif ?>
