@@ -16,7 +16,7 @@ BEGIN
     RETURN -1;
   ELSE
     SELECT booitem_seq_id INTO _returnVal
-    FROM booitem(getItemId(pItemNumber))
+    FROM xtmfg.booitem(getItemId(pItemNumber))
     WHERE (booitem_seqnumber=CAST(pSeqNumber AS integer));
   END IF;
     
