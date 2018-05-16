@@ -1,19 +1,19 @@
+DROP FUNCTION IF EXISTS itemIpsPrice(INTEGER, INTEGER, INTEGER, NUMERIC, INTEGER, INTEGER, INTEGER, DATE, DATE, INTEGER);
 
-DROP FUNCTION IF EXISTS itemipsprice(integer, integer, integer, numeric, integer, integer, integer, date, date, integer);
-
-CREATE OR REPLACE FUNCTION itemipsprice(pItemid INTEGER,
-                                        pCustid INTEGER,
-                                        pShiptoid INTEGER,
-                                        pQty NUMERIC,
-                                        pQtyuom INTEGER,
-                                        pPriceuom INTEGER,
-                                        pCurrid INTEGER,
-                                        pEffective DATE,
-                                        pAsof DATE,
-                                        pSiteid INTEGER,
-                                        pShipzoneid INTEGER DEFAULT (-1),
-                                        pSaletypeid INTEGER DEFAULT (-1)) RETURNS SETOF itemprice AS $$
--- Copyright (c) 1999-2015 by OpenMFG LLC, d/b/a xTuple. 
+CREATE OR REPLACE FUNCTION itemIpsPrice(pItemid     INTEGER,
+                                        pCustid     INTEGER,
+                                        pShiptoid   INTEGER,
+                                        pQty        NUMERIC,
+                                        pQtyuom     INTEGER,
+                                        pPriceuom   INTEGER,
+                                        pCurrid     INTEGER,
+                                        pEffective  DATE,
+                                        pAsof       DATE,
+                                        pSiteid     INTEGER,
+                                        pShipzoneid INTEGER DEFAULT NULL,
+                                        pSaletypeid INTEGER DEFAULT NULL)
+RETURNS SETOF itemprice AS $$
+-- Copyright (c) 1999-2018 by OpenMFG LLC, d/b/a xTuple. 
 -- See www.xtuple.com/CPAL for the full text of the software license.
 DECLARE
   _row  itemprice%ROWTYPE;
@@ -226,5 +226,5 @@ BEGIN
 
   RETURN;
 
-END; $$
-  LANGUAGE plpgsql;
+END
+$$ language plpgsql;
