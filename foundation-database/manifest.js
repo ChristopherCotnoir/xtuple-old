@@ -41,7 +41,6 @@
 
     "public/patches/drop_share_users_triggers.sql",
     "public/patches/fixreportgrade.sql",
-    "public/patches/fixlines.sql",
 
     "public/types/_docinfo.sql",
     "public/types/_targetdoc.sql",
@@ -2004,6 +2003,7 @@
     "public/patches/fixapapply.sql",
     "public/patches/fixcheckitemcurrrate.sql",
     "public/patches/fixinvhist.sql",
+    "public/patches/fixlines.sql",
     "public/patches/migrate_wo_source.sql",
     "public/patches/migratemd5settings.sql",
     "public/patches/movedict.sql",
